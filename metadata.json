@@ -1,0 +1,6 @@
+{
+  "name": "Kebab Al Firdaus — Medaeng Sidoarjo",
+  "description": "Website resmi Kebab Al Firdaus di Medaeng Kulon, Sidoarjo. Kebab, aneka kudapan, bahan baku kebab grosir, dan pesanan acara.",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

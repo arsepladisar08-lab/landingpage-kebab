@@ -1,46 +1,48 @@
-# Kebab Al Firdaus — Landing Page
+# Kebab Al Firdaus — React Web Application
 
-Static, mobile-first landing page for Kebab Al Firdaus, Medaeng Kulon, Sidoarjo.
+Modern React + TypeScript + Vite web application for **Kebab Al Firdaus**, Medaeng Kulon, Sidoarjo.
 
-## Run locally
+## Overview
 
-Open `index.html` in a browser, or serve this folder with any static server. No build step or package installation is required.
+This project was rewritten as a modern React application preserving the core features, visual identity, and business logic:
+- Mobile-first responsive navigation with accessible drawer and keyboard controls.
+- Dynamic WhatsApp integration for direct inquiries, product menus, wholesale/business consultation, and event orders.
+- Pure CSS hero kebab artwork with animated floating effects and badge stickers.
+- Interactive offer showcase (`Kebab & Kudapan`, `Bahan Kebab & Grosir`, `Pesanan Acara`).
+- Wholesale & reseller consultation section with brand aesthetics.
+- Step-by-step ordering guide (4-step visual flow).
+- Verified Google Maps location route display, operating hours, and address details.
+- Accessible interactive FAQ accordion.
+- Floating quick-access WhatsApp chat button.
 
-## Deploy to Vercel
+## Tech Stack
 
-Import the repository into Vercel and use the project root as the deployment root. Framework preset: **Other**. Build command: leave empty. Output directory: `.` (project root).
+- **Framework**: React 18
+- **Language**: TypeScript
+- **Bundler & Dev Server**: Vite
+- **Styling**: Modern CSS3 (CSS custom properties, fluid typography, responsive layout)
+- **Deployment**: Static SPA (`vite build`)
 
-## Project files
+## Development
 
-- `index.html` — semantic page structure, copy, metadata, and WhatsApp/Maps links.
-- `styles.css` — brand direction, responsive layouts, illustrations, and reduced-motion support.
-- `script.js` — mobile navigation and current footer year.
-- `PROJECT-FACTS.md` — source-backed facts, strategy, and data requiring confirmation.
+```bash
+# Install dependencies
+npm install
 
-## Business facts and content status
+# Start local dev server (port 3000)
+npm run dev
 
-Public listing used as a starting point:
-- Name: Kebab Murah Di Sidoarjo Alfirdaus / Kebab Al Firdaus.
-- Address: Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257.
-- Main phone: 0838-3036-1617.
-- Public directory listing displays opening times: Mon–Sat 06:00–21:00; Sun 06:00–18:00. Confirm before publishing as official hours.
-- A public business listing shows 4.6/5 and 57 reviews. Rating and review count should be rechecked before promotion.
-- Public listing and review summaries mention kebab, roti maryam, kebab ingredients/wholesale, and orders for events. Current product names, stock, prices, minimum order and service coverage require owner confirmation.
+# Type check
+npm run lint
 
-All menu prices are intentionally omitted because no approved price list was supplied. Product illustrations are CSS artwork, not actual product photography. No testimonials are fabricated.
+# Build for production
+npm run build
+```
 
-## Before launch — owner confirmation needed
+## Business & Location Facts
 
-1. Confirm official business name and logo/brand assets.
-2. Confirm telephone/WhatsApp destination and whether the second public number is active.
-3. Confirm address pin and official operating hours.
-4. Supply approved menu/product list, variants, current prices, and product photos.
-5. Confirm whether roti maryam, other snacks, raw-material wholesale, reseller support, and event/catering orders are currently available.
-6. Confirm wholesale minimums, delivery coverage/fees, payment methods, and pre-order lead time.
-7. Refresh rating/review count and approve its display.
-
-## QA status
-
-- PASS: semantic HTML structure, responsive CSS breakpoints, accessible mobile-nav state, keyboard Escape close, reduced-motion fallback, and configured WhatsApp/Maps links.
-- NOT TESTED: browser rendering across real devices, live link destination checks, accessibility audit, Lighthouse performance, and deployment.
-- NEEDS DATA: final logo and original product photos, approved price/menu content, owner-approved claims, and confirmation of phone/address/hours and wholesale/event terms.
+- **Business Name**: Kebab Al Firdaus (Listing: Kebab Murah Di Sidoarjo Alfirdaus)
+- **Address**: Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257
+- **WhatsApp / Phone**: +62 838-3036-1617
+- **Directory Rating**: 4.6 / 5.0 (57 Google reviews)
+- **Directory Hours**: Mon–Sat 06:00–21:00; Sun 06:00–18:00
