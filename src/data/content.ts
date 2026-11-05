@@ -1,7 +1,11 @@
 export const BUSINESS_INFO = {
-  name: 'Toko Kebab Al Firdaus',
+  name: 'AL FIRDAUS',
   shortName: 'AL FIRDAUS',
+  subName: 'BAHAN KEBAB & FROZEN FOOD HOMEMADE',
   tagline: 'Bahan Kebab & Frozen Food Homemade',
+  address: 'Taman, Sidoarjo, Jawa Timur',
+  hoursWeekday: 'Jam operasional perlu dikonfirmasi',
+  hoursSunday: 'Jam operasional perlu dikonfirmasi',
   area: 'Taman, Sidoarjo, Jawa Timur',
   phone: '6283830361617',
   phoneDisplay: '0838-3036-1617',
