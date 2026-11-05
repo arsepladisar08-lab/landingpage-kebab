@@ -52,11 +52,12 @@ export const WholesaleSection: React.FC = () => {
     ].join('\n');
 
     const url = `${BUSINESS_INFO.whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
-    const opened = window.open(url, '_blank', 'noopener,noreferrer');
+    const opened = window.open(url, '_blank');
     if (opened) {
+      opened.opener = null;
       setStatus('WhatsApp telah dibuka dengan ringkasan permintaan. Tinjau pesannya lalu tekan Kirim di WhatsApp untuk mengirim ke admin.');
     } else {
-      setStatus('Popup WhatsApp terhalang browser. Buka WhatsApp melalui tombol kontak, lalu sampaikan detail permintaan grosir.');
+      setStatus('Popup WhatsApp terhalang browser. Izinkan popup atau gunakan tombol kontak untuk melanjutkan.');
     }
   };
 
