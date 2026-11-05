@@ -24,8 +24,15 @@ export const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, initial
   const previousOverflowRef = useRef('');
 
   useEffect(() => {
-    if (initialProduct) setProduct(initialProduct);
-  }, [initialProduct]);
+    if (!isOpen) return;
+    setProduct(initialProduct || 'Kebab Original');
+    setQuantity(1);
+    setUnit(initialProduct === 'Bahan Baku Kebab Grosir' ? 'pack' : 'paket');
+    setCustomerName('');
+    setNotes('');
+    setEventDate('');
+    setEventLocation('');
+  }, [isOpen, initialProduct]);
 
   useEffect(() => {
     if (!isOpen) return;
