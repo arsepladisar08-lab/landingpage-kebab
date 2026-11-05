@@ -141,3 +141,28 @@ export const FAQ_ITEMS = [
     answer: 'Masa simpan dan petunjuk pengolahan perlu mengikuti informasi pada kemasan atau panduan resmi dari pemilik produk. Halaman ini tidak menebak masa simpan atau cara olah; silakan konfirmasi kepada admin.',
   },
 ] as const;
+
+// Backwards-compatible exports retained for components that remain in the source tree.
+export const OFFER_ITEMS = [
+  {
+    id: 'meat', code: 'A / 01', tag: 'BAHAN KEBAB', title: 'Daging kebab frozen',
+    description: 'Tanyakan pilihan varian, ukuran kemasan, stok, dan harga terbaru kepada admin.',
+    actionText: 'Tanya Harga', whatsappMessage: 'Saya ingin bertanya tentang daging kebab frozen.', type: 'supply' as const,
+  },
+  {
+    id: 'tortilla', code: 'A / 02', tag: 'BAHAN KEBAB', title: 'Kulit kebab / tortilla',
+    description: 'Pilihan kulit untuk meracik kebab sesuai kebutuhan rumah tangga atau operasional usaha.',
+    actionText: 'Tanya Harga', whatsappMessage: 'Saya ingin bertanya tentang kulit kebab / tortilla.', type: 'supply' as const,
+  },
+  {
+    id: 'frozen', code: 'A / 03', tag: 'SIAP OLAH', title: 'Kebab frozen & frozen food',
+    description: 'Tanyakan daftar produk, detail kemasan, petunjuk penyimpanan, dan ketersediaannya.',
+    actionText: 'Lihat Katalog', whatsappMessage: 'Saya ingin bertanya tentang katalog frozen food.', type: 'food' as const,
+  },
+];
+export const ORDERING_STEPS = [
+  { number: '01', title: 'Pilih produk', description: 'Tentukan kategori produk dan perkiraan jumlah yang dibutuhkan.' },
+  { number: '02', title: 'Chat admin', description: 'Pesan awal akan terisi sesuai produk pilihan.' },
+  { number: '03', title: 'Lengkapi detail', description: 'Kirim nama produk, jumlah, dan alamat atau opsi pengambilan.' },
+  { number: '04', title: 'Konfirmasi', description: 'Admin menginformasikan stok, harga, ongkir, dan cara pembayaran.' },
+];
