@@ -1,32 +1,53 @@
-# Kebab Al Firdaus — Project Facts
+# Project Facts — Toko Kebab Al Firdaus
 
-## Source-backed facts
-- Business listing name: KEBAB MURAH DI SIDOARJO ALFIRDAUS.
-- Area: Medaeng Kulon, Kedungturi, Kecamatan Taman, Kabupaten Sidoarjo, Jawa Timur.
-- Listed address: Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257.
-- Public primary phone: +62 838-3036-1617.
-- Public business profile result: 4.6/5 from 57 reviews (rating data should be revalidated before launch).
-- Public listing/review summaries mention kebab, roti maryam, bulk kebab ingredients, and event orders.
-- Public directory hours shown by one source: Mon–Sat 06:00–21:00; Sunday 06:00–18:00. Treat as unconfirmed until owner approval.
+## Source-derived positioning
+The supplied `kebab-al-firdaus-landingpage.html` frames the business as a shop for kebab ingredients and homemade frozen food from Taman, Sidoarjo, with retail/satuan buying and enquiries for wholesale/resellers.
 
-## Audience hypotheses
-1. Local buyers looking for ready-to-eat kebab and snacks.
-2. Small food entrepreneurs/resellers seeking kebab ingredients in bulk.
-3. Individuals and organisers looking for snack/event orders.
+## Product categories from the supplied HTML
+1. Daging kebab frozen
+2. Kulit kebab / tortilla
+3. Kebab frozen
+4. Frozen food
+5. Paket kebutuhan usaha
+6. Kebutuhan sesuai permintaan
+
+Descriptions deliberately direct customers to confirm current variants, package sizes, stock, storage guidance, and prices with the admin.
+
+## Target audiences from the supplied HTML
+- Household consumers
+- Kebab shops / warung kebab
+- Frozen-food resellers
+- Catering and canteen operators
+- Event/family needs
 
 ## Conversion strategy
-- Primary action: WhatsApp enquiry/order.
-- Secondary actions: find location; ask about menu/prices; ask about wholesale and event orders.
-- Key friction to address: unknown prices/availability, minimum wholesale order, delivery and event lead time.
+- Primary conversion: ask about products or order through WhatsApp.
+- Secondary conversion: request wholesale/reseller pricing through a prefilled WhatsApp enquiry form.
+- Social discovery: store and product Instagram accounts.
+- Location reference: general Taman, Sidoarjo area only; no precise pin claimed.
 
-## Assumptions requiring owner confirmation
-- Whether the business is actively selling each product/service described in public listings.
-- Current menu, variants, prices, product availability, wholesale minimum order, reseller offer, delivery coverage and charges, event capacity, lead times, payment methods.
-- Official opening hours, phone/WhatsApp and exact pin.
-- Approved brand identity, logo, and original product photography.
+## Existing project data carried forward
+- WhatsApp number in the previous GitHub project: +62 838-3036-1617.
+- Treat this as a carried-forward value, not as confirmation from the supplied HTML. The supplied HTML's WhatsApp setting is blank and explicitly asks the owner to enter the official number before launch.
 
-## Visual direction
-- Street-food editorial with warm tortilla/roasted-food cues and a sharp lime accent.
-- Charcoal foundation, warm paper sections and restrained chilli-orange contrast.
-- Typography: Manrope display + DM Sans body.
-- Hand-built CSS kebab illustration is a decorative placeholder, not a photograph of the actual product.
+## Unknowns / owner confirmation required
+- Current and official WhatsApp number.
+- Exact street address and store map pin.
+- Official operating hours.
+- Current product availability, variants, sizes, ingredients, package weights, prices, and MOQ.
+- Whether the shop currently ships beyond Sidoarjo, shipping rates, pickup process, and payment methods.
+- Frozen storage instructions, shelf life, and cooking instructions from approved packaging or owner guidance.
+- Current product and packaging photos.
+
+## Brand and visual direction from supplied HTML
+- Primary palette: deep red, bright yellow, warm off-white, charcoal, and green WhatsApp CTA.
+- Typography: Space Grotesk display + DM Sans body.
+- Visual tone: bold local-food storefront with neo-brutalist outlines and shadows.
+- Original logo extracted from embedded WebP in supplied HTML; product imagery remains placeholders pending real photos.
+
+## Implementation decisions
+- Preserve React + Vite + TypeScript structure from repository.
+- Convert uploaded single-file HTML into modular React components.
+- Use native IntersectionObserver and CSS motion rather than loading GSAP from CDN.
+- Keep WhatsApp message/form flow client-side; no server data collection.
+- Store content centrally in `src/data/content.ts`.
