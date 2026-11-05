@@ -1,136 +1,170 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Eye, ArrowUpRight, Sparkles } from 'lucide-react';
 import { MENU_VARIANTS } from '../data/content';
+import { MenuVariant } from '../types';
+import { DummyFoodVisual } from './DummyFoodVisual';
 
 interface MenuSectionProps {
   onSelectProduct: (productName: string) => void;
+  onPreviewMenu: (item: MenuVariant) => void;
 }
 
-export const MenuSection: React.FC<MenuSectionProps> = ({ onSelectProduct }) => {
-  // We showcase the 4 primary kebab food variants in this interactive grid
-  const primaryVariants = MENU_VARIANTS.filter((v) =>
-    ['original', 'keju', 'pedas', 'komplit'].includes(v.type)
-  );
+export const MenuSection: React.FC<MenuSectionProps> = ({
+  onSelectProduct,
+  onPreviewMenu,
+}) => {
+  const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('all');
 
-  const renderSvg = (type: string) => {
-    switch (type) {
-      case 'original':
-        return (
-          <svg viewBox="0 0 240 180" role="img" aria-label="Ilustrasi Kebab Original" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="bread1" x1="0" y1="0" x2="1" y2="1">
-                <stop stopColor="#ffe8a1" />
-                <stop offset="1" stopColor="#eab14f" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="124" cy="143" rx="75" ry="12" fill="#171717" opacity=".14" />
-            <path d="M52 37 Q104 8 183 35 L147 144 Q94 162 43 117Z" fill="url(#bread1)" stroke="#1c1b18" strokeWidth="4" strokeLinejoin="round" />
-            <path d="M55 44 Q112 23 175 40 L164 64 Q110 47 48 67Z" fill="#72a84c" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M49 64 Q107 45 169 63 L157 83 Q101 66 44 86Z" fill="#b51f24" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M44 85 Q103 65 161 84 L151 103 Q99 86 39 106Z" fill="#704020" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M42 37 Q100 10 183 35" fill="none" stroke="#fff4cf" strokeWidth="6" strokeLinecap="round" />
-            <path d="M72 42 l-7 11 M101 34 l-6 12 M133 33 l-5 12 M93 118 l-8 12 M124 111 l-6 13" stroke="#c98b37" strokeWidth="3.5" strokeLinecap="round" />
-          </svg>
-        );
-      case 'keju':
-        return (
-          <svg viewBox="0 0 240 180" role="img" aria-label="Ilustrasi Kebab Keju" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="bread2" x1="0" y1="0" x2="1" y2="1">
-                <stop stopColor="#fff0b3" />
-                <stop offset="1" stopColor="#e6a84a" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="122" cy="145" rx="76" ry="12" fill="#171717" opacity=".14" />
-            <path d="M52 37 Q104 8 183 35 L147 144 Q94 162 43 117Z" fill="url(#bread2)" stroke="#1c1b18" strokeWidth="4" strokeLinejoin="round" />
-            <path d="M55 44 Q112 23 175 40 L164 64 Q110 47 48 67Z" fill="#64a64c" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M49 64 Q107 45 169 63 L157 83 Q101 66 44 86Z" fill="#c52728" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M44 84 Q103 65 161 84 L151 103 Q99 86 39 106Z" fill="#78451f" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M46 72 Q102 55 165 73 L153 92 Q105 78 42 94Z" fill="#ffd64e" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M42 37 Q100 10 183 35" fill="none" stroke="#fff7d7" strokeWidth="6" strokeLinecap="round" />
-            <path d="M72 42 l-7 11 M101 34 l-6 12 M133 33 l-5 12 M93 118 l-8 12 M124 111 l-6 13" stroke="#c98b37" strokeWidth="3.5" strokeLinecap="round" />
-          </svg>
-        );
-      case 'pedas':
-        return (
-          <svg viewBox="0 0 240 180" role="img" aria-label="Ilustrasi Kebab Pedas" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="bread3" x1="0" y1="0" x2="1" y2="1">
-                <stop stopColor="#ffebad" />
-                <stop offset="1" stopColor="#e3a34b" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="122" cy="145" rx="76" ry="12" fill="#171717" opacity=".14" />
-            <path d="M52 37 Q104 8 183 35 L147 144 Q94 162 43 117Z" fill="url(#bread3)" stroke="#1c1b18" strokeWidth="4" strokeLinejoin="round" />
-            <path d="M55 44 Q112 23 175 40 L164 64 Q110 47 48 67Z" fill="#70a64a" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M49 64 Q107 45 169 63 L157 83 Q101 66 44 86Z" fill="#b91520" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M44 85 Q103 65 161 84 L151 103 Q99 86 39 106Z" fill="#7c381d" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M63 75 l8 6 -7 5 10 6 -11 4 M111 66 l8 6 -7 5 10 6 -11 4 M143 84 l8 6 -7 5" fill="none" stroke="#ff5946" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M42 37 Q100 10 183 35" fill="none" stroke="#fff4cf" strokeWidth="6" strokeLinecap="round" />
-            <path d="M72 42 l-7 11 M101 34 l-6 12 M133 33 l-5 12 M93 118 l-8 12 M124 111 l-6 13" stroke="#c98b37" strokeWidth="3.5" strokeLinecap="round" />
-          </svg>
-        );
-      case 'komplit':
-      default:
-        return (
-          <svg viewBox="0 0 240 180" role="img" aria-label="Ilustrasi Kebab Komplit" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="bread4" x1="0" y1="0" x2="1" y2="1">
-                <stop stopColor="#fff0af" />
-                <stop offset="1" stopColor="#dfa047" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="122" cy="145" rx="76" ry="12" fill="#171717" opacity=".14" />
-            <path d="M52 37 Q104 8 183 35 L147 144 Q94 162 43 117Z" fill="url(#bread4)" stroke="#1c1b18" strokeWidth="4" strokeLinejoin="round" />
-            <path d="M55 44 Q112 23 175 40 L164 64 Q110 47 48 67Z" fill="#71a94b" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M49 64 Q107 45 169 63 L157 83 Q101 66 44 86Z" fill="#c81d27" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M44 85 Q103 65 161 84 L151 103 Q99 86 39 106Z" fill="#75401e" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M48 72 Q101 56 165 73 L153 92 Q105 78 42 94Z" fill="#ffd94a" stroke="#1c1b18" strokeWidth="2.5" />
-            <path d="M42 37 Q100 10 183 35" fill="none" stroke="#fff5d1" strokeWidth="6" strokeLinecap="round" />
-            <path d="M72 42 l-7 11 M101 34 l-6 12 M133 33 l-5 12 M93 118 l-8 12 M124 111 l-6 13" stroke="#c98b37" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M179 37 l4 -12 4 12 12 -2 -9 8 4 12 -11 -7 -10 7 4 -12 -9 -8Z" fill="#ffdd00" stroke="#1c1b18" strokeWidth="2" />
-          </svg>
-        );
-    }
-  };
+  const filteredItems = MENU_VARIANTS.filter((item) => {
+    if (activeTab === 'all') return true;
+    if (activeTab === 'kebab') return item.category === 'kebab';
+    if (activeTab === 'snack') return item.category === 'snack';
+    if (activeTab === 'wholesale') return item.category === 'wholesale' || item.category === 'event';
+    return true;
+  });
 
   return (
     <section className="menu-variants-section section-pad" id="menu-varian">
       <div className="section-heading">
         <div>
-          <div className="section-kicker">INSPIRASI MENU FAVORIT</div>
+          <div className="section-kicker flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-[#ec6c3b]" />
+            <span>PILIHAN MENU & KUDAPAN</span>
+          </div>
           <h2>
             Pilih mood<br />
-            <em>kebabmu.</em>
+            <em>kebabmu hari ini.</em>
           </h2>
         </div>
         <p>
-          Mulai dari rasa klasik, lumuran keju gurih, hingga bumbu pedas mantap. Klik untuk langsung
-          memesan atau merangkum porsi ke WhatsApp.
+          Tampilan minimalis dengan info ringkas. Klik <strong>Lihat Detail</strong> untuk komposisi lengkap & karakter rasa, atau langsung pesan via WhatsApp.
         </p>
       </div>
 
-      <div className="menu-variants-grid">
-        {primaryVariants.map((item) => (
-          <article key={item.id} className="menu-variant-card">
-            <div className="variant-art-box">
-              <span className="variant-tag-pill">{item.tag}</span>
-              {renderSvg(item.type)}
+      {/* shadcn-inspired Filter Tabs */}
+      <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-3 mb-8 gap-2 no-scrollbar">
+        <div className="inline-flex p-1 bg-[#eae3d5] rounded-xl border border-black/10 gap-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'all'
+                ? 'bg-white text-[#1c1b18] shadow-xs'
+                : 'text-[#656157] hover:text-[#1c1b18]'
+            }`}
+          >
+            Semua ({MENU_VARIANTS.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('kebab')}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'kebab'
+                ? 'bg-white text-[#1c1b18] shadow-xs'
+                : 'text-[#656157] hover:text-[#1c1b18]'
+            }`}
+          >
+            Kebab Hangat (4)
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('snack')}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'snack'
+                ? 'bg-white text-[#1c1b18] shadow-xs'
+                : 'text-[#656157] hover:text-[#1c1b18]'
+            }`}
+          >
+            Roti Maryam (1)
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('wholesale')}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'wholesale'
+                ? 'bg-white text-[#1c1b18] shadow-xs'
+                : 'text-[#656157] hover:text-[#1c1b18]'
+            }`}
+          >
+            Grosir & Acara (2)
+          </button>
+        </div>
+      </div>
+
+      {/* Minimalist shadcn-style Card Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {filteredItems.map((item) => (
+          <article
+            key={item.id}
+            className="group flex flex-col bg-white rounded-2xl border border-neutral-200/90 hover:border-neutral-300 shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden"
+          >
+            {/* Dummy Image Container with Quick Preview Hover */}
+            <div
+              className="relative aspect-[16/10] bg-[#f8f5ee] cursor-pointer overflow-hidden border-b border-neutral-100"
+              onClick={() => onPreviewMenu(item)}
+            >
+              <DummyFoodVisual
+                type={item.type === 'custom' ? item.id : item.type}
+                alt={item.imageDummyAlt || item.name}
+                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                showBadge={true}
+              />
+
+              {/* Tag pill badge top left */}
+              <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#1c1b18] text-[#d5f264] shadow-xs">
+                {item.badge}
+              </span>
+
+              {/* Hover Quick Preview Pill Overlay */}
+              <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-[#1c1b18] text-xs font-bold shadow-md transform -translate-y-1 group-hover:translate-y-0 transition-transform duration-200">
+                  <Eye className="w-3.5 h-3.5" />
+                  Lihat Detail
+                </span>
+              </div>
             </div>
 
-            <div className="variant-card-body">
-              <div className="variant-badge">{item.badge}</div>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
+            {/* Minimalist Card Body */}
+            <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ec6c3b]">
+                    {item.tag}
+                  </span>
+                  {item.spiceLevel !== undefined && item.spiceLevel > 0 && (
+                    <span className="text-[10px] font-medium text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded">
+                      {'🌶️'.repeat(item.spiceLevel)}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
+                  {item.name}
+                </h3>
+                <p className="text-xs text-[#625e55] line-clamp-2 mt-1 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
 
-              <div className="variant-card-footer">
-                <span className="order-hint">Tanya ketersediaan</span>
+              {/* Minimalist Card Footer Actions */}
+              <div className="pt-2 border-t border-neutral-100 flex items-center gap-2">
                 <button
                   type="button"
-                  className="variant-order-btn"
+                  onClick={() => onPreviewMenu(item)}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-[#1c1b18] bg-neutral-100 hover:bg-neutral-200 active:scale-95 transition-all"
+                  aria-label={`Lihat detail ${item.name}`}
+                >
+                  <Eye className="w-3.5 h-3.5 text-[#5e5b53]" />
+                  <span>Detail</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => onSelectProduct(item.name)}
+                  className="inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl text-xs font-black text-[#1c1b18] bg-[#d5f264] hover:bg-[#c6e64d] active:scale-95 transition-all shadow-xs"
                   aria-label={`Pesan ${item.name}`}
                 >
-                  Pesan <span>↗</span>
+                  <span>Pesan</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -138,16 +172,15 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onSelectProduct }) => 
         ))}
       </div>
 
-      {/* Roti Maryam & Wholesale Quick Banner */}
-      <div className="menu-snack-banner">
+      {/* Roti Maryam & Wholesale Quick Callout */}
+      <div className="menu-snack-banner mt-12">
         <div className="snack-banner-left">
           <span className="eyebrow" style={{ color: 'var(--orange)' }}>
-            JUGA TERSEDIA
+            LENGKAPI PESANANMU
           </span>
-          <h3>Roti Maryam Hangat & Bahan Kebab Grosir</h3>
+          <h3>Roti Maryam Hangat & Pasokan Grosir</h3>
           <p>
-            Selain kebab siap santap, kamu juga bisa memesan roti maryam lezat, paket bahan baku untuk
-            usaha, atau porsi catering untuk acara kumpul dan syukuran di Sidoarjo.
+            Tersedia kudapan roti maryam gurih/manis, paket pasokan kulit tortilla & daging kebab untuk UMKM, serta paket katering acara di Sidoarjo.
           </p>
         </div>
         <div className="snack-banner-actions">

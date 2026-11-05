@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --ink: #1c1b18;
   --paper: #f3efe5;
@@ -2319,3 +2321,366 @@ h1, h2, h3, p {
 @media (prefers-reduced-motion:reduce) {
   .menu-variant-card,.variant-art-box svg,.modal-backdrop,.order-modal { transition:none!important; animation:none!important; }
 }
+
+/* ==========================================================================
+   UI Defect Fixes: Container, Steps, FAQ, Footer, and Mobile CTA
+   ========================================================================== */
+
+/* Generic Layout Utilities */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section {
+  padding: 100px max(7vw, 42px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--lime);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 13px 24px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.btn-primary:hover {
+  background: var(--ink);
+  color: var(--lime);
+}
+
+/* Selector 4: Steps & Cara Pemesanan */
+.steps.section,
+.section.steps {
+  padding: 100px max(7vw, 42px);
+  background: var(--paper);
+}
+
+.steps .container {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.steps .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  margin-bottom: 48px;
+}
+
+.steps .section-head .eyebrow {
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.steps .section-head h2 {
+  font: 800 clamp(36px, 4.8vw, 60px)/1.05 var(--display);
+  letter-spacing: -0.06em;
+  margin: 0;
+}
+
+.steps .section-head p {
+  max-width: 320px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #69655c;
+  margin: 0;
+}
+
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+  padding-top: 36px;
+  gap: 24px;
+}
+
+.step-card {
+  border-right: 1px solid var(--line);
+  padding-right: 24px;
+  min-height: 160px;
+}
+
+.step-card:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.step-num {
+  font: 800 12px var(--display);
+  color: var(--orange);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.step-card h3 {
+  font: 800 18px var(--display);
+  letter-spacing: -0.04em;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.step-card p {
+  font-size: 11px;
+  color: #777268;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.steps-action {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--line);
+}
+
+/* Selector 3: FAQ Section */
+.faq.section,
+.section.faq {
+  padding: 100px max(7vw, 42px);
+  background: #e8e1d2;
+  display: block;
+}
+
+.faq .container {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 8%;
+  align-items: start;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.faq .section-head .eyebrow {
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.faq .section-head h2 {
+  font: 800 clamp(36px, 4.8vw, 60px)/1.05 var(--display);
+  letter-spacing: -0.06em;
+  margin: 0 0 16px;
+}
+
+.faq .section-head p {
+  max-width: 360px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #68645b;
+  margin: 0;
+}
+
+.faq .faq-list {
+  border-top: 1px solid var(--line);
+}
+
+/* Selector 1: Footer */
+.footer {
+  min-height: 90px;
+  padding: 64px max(7vw, 42px) 40px;
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: block;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.footer-copy {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #69655c;
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--orange);
+}
+
+/* Selector 2: Mobile CTA & Desktop Floating Hide */
+.mobile-cta {
+  display: none;
+}
+
+/* Responsive Overrides for Steps, FAQ, Footer, Mobile CTA */
+@media (max-width: 900px) {
+  .step-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  .step-card:nth-child(2) {
+    border-right: none;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 650px) {
+  .section,
+  .steps.section,
+  .section.steps,
+  .faq.section,
+  .section.faq {
+    padding: 72px 22px;
+  }
+
+  .steps .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .step-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .step-card {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 20px;
+    min-height: auto;
+  }
+
+  .step-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .faq .container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer {
+    padding: 28px 22px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .footer-links {
+    gap: 14px;
+  }
+
+  .mobile-cta {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 10px 16px;
+    z-index: 30;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-cta .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .floating-wa {
+    bottom: 74px !important;
+    right: 14px !important;
+  }
+
+  body {
+    padding-bottom: 68px;
+  }
+}
+
+/* shadcn-inspired Menu Detail Dialog & Micro-interactions */
+.menu-detail-dialog {
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: min(90vh, 860px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-subtle-float {
+  animation: subtleFloat 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(213, 242, 100, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(213, 242, 100, 0); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.5s infinite;
+}
+
