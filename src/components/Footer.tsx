@@ -1,22 +1,16 @@
 import React from 'react';
 import { BUSINESS_INFO } from '../data/content';
 
-export const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="footer">
-      <a className="brand footer-brand" href="#top">
-        <span className="brand-mark">AF</span>
-        <span className="brand-copy">
-          <strong>{BUSINESS_INFO.name}</strong>
-          <small>{BUSINESS_INFO.subName}</small>
-        </span>
-      </a>
-      <span>LOCAL TASTE. GOOD MOMENTS.</span>
-      <span>
-        © <span id="year">{currentYear}</span> KEBAB {BUSINESS_INFO.name} · SIDOARJO
-      </span>
-    </footer>
-  );
-};
+export const Footer: React.FC = () => (
+  <footer className="footer">
+    <div className="container footer-inner">
+      <div className="footer-copy">
+        © {new Date().getFullYear()} {BUSINESS_INFO.name}. Maknyus Banget!<br />
+        Halaman informasi produk dan pemesanan.
+      </div>
+      <div className="footer-links">
+        <a href="#produk">Produk</a><a href="#grosir">Harga Grosir</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
+      </div>
+    </div>
+  </footer>
+);
