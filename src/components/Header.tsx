@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
+import { BUSINESS_INFO } from '../data/content';
 
-const NAV_ITEMS = [
-  ['#produk', 'Produk'],
-  ['#keunggulan', 'Keunggulan'],
-  ['#cara-pesan', 'Cara Pesan'],
-  ['#grosir', 'Harga Grosir'],
-  ['#faq', 'FAQ'],
-  ['#kontak', 'Kontak'],
-] as const;
+interface HeaderProps { onOpenOrderModal: () => void; }
 
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -21,43 +14,46 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('keydown', closeOnEscape);
   }, []);
 
-  const headerWhatsappUrl = getWhatsAppLink(
-    'Halo, Toko Kebab Al Firdaus. Saya ingin bertanya tentang produk dan harga terbaru.'
-  );
+  const closeMenu = () => setIsMenuOpen(false);
+  const openOrder = () => {
+    closeMenu();
+    onOpenOrderModal();
+  };
 
   return (
-    <header className="site-header" id="top">
-      <div className="container header-inner">
-        <a className="brand" href="#top" aria-label="Toko Kebab Al Firdaus, kembali ke atas">
-          <span className="brand-badge" aria-hidden="true">AF</span>
-          <span>
-            <span className="brand-name">{BUSINESS_INFO.name}</span>
-            <span className="brand-line">{BUSINESS_INFO.tagline}</span>
+    <>
+      <div className="topline">
+        <span className="dot" /> KEBAB AL FIRDAUS <span className="topline-divider">/</span> MEDAENG · SIDOARJO
+      </div>
+      <header className="site-header" id="top">
+        <a className="brand" href="#top" aria-label="Kebab Al Firdaus, ke halaman utama">
+          <span className="brand-mark" aria-hidden="true">AF</span>
+          <span className="brand-copy">
+            <strong>{BUSINESS_INFO.name}</strong>
+            <small>{BUSINESS_INFO.subName}</small>
           </span>
         </a>
-
-        <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`} id="mainNav" aria-label="Navigasi utama">
-          {NAV_ITEMS.map(([href, label]) => (
-            <a key={href} href={href} onClick={() => setIsMenuOpen(false)}>{label}</a>
-          ))}
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-expanded={isMenuOpen}
+          aria-controls="main-nav"
+          aria-label={isMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span /><span />
+        </button>
+        <nav className={'nav ' + (isMenuOpen ? 'open' : '')} id="main-nav" aria-label="Navigasi utama">
+          <a href="#cerita" onClick={closeMenu}>Tentang</a>
+          <a href="#menu-varian" onClick={closeMenu}>Menu Kebab</a>
+          <a href="#pilihan" onClick={closeMenu}>Layanan</a>
+          <a href="#grosir" onClick={closeMenu}>Grosir & Acara</a>
+          <a href="#lokasi" onClick={closeMenu}>Lokasi</a>
         </nav>
-
-        <div className="header-actions">
-          <a className="btn btn-primary" href={headerWhatsappUrl} target="_blank" rel="noopener noreferrer">
-            Pesan via WhatsApp <span aria-hidden="true">↗</span>
-          </a>
-          <button
-            className="nav-toggle"
-            type="button"
-            aria-label={isMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
-            aria-expanded={isMenuOpen}
-            aria-controls="mainNav"
-            onClick={() => setIsMenuOpen((open) => !open)}
-          >
-            {isMenuOpen ? '×' : '☰'}
-          </button>
-        </div>
-      </div>
-    </header>
+        <button type="button" className="header-cta header-cta-btn" onClick={openOrder}>
+          Pesan Sekarang <span>↗</span>
+        </button>
+      </header>
+    </>
   );
 };
