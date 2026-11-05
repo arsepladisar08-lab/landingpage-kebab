@@ -164,9 +164,3 @@ export const OFFER_ITEMS = [
     actionText: 'Lihat Katalog', whatsappMessage: 'Saya ingin bertanya tentang katalog frozen food.', type: 'food' as const,
   },
 ];
-export const ORDERING_STEPS = [
-  { number: '01', title: 'Pilih produk', description: 'Tentukan kategori produk dan perkiraan jumlah yang dibutuhkan.' },
-  { number: '02', title: 'Chat admin', description: 'Pesan awal akan terisi sesuai produk pilihan.' },
-  { number: '03', title: 'Lengkapi detail', description: 'Kirim nama produk, jumlah, dan alamat atau opsi pengambilan.' },
-  { number: '04', title: 'Konfirmasi', description: 'Admin menginformasikan stok, harga, ongkir, dan cara pembayaran.' },
-];
