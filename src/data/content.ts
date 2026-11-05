@@ -1,166 +1,79 @@
-export const BUSINESS_INFO = {
+import type { BusinessInfo, OfferItem, MenuVariant, OrderFormData, OrderingStep, FaqItem } from '../types';
+
+export const BUSINESS_INFO: BusinessInfo = {
   name: 'AL FIRDAUS',
-  shortName: 'AL FIRDAUS',
-  subName: 'BAHAN KEBAB & FROZEN FOOD HOMEMADE',
-  tagline: 'Bahan Kebab & Frozen Food Homemade',
-  address: 'Taman, Sidoarjo, Jawa Timur',
-  hoursWeekday: 'Jam operasional perlu dikonfirmasi',
-  hoursSunday: 'Jam operasional perlu dikonfirmasi',
-  area: 'Taman, Sidoarjo, Jawa Timur',
+  subName: 'KEBAB & MORE',
+  address: 'Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257',
+  hoursWeekday: 'Senin–Sabtu 06.00–21.00',
+  hoursSunday: 'Minggu 06.00–18.00',
   phone: '6283830361617',
   phoneDisplay: '0838-3036-1617',
+  rating: 4.6,
+  reviewCount: 57,
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Kebab+Murah+Di+Sidoarjo+Alfirdaus+Jl+Bali+No+13+Medaeng',
   whatsappBaseUrl: 'https://wa.me/6283830361617',
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman%2C%20Sidoarjo%2C%20Jawa%20Timur',
-  instagramStoreUrl: 'https://www.instagram.com/tokokebabalfirdaus/',
-  instagramStoreHandle: '@tokokebabalfirdaus',
-  instagramProductUrl: 'https://www.instagram.com/kebabalfirdaus/',
-  instagramProductHandle: '@kebabalfirdaus',
 };
 
 export function getWhatsAppLink(message: string): string {
-  return `${BUSINESS_INFO.whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
+  return BUSINESS_INFO.whatsappBaseUrl + '?text=' + encodeURIComponent(message);
 }
 
-export const PRODUCT_ITEMS = [
-  {
-    id: 'meat',
-    type: 'Bahan kebab',
-    title: 'Daging kebab frozen',
-    description: 'Untuk menyiapkan sajian kebab di rumah atau sebagai bahan menu usaha. Tanyakan pilihan varian dan kemasan yang tersedia.',
-    icon: '🥩',
-    slotLabel: 'Foto daging kebab',
-    message: 'Daging kebab frozen',
-    track: 'whatsapp_product_meat',
-  },
-  {
-    id: 'tortilla',
-    type: 'Bahan kebab',
-    title: 'Kulit kebab / tortilla',
-    description: 'Pilihan kulit untuk meracik kebab sesuai kebutuhan rumah tangga atau operasional usaha kuliner.',
-    icon: '🫓',
-    slotLabel: 'Foto kulit kebab',
-    message: 'Kulit kebab / tortilla',
-    track: 'whatsapp_product_tortilla',
-  },
-  {
-    id: 'frozen-kebab',
-    type: 'Siap olah',
-    title: 'Kebab frozen',
-    description: 'Opsi praktis untuk persediaan di rumah. Konfirmasikan varian, petunjuk penyimpanan, dan cara pengolahan kepada admin.',
-    icon: '🌯',
-    slotLabel: 'Foto kebab frozen',
-    message: 'Kebab frozen siap olah',
-    track: 'whatsapp_product_frozen_kebab',
-  },
-  {
-    id: 'frozen-food',
-    type: 'Katalog tambahan',
-    title: 'Frozen food',
-    description: 'Tanyakan daftar produk frozen food pendamping yang tersedia dan detail kemasannya langsung kepada admin.',
-    icon: '❄️',
-    slotLabel: 'Foto frozen food',
-    message: 'Katalog frozen food',
-    track: 'whatsapp_product_frozen_food',
-  },
-  {
-    id: 'business-pack',
-    type: 'Untuk pelaku usaha',
-    title: 'Paket kebutuhan usaha',
-    description: 'Diskusikan kebutuhan bahan untuk warung, katering, kantin, atau reseller. Susunan paket dan jumlahnya perlu dikonfirmasi.',
-    icon: '📦',
-    slotLabel: 'Foto paket usaha',
-    message: 'Paket kebutuhan usaha',
-    track: 'wholesale_package_click',
-  },
-  {
-    id: 'custom',
-    type: 'Pemesanan fleksibel',
-    title: 'Kebutuhan sesuai permintaan',
-    description: 'Belum tahu produk yang cocok? Sampaikan tujuan, perkiraan jumlah, dan kebutuhan pengiriman untuk dikonsultasikan.',
-    icon: '🛍️',
-    slotLabel: 'Foto kemasan pesanan',
-    message: 'Konsultasi produk',
-    track: 'whatsapp_product_consult',
-  },
-] as const;
+export const MENU_VARIANTS: MenuVariant[] = [
+  { id: 'original', name: 'Kebab Original', tag: 'KLASIK', description: 'Rasa daging gurih berpadu dengan sayuran renyah dan racikan saus khas Al Firdaus.', badge: 'FAVORIT', type: 'original', kind: 'ready-to-eat' },
+  { id: 'keju', name: 'Kebab Keju', tag: 'CREAMY GURIH', description: 'Paduan daging kebab gurih dengan keju yang creamy dan memanjakan lidah.', badge: 'BESTSELLER', type: 'keju', kind: 'ready-to-eat' },
+  { id: 'pedas', name: 'Kebab Pedas', tag: 'SPICY MOOD', description: 'Saus pedas nikmat untuk kamu yang mencari sensasi gigitan hangat.', badge: 'PEDAS MANTAP', type: 'pedas', kind: 'ready-to-eat' },
+  { id: 'komplit', name: 'Kebab Komplit', tag: 'KOMPLIT JUMBO', description: 'Kombinasi daging, sayur, ekstra saus, dan keju dalam satu porsi mantap.', badge: 'SPESIAL', type: 'komplit', kind: 'ready-to-eat' },
+  { id: 'maryam', name: 'Roti Maryam Gurih / Manis', tag: 'KUDAPAN POPULER', description: 'Roti maryam untuk teman santai. Tanyakan pilihan rasa dan ketersediaannya.', badge: 'KUDAPAN KHAS', type: 'custom', kind: 'snack' },
+  { id: 'bahan-grosir', name: 'Bahan Baku Kebab Grosir', tag: 'UNTUK USAHA & RESELLER', description: 'Konsultasikan kebutuhan tortilla, daging olahan kebab, dan saus untuk usaha.', badge: 'SUPPLY USAHA', type: 'custom', kind: 'wholesale' },
+  { id: 'pesanan-acara', name: 'Paket Pesanan Acara / Hajatan', tag: 'ACARA & SYUKURAN', description: 'Diskusikan kebutuhan kebab untuk arisan, hajatan, kantor, atau syukuran keluarga.', badge: 'CATERING ACARA', type: 'custom', kind: 'event' },
+];
 
-export const BENEFITS = [
-  {
-    icon: '🏡',
-    title: 'Produk homemade',
-    description: 'Bahan kebab dan frozen food homemade dari Taman, Sidoarjo.',
-  },
-  {
-    icon: '🛒',
-    title: 'Satuan atau grosir',
-    description: 'Belanja untuk kebutuhan rumah atau tanyakan penawaran untuk usaha.',
-  },
-  {
-    icon: '💬',
-    title: 'Langsung via WhatsApp',
-    description: 'Tidak perlu membuat akun. Pesan dan pertanyaan produk dikirim langsung ke admin.',
-  },
-  {
-    icon: '🚚',
-    title: 'Pengiriman dikonfirmasi',
-    description: 'Biaya, jangkauan, dan opsi pengambilan disepakati setelah alamat serta pesanan diketahui.',
-  },
-] as const;
+export function getMenuVariant(product: string): MenuVariant | undefined {
+  return MENU_VARIANTS.find((item) => item.name === product);
+}
 
-export const ORDERING_STEPS = [
-  { number: '01', title: 'Pilih produk', description: 'Tentukan kategori produk dan perkiraan jumlah yang dibutuhkan.' },
-  { number: '02', title: 'Chat admin', description: 'Tekan tombol WhatsApp. Pesan awal akan terisi sesuai produk pilihan.' },
-  { number: '03', title: 'Lengkapi detail', description: 'Kirim nama produk, jumlah, dan alamat atau opsi pengambilan.' },
-  { number: '04', title: 'Konfirmasi', description: 'Admin memberi informasi stok, harga, ongkir, dan cara pembayaran.' },
-  { number: '05', title: 'Selesaikan pesanan', description: 'Pesanan dibayar, lalu dikirim atau diambil sesuai kesepakatan.' },
-] as const;
+export function buildOrderWhatsAppUrl(data: OrderFormData): string {
+  const kind = getMenuVariant(data.product)?.kind ?? 'ready-to-eat';
+  const quantityLabel = kind === 'wholesale' ? 'Perkiraan kebutuhan' : kind === 'event' ? 'Perkiraan jumlah porsi' : kind === 'snack' ? 'Jumlah kudapan' : 'Jumlah porsi';
+  const quantityValue = kind === 'wholesale' || kind === 'snack'
+    ? String(data.quantity) + ' ' + (data.unit || (kind === 'wholesale' ? 'pack' : 'paket'))
+    : String(data.quantity) + ' porsi';
 
-export const FAQ_ITEMS = [
-  {
-    question: 'Apakah produk bisa dibeli satuan?',
-    answer: 'Pembelian satuan dan grosir sama-sama dilayani. Tanyakan varian, ketersediaan, dan kemasan kepada admin sebelum memesan.',
-  },
-  {
-    question: 'Apakah tersedia harga grosir untuk reseller atau warung?',
-    answer: 'Kamu bisa mengajukan permintaan harga grosir melalui formulir di bagian “Harga Grosir” atau langsung menghubungi admin. Penawaran akan dikonfirmasi sesuai produk dan kebutuhan.',
-  },
-  {
-    question: 'Bagaimana cara memesan?',
-    answer: 'Pilih produk, tekan tombol WhatsApp, lalu kirim nama produk, jumlah, dan alamat. Admin akan mengonfirmasi ketersediaan, harga, ongkir, dan cara bayar.',
-  },
-  {
-    question: 'Apakah bisa dikirim ke luar Sidoarjo?',
-    answer: 'Jangkauan pengiriman belum dicantumkan sebagai ketentuan tetap. Hubungi admin dengan kota atau kecamatan tujuan untuk mengecek opsi kirim dan ongkir.',
-  },
-  {
-    question: 'Apakah bisa mengambil pesanan langsung di toko?',
-    answer: 'Tanyakan opsi pengambilan, alamat lengkap, dan jam operasional kepada admin sebelum datang. Detail tersebut masih perlu dikonfirmasi pemilik toko.',
-  },
-  {
-    question: 'Apakah produk dibuat sendiri (homemade)?',
-    answer: 'Toko Kebab Al Firdaus memasarkan bahan kebab dan frozen food homemade dari Taman, Sidoarjo. Untuk detail bahan atau proses produksi tertentu, silakan tanyakan kepada admin.',
-  },
-  {
-    question: 'Berapa lama produk frozen bisa disimpan dan bagaimana cara mengolahnya?',
-    answer: 'Masa simpan dan petunjuk pengolahan perlu mengikuti informasi pada kemasan atau panduan resmi dari pemilik produk. Halaman ini tidak menebak masa simpan atau cara olah; silakan konfirmasi kepada admin.',
-  },
-] as const;
+  const lines = [
+    'Halo Kebab Al Firdaus! Saya ingin bertanya dan memesan:',
+    '',
+    'Menu / Kebutuhan: ' + data.product,
+    quantityLabel + ': ' + quantityValue,
+    data.eventDate ? 'Tanggal acara: ' + data.eventDate : '',
+    data.eventLocation ? 'Lokasi acara / tujuan: ' + data.eventLocation : '',
+    data.customerName && data.customerName.trim() ? 'Nama pemesan: ' + data.customerName.trim() : '',
+    data.notes && data.notes.trim() ? 'Catatan tambahan: ' + data.notes.trim() : '',
+    '',
+    'Mohon info ketersediaan, harga terbaru, dan detail pemesanan. Terima kasih.',
+  ].filter(Boolean);
 
-// Backwards-compatible exports retained for components that remain in the source tree.
-export const OFFER_ITEMS = [
-  {
-    id: 'meat', code: 'A / 01', tag: 'BAHAN KEBAB', title: 'Daging kebab frozen',
-    description: 'Tanyakan pilihan varian, ukuran kemasan, stok, dan harga terbaru kepada admin.',
-    actionText: 'Tanya Harga', whatsappMessage: 'Saya ingin bertanya tentang daging kebab frozen.', type: 'supply' as const,
-  },
-  {
-    id: 'tortilla', code: 'A / 02', tag: 'BAHAN KEBAB', title: 'Kulit kebab / tortilla',
-    description: 'Pilihan kulit untuk meracik kebab sesuai kebutuhan rumah tangga atau operasional usaha.',
-    actionText: 'Tanya Harga', whatsappMessage: 'Saya ingin bertanya tentang kulit kebab / tortilla.', type: 'supply' as const,
-  },
-  {
-    id: 'frozen', code: 'A / 03', tag: 'SIAP OLAH', title: 'Kebab frozen & frozen food',
-    description: 'Tanyakan daftar produk, detail kemasan, petunjuk penyimpanan, dan ketersediaannya.',
-    actionText: 'Lihat Katalog', whatsappMessage: 'Saya ingin bertanya tentang katalog frozen food.', type: 'food' as const,
-  },
+  return BUSINESS_INFO.whatsappBaseUrl + '?text=' + encodeURIComponent(lines.join('\n'));
+}
+
+export const OFFER_ITEMS: OfferItem[] = [
+  { id: 'food', code: 'A / 01', tag: 'MENU UTAMA', title: 'Kebab siap santap', description: 'Empat pilihan rasa untuk teman santai, makan bersama, atau mengisi perut saat beraktivitas.', actionText: 'Lihat menu kebab', whatsappMessage: 'Halo, boleh minta daftar menu dan harga Kebab Al Firdaus?', type: 'food', productName: 'Kebab Original' },
+  { id: 'supply', code: 'A / 02', tag: 'LAYANAN TAMBAHAN', title: 'Bahan kebab & grosir', description: 'Untuk warung kebab, reseller, atau pelaku usaha yang ingin berkonsultasi soal pasokan bahan.', actionText: 'Konsultasi grosir', whatsappMessage: 'Halo, saya ingin bertanya tentang bahan kebab dan pembelian grosir.', type: 'supply', productName: 'Bahan Baku Kebab Grosir' },
+  { id: 'event', code: 'A / 03', tag: 'LAYANAN TAMBAHAN', title: 'Pesanan acara', description: 'Diskusikan kebutuhan porsi untuk arisan, syukuran, rapat, atau acara keluarga.', actionText: 'Diskusikan acara', whatsappMessage: 'Halo, saya ingin bertanya tentang pesanan untuk acara.', type: 'event', productName: 'Paket Pesanan Acara / Hajatan' },
+];
+
+export const ORDERING_STEPS: OrderingStep[] = [
+  { number: '01', title: 'Pilih menu', description: 'Pilih varian kebab atau kudapan yang ingin kamu nikmati.' },
+  { number: '02', title: 'Atur pesanan', description: 'Tentukan jumlah porsi dan tulis catatan bila ada.' },
+  { number: '03', title: 'Kirim ke WhatsApp', description: 'Periksa rangkuman pesanan sebelum mengirimnya ke admin.' },
+  { number: '04', title: 'Konfirmasi', description: 'Admin mengonfirmasi stok, harga, waktu, dan opsi pengambilan/pengiriman.' },
+];
+
+export const FAQ_ITEMS: FaqItem[] = [
+  { question: 'Bagaimana cara memesan kebab?', answer: 'Pilih varian pada bagian menu, tekan tombol Pesan, lalu tentukan jumlah dan catatan. Rangkuman akan dibuka di WhatsApp untuk kamu periksa sebelum dikirim.' },
+  { question: 'Berapa harga setiap varian kebab?', answer: 'Harga dapat berubah mengikuti menu dan ketersediaan. Hubungi admin melalui WhatsApp untuk memperoleh daftar harga terbaru.' },
+  { question: 'Apakah tersedia roti maryam?', answer: 'Roti maryam tercantum sebagai kudapan tambahan. Tanyakan pilihan rasa dan ketersediaannya kepada admin sebelum memesan.' },
+  { question: 'Apakah bisa membeli bahan kebab secara grosir?', answer: 'Informasi pada referensi proyek menyebutkan layanan bahan kebab/grosir. Hubungi admin untuk memastikan jenis bahan, harga, minimum pembelian, dan stok saat ini.' },
+  { question: 'Apakah menerima pesanan untuk acara atau hajatan?', answer: 'Konsultasikan tanggal acara, perkiraan jumlah porsi, lokasi, dan waktu yang dibutuhkan. Detail pesanan akan dikonfirmasi langsung oleh admin.' },
+  { question: 'Apakah tersedia layanan pengiriman?', answer: 'Opsi pengiriman, area layanan, biaya kirim, dan minimum pesanan perlu dikonfirmasi langsung melalui WhatsApp.' },
+  { question: 'Di mana lokasi Kebab Al Firdaus?', answer: 'Alamat yang tercantum pada referensi proyek adalah Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257. Pastikan kembali alamat dan jam operasional sebelum berkunjung.' },
 ];
