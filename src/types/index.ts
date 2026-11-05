@@ -32,6 +32,23 @@ export interface OrderFormData {
   eventLocation?: string;
 }
 
+export interface MenuVariant {
+  id: string;
+  name: string;
+  tag: string;
+  tagColor?: string;
+  description: string;
+  badge: string;
+  type: 'original' | 'keju' | 'pedas' | 'komplit' | 'custom';
+}
+
+export interface OrderFormData {
+  customerName: string;
+  product: string;
+  quantity: number;
+  notes: string;
+}
+
 export interface OrderingStep {
   number: string;
   title: string;

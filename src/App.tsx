@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
@@ -16,35 +16,39 @@ import { OrderModal } from './components/OrderModal';
 
 export const App: React.FC = () => {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState('Kebab Original');
+  const [selectedProduct, setSelectedProduct] = useState<string | undefined>();
 
-  const openOrder = useCallback((productName = 'Kebab Original') => {
+  const handleOpenOrder = (productName?: string) => {
     setSelectedProduct(productName);
     setIsOrderModalOpen(true);
-  }, []);
-  const closeOrder = useCallback(() => setIsOrderModalOpen(false), []);
-  const viewMenu = useCallback(() => {
-    document.getElementById('menu-varian')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
+  };
+
+  const handleCloseOrder = () => {
+    setIsOrderModalOpen(false);
+  };
 
   return (
     <>
-      <Header onOpenOrderModal={() => openOrder()} />
+      <Header onOpenOrderModal={() => handleOpenOrder()} />
       <main>
-        <Hero onOpenOrderModal={() => openOrder()} />
+        <Hero onOpenOrderModal={() => handleOpenOrder()} />
         <AboutSection />
-        <MenuSection onSelectProduct={openOrder} />
-        <OfferSection onSelectProduct={openOrder} onViewMenu={viewMenu} />
-        <WholesaleSection onOpenWholesale={() => openOrder('Bahan Baku Kebab Grosir')} />
+        <MenuSection onSelectProduct={(p) => handleOpenOrder(p)} />
+        <OfferSection />
+        <WholesaleSection />
         <StepsSection />
         <QuoteBand />
         <LocationSection />
         <FaqSection />
-        <FinalCta onOpenOrder={() => openOrder()} />
+        <FinalCta />
       </main>
       <Footer />
       <FloatingWhatsApp />
-      <OrderModal isOpen={isOrderModalOpen} onClose={closeOrder} initialProduct={selectedProduct} />
+      <OrderModal
+        isOpen={isOrderModalOpen}
+        onClose={handleCloseOrder}
+        initialProduct={selectedProduct}
+      />
     </>
   );
 };
