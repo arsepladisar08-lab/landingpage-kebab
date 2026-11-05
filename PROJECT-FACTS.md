@@ -1,53 +1,72 @@
-# Project Facts — Toko Kebab Al Firdaus
+# Project Facts — Kebab Al Firdaus
 
-## Source-derived positioning
-The supplied `kebab-al-firdaus-landingpage.html` frames the business as a shop for kebab ingredients and homemade frozen food from Taman, Sidoarjo, with retail/satuan buying and enquiries for wholesale/resellers.
+## Confirmed business positioning
 
-## Product categories from the supplied HTML
-1. Daging kebab frozen
-2. Kulit kebab / tortilla
-3. Kebab frozen
-4. Frozen food
-5. Paket kebutuhan usaha
-6. Kebutuhan sesuai permintaan
+The business owner confirmed that the principal sales focus is **ready-to-eat kebab for consumers**. Kebab ingredients / wholesale and event orders are **additional services**, not the main positioning.
 
-Descriptions deliberately direct customers to confirm current variants, package sizes, stock, storage guidance, and prices with the admin.
+## Primary menu in the supplied ZIP reference
 
-## Target audiences from the supplied HTML
-- Household consumers
-- Kebab shops / warung kebab
-- Frozen-food resellers
-- Catering and canteen operators
-- Event/family needs
+The supplied ZIP presents four main ready-to-eat kebab variants:
 
-## Conversion strategy
-- Primary conversion: ask about products or order through WhatsApp.
-- Secondary conversion: request wholesale/reseller pricing through a prefilled WhatsApp enquiry form.
-- Social discovery: store and product Instagram accounts.
-- Location reference: general Taman, Sidoarjo area only; no precise pin claimed.
+1. Kebab Original
+2. Kebab Keju
+3. Kebab Pedas
+4. Kebab Komplit
 
-## Existing project data carried forward
-- WhatsApp number in the previous GitHub project: +62 838-3036-1617.
-- Treat this as a carried-forward value, not as confirmation from the supplied HTML. The supplied HTML's WhatsApp setting is blank and explicitly asks the owner to enter the official number before launch.
+The reference also presents Roti Maryam as an additional snack. The current availability of all menu items, ingredients, sizes, and variants should be confirmed with the owner.
+
+## Additional services
+
+- Kebab ingredients / wholesale enquiries for small food businesses, sellers, and resellers.
+- Larger kebab orders for gatherings, family events, and other occasions.
+
+The exact wholesale catalogue, unit sizes, minimum order, event availability, event lead time, and service area are not confirmed in the source data.
+
+## Audience and conversion strategy
+
+- Primary audience: consumers looking to buy ready-to-eat kebab.
+- Primary conversion: choose one of the four kebab varieties and continue the order through WhatsApp.
+- Secondary audience: kebab sellers / small food businesses seeking supplies.
+- Secondary conversion: consultation for wholesale ingredients.
+- Additional service conversion: discuss event date, estimated quantity, and delivery / pickup details.
+
+## Design direction from the supplied ZIP
+
+- Visual character: editorial local-food storefront with a strong charcoal hero, warm paper surfaces, lime accents, and orange details.
+- Typography: Manrope display and DM Sans body.
+- Hero: “Gigit hangatnya. Nikmati rasanya.” with a CSS kebab composition.
+- Menu cards: four illustrated kebab variants, tags, short descriptions, and direct order actions.
+- Order flow: quick modal with product selection, quantity stepper, WhatsApp preview, and conditional fields for wholesale / events.
+- Responsive layout: mobile-first navigation, stacked content, and a scrollable order sheet/modal.
+- Menu SVGs are illustrations; they are not verified product photographs.
+
+## Data retained from project references — owner verification required
+
+- WhatsApp number: +62 838-3036-1617.
+- Address: Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257.
+- Hours in supplied ZIP: Senin–Sabtu 06.00–21.00; Minggu 06.00–18.00.
+- Public-directory rating in supplied ZIP: 4.6 / 5 from 57 reviews.
+
+These values are retained from the supplied ZIP / prior project data, not newly confirmed by the owner in this conversation. Validate them before using them as definitive current business information.
 
 ## Unknowns / owner confirmation required
-- Current and official WhatsApp number.
-- Exact street address and store map pin.
-- Official operating hours.
-- Current product availability, variants, sizes, ingredients, package weights, prices, and MOQ.
-- Whether the shop currently ships beyond Sidoarjo, shipping rates, pickup process, and payment methods.
-- Frozen storage instructions, shelf life, and cooking instructions from approved packaging or owner guidance.
-- Current product and packaging photos.
 
-## Brand and visual direction from supplied HTML
-- Primary palette: deep red, bright yellow, warm off-white, charcoal, and green WhatsApp CTA.
-- Typography: Space Grotesk display + DM Sans body.
-- Visual tone: bold local-food storefront with neo-brutalist outlines and shadows.
-- Original logo extracted from embedded WebP in supplied HTML; product imagery remains placeholders pending real photos.
+- Current official WhatsApp number.
+- Exact street address and Google Maps pin.
+- Official operating hours.
+- Approved retail price list and active kebab variants.
+- Ingredients, portion sizes, and current Roti Maryam availability.
+- Wholesale product list, packaging units, wholesale prices, and MOQ.
+- Event service scope, available dates, capacity, and ordering lead time.
+- Delivery / pickup rules, service area, payment methods, and delivery rates.
+- Original product and packaging photographs.
 
 ## Implementation decisions
-- Preserve React + Vite + TypeScript structure from repository.
-- Convert uploaded single-file HTML into modular React components.
-- Use native IntersectionObserver and CSS motion rather than loading GSAP from CDN.
-- Keep WhatsApp message/form flow client-side; no server data collection.
-- Store content centrally in `src/data/content.ts`.
+
+- Preserve React + Vite + TypeScript.
+- Use a kebab-first home page and primary menu cards.
+- Keep wholesale and event paths visually subordinate as additional services.
+- Use a single mode-aware modal with different quantities / fields for ready-to-eat kebab, snacks, wholesale, and events.
+- Build prefilled WhatsApp message content client-side; the app does not persist customer data on a server.
+- Centralize products and business information in `src/data/content.ts`.
+- Do not invent prices or imply that reference illustrations are real product photos.
