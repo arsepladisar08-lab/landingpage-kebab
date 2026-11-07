@@ -52,7 +52,6 @@ export function buildCartWhatsAppUrl(data: {
   items: Array<{
     name: string;
     quantity: number;
-    price: number;
     portionOption?: string;
     notes?: string;
   }>;
@@ -61,13 +60,11 @@ export function buildCartWhatsAppUrl(data: {
   generalNotes?: string;
 }): string {
   const totalItemCount = data.items.reduce((acc, curr) => acc + curr.quantity, 0);
-  const totalPrice = data.items.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 
   const itemLines = data.items.map((item, index) => {
     const optionText = item.portionOption ? ` (${item.portionOption})` : '';
     const noteText = item.notes ? ` [Catatan: ${item.notes}]` : '';
-    const subtotal = formatRupiah(item.price * item.quantity);
-    return `${index + 1}. *${item.name}*${optionText} x${item.quantity} = ${subtotal}${noteText}`;
+    return `${index + 1}. *${item.name}*${optionText} x${item.quantity}${noteText}`;
   });
 
   const methodText =
@@ -82,7 +79,7 @@ export function buildCartWhatsAppUrl(data: {
     ...itemLines,
     '',
     `📦 *Total Pesanan:* ${totalItemCount} item`,
-    `💰 *Estimasi Total:* ${formatRupiah(totalPrice)}`,
+    '💬 Harga akhir dan ketersediaan akan dikonfirmasi oleh admin.',
     '',
     data.customerName ? `👤 *Nama Pemesan:* ${data.customerName}` : '',
     `📍 *Metode Pengambilan:* ${methodText}`,
@@ -257,79 +254,25 @@ export const MENU_VARIANTS: MenuVariant[] = [
 
 export const PROMO_BANNER_ITEMS = [
   {
-    id: 'promo-jumat',
-    type: 'promo' as const,
-    tag: '🔥 PROMO SPESIAL HARI INI',
-    title: 'Paket 3 Kebab Komplit Gratis 1 Roti Maryam',
-    subtitle: 'Cocok dinikmati bersama teman atau keluarga di sore hari.',
-    highlightText: 'Hemat Rp 10.000',
-    badge: 'BEST VALUE',
-    actionText: '+ Tambah ke Keranjang',
-    linkedProductName: 'Kebab Komplit',
-    price: 54000,
-  },
-  {
-    id: 'gallery-grill',
+    id: 'gallery-kebab',
     type: 'gallery' as const,
-    tag: '📸 GALERI KEBAB AL FIRDAUS',
-    title: 'Panggang Daging Rempah Smoky & Juicy',
-    subtitle: 'Dipanggang segar saat kamu memesan di outlet Medaeng Kulon.',
-    highlightText: 'Daging 100% Olahan Berkualitas',
-    badge: 'FRESH GRILL',
-    actionText: 'Lihat Menu',
-    linkedProductName: 'Kebab Original',
-    price: 12000,
-  },
-  {
-    id: 'promo-grosir',
-    type: 'promo' as const,
-    tag: '💼 PENAWARAN MITRA USAHA',
-    title: 'Paket Bahan Tortilla & Daging Kebab Grosir',
-    subtitle: 'Siap pasok untuk warung kuliner, cafe, dan reseller di Sidoarjo & Surabaya.',
-    highlightText: 'Harga Khusus Mitra',
-    badge: 'PELUANG BISNIS',
-    actionText: 'Konsultasi Pasokan',
-    linkedProductName: 'Bahan Baku Kebab Grosir',
-    price: 50000,
-  },
-  {
-    id: 'gallery-cheese',
-    type: 'gallery' as const,
-    tag: '📸 GALERI SAJIAN FAVORIT',
-    title: 'Sensasi Keju Lumer Creamy Double Melt',
-    subtitle: 'Lumuran keju gurih berpadu dengan selada renyah dan mayones gurih mantap.',
-    highlightText: 'Favorit Semua Kalangan',
-    badge: 'EXTRA CHEESY',
-    actionText: '+ Tambah ke Keranjang',
-    linkedProductName: 'Kebab Keju',
-    price: 15000,
-  },
-  {
-    id: 'promo-acara',
-    type: 'promo' as const,
-    tag: '🎉 PAKET HAJATAN & KATERING',
-    title: 'Pesan Kebab Porsi Besar untuk Acara & Arisan',
-    subtitle: 'Dikemas rapi dalam box praktis, higienis, dan disajikan hangat tepat waktu.',
-    highlightText: 'Free Ongkir Area Medaeng (Min. 30 Porsi)',
-    badge: 'KATERING CEPAT',
-    actionText: 'Pesan Acara',
-    linkedProductName: 'Paket Pesanan Acara / Hajatan',
-    price: 15000,
+    tag: 'MENU PILIHAN',
+    title: 'Pilihan Kebab',
+    subtitle: 'Lihat varian menu dan tanyakan ketersediaan terbaru kepada admin.',
+    badge: 'MENU',
+    actionText: 'Lihat menu',
   },
   {
     id: 'gallery-maryam',
     type: 'gallery' as const,
-    tag: '📸 GALERI KUDAPAN HANGAT',
-    title: 'Roti Maryam Gurih & Manis Berlapis Renyah',
-    subtitle: 'Tekstur luar renyah dengan bagian dalam empuk lembut berserat harum margarin.',
-    highlightText: 'Enak Dinikmati Hangat',
-    badge: 'KUDAPAN SPESIAL',
-    actionText: '+ Tambah ke Keranjang',
-    linkedProductName: 'Roti Maryam Gurih / Manis',
-    price: 10000,
+    tag: 'PILIHAN KUDAPAN',
+    title: 'Roti Maryam',
+    subtitle: 'Lihat detail menu dan tanyakan pilihan yang tersedia kepada admin.',
+    badge: 'KUDAPAN',
+    actionText: 'Lihat menu',
   },
 ];
-
+ 
 export const OFFER_ITEMS: OfferItem[] = [
   {
     id: 'food',
@@ -347,7 +290,7 @@ export const OFFER_ITEMS: OfferItem[] = [
     code: 'A / 02',
     tag: 'UNTUK USAHA',
     title: 'Bahan kebab & grosir',
-    description: 'Sedang mencari kebutuhan bahan kebab untuk produksi atau jualan kembali? Konsultasikan kebutuhanmu.',
+    description: 'Sedang mencari bahan kebab untuk usaha? Hubungi admin untuk menanyakan ketersediaan dan ketentuan pemesanan.',
     actionText: 'Tanya kebutuhan grosir',
     whatsappMessage: 'Halo, saya ingin bertanya tentang bahan kebab dan pembelian grosir.',
     type: 'supply',
@@ -358,7 +301,7 @@ export const OFFER_ITEMS: OfferItem[] = [
     code: 'A / 03',
     tag: 'UNTUK MOMEN SPESIAL',
     title: 'Pesanan acara',
-    description: 'Punya acara keluarga, kumpul komunitas, atau hajatan? Bicarakan jumlah dan kebutuhan pesanan lebih dulu.',
+    description: 'Punya acara keluarga atau komunitas? Tanyakan terlebih dahulu apakah kebutuhan dan tanggal pesananmu dapat dilayani.',
     actionText: 'Diskusikan pesanan acara',
     whatsappMessage: 'Halo, saya ingin bertanya tentang pesanan untuk acara.',
     type: 'event',
@@ -370,12 +313,12 @@ export const ORDERING_STEPS: OrderingStep[] = [
   {
     number: '01',
     title: 'Pilih kebutuhan',
-    description: 'Kebab, kudapan, bahan grosir, atau pesanan acara.',
+    description: 'Pilih menu atau kebutuhan yang ingin kamu tanyakan.',
   },
   {
     number: '02',
     title: 'Hubungi kami',
-    description: 'Masukkan pesanan ke keranjang belanja atau langsung chat kami via WhatsApp.',
+    description: 'Pilih menu untuk dimasukkan ke keranjang, atau hubungi admin untuk konsultasi kebutuhan khusus.',
   },
   {
     number: '03',
@@ -396,18 +339,18 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: 'Apakah bisa membeli bahan kebab secara grosir?',
-    answer: 'Ya, listing publik menyebutkan penyediaan bahan kebab/grosir (tortilla, daging olahan, bumbu). Hubungi kami untuk memastikan jenis bahan, minimum pembelian, dan ketersediaan stok.',
+    answer: 'Silakan hubungi admin untuk menanyakan apakah bahan kebab grosir sedang tersedia, termasuk jenis bahan, minimum pembelian, harga, dan stok terbaru.',
   },
   {
     question: 'Apakah menerima pesanan untuk acara atau hajatan?',
-    answer: 'Bisa! Kami melayani pesanan untuk acara keluarga, arisan, syukuran, atau komunitas. Silakan konsultasikan tanggal acara, jumlah porsi, dan waktu pengambilan/pengiriman.',
+    answer: 'Untuk pesanan acara, silakan hubungi admin terlebih dahulu untuk memastikan apakah kebutuhan, tanggal, jumlah porsi, dan waktu yang kamu ajukan dapat dilayani.',
   },
   {
     question: 'Apakah tersedia layanan pengantaran (delivery)?',
-    answer: 'Opsi pengantaran dapat dikoordinasikan langsung melalui WhatsApp. Area layanan, minimal order, dan ongkir akan diinformasikan oleh tim kami.',
+    answer: 'Hubungi admin untuk menanyakan apakah pengantaran tersedia ke alamatmu. Area layanan, minimal pesanan, dan ongkir perlu dikonfirmasi sebelum checkout.',
   },
   {
     question: 'Di mana lokasi Kebab Al Firdaus?',
-    answer: 'Kami beralamat di Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo (area Medaeng dekat Surabaya–Sidoarjo). Tersedia panduan rute via Google Maps.',
+    answer: 'Kami berada di area Medaeng, Sidoarjo. Hubungi admin untuk memastikan alamat lengkap, pin lokasi, dan jam operasional terbaru sebelum berkunjung.',
   },
 ];
