@@ -9,24 +9,16 @@ export const LocationSection: React.FC = () => {
         <h2>Mampir ke<br /><em>Al Firdaus.</em></h2>
         <p className="location-desc">Kami berada di kawasan Medaeng Kulon, Kedungturi, Kecamatan Taman, Kabupaten Sidoarjo.</p>
         <div className="address">
-          <span className="address-icon">↗</span>
-          <div><small>ALAMAT</small><strong>{BUSINESS_INFO.address}</strong></div>
-        </div>
-        <div className="address">
           <span className="address-icon">◷</span>
           <div>
-            <small>JAM OPERASIONAL (TERCANTUM DI DIREKTORI)</small>
-            <strong>{BUSINESS_INFO.hoursWeekday}<br />{BUSINESS_INFO.hoursSunday}</strong>
+            <small>INFO SEBELUM BERKUNJUNG</small>
+            <strong>Hubungi admin untuk memastikan alamat lengkap, pin lokasi, dan jam operasional terbaru.</strong>
           </div>
         </div>
-        <div className="address">
-          <span className="address-icon">☎</span>
-          <div><small>TELEPON / WHATSAPP</small><strong>{BUSINESS_INFO.phoneDisplay}</strong></div>
-        </div>
         <div className="location-actions">
-          <a className="button button-dark" href={BUSINESS_INFO.mapsUrl} target="_blank" rel="noopener noreferrer">Buka Google Maps <span>↗</span></a>
+          <a className="button button-dark" href={BUSINESS_INFO.mapsUrl} target="_blank" rel="noopener noreferrer">Buka referensi Maps <span>↗</span></a>
         </div>
-        <p className="data-note">Alamat dan jam di atas berasal dari referensi listing publik dan perlu dikonfirmasi pemilik sebelum dipublikasikan sebagai informasi final.</p>
+        <p className="data-note">Peta dan informasi lokasi ini merupakan referensi dari listing publik. Konfirmasikan alamat serta jam operasional kepada admin sebelum berkunjung.</p>
       </div>
       <div className="map-panel" style={{ padding: 0, overflow: 'hidden', borderRadius: 16, border: '2px solid var(--ink)', minHeight: 480, position: 'relative', boxShadow: '4px 6px 0 var(--ink)' }}>
         <iframe
