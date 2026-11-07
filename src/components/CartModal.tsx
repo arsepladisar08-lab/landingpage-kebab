@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { CartItem } from '../types';
-import { buildCartWhatsAppUrl, BUSINESS_INFO } from '../data/content';
+import { buildCartWhatsAppUrl } from '../data/content';
 import { DummyFoodVisual } from './DummyFoodVisual';
 
 interface CartModalProps {
