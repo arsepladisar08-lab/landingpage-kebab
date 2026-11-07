@@ -17,9 +17,29 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MenuDetailModal } from './components/MenuDetailModal';
 import { CartModal } from './components/CartModal';
 import { MenuVariant, CartItem } from './types';
-import { formatRupiah } from './data/content';
+import { formatRupiah, MENU_VARIANTS } from './data/content';
 
 const CART_STORAGE_KEY = 'alfirdaus_kebab_cart_v1';
+
+const isValidCartItem = (value: unknown): value is CartItem => {
+  if (!value || typeof value !== 'object') return false;
+
+  const item = value as Partial<CartItem>;
+  const variant = MENU_VARIANTS.find((entry) => entry.id === item.menuId);
+
+  return Boolean(
+    variant &&
+      variant.kind !== 'wholesale' &&
+      variant.kind !== 'event' &&
+      item.name === variant.name &&
+      typeof item.id === 'string' &&
+      typeof item.tag === 'string' &&
+      typeof item.price === 'number' &&
+      Number.isFinite(item.price) &&
+      Number.isInteger(item.quantity) &&
+      (item.quantity ?? 0) > 0
+  );
+};
 
 export const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -30,7 +50,8 @@ export const App: React.FC = () => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed: unknown = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed.filter(isValidCartItem) : [];
       }
     } catch {
       // Fallback
@@ -50,6 +71,8 @@ export const App: React.FC = () => {
   const totalCartPrice = cartItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 
   const handleAddToCart = (variant: MenuVariant, portionOption?: string) => {
+    if (variant.kind === 'wholesale' || variant.kind === 'event') return;
+
     setCartItems((prev) => {
       const matchIndex = prev.findIndex(
         (item) => item.menuId === variant.id && item.portionOption === (portionOption || 'Reguler')
@@ -78,39 +101,6 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleAddCustomToCart = (item: {
-    menuId: string;
-    name: string;
-    tag: string;
-    price: number;
-    portionOption?: string;
-  }) => {
-    setCartItems((prev) => {
-      const matchIndex = prev.findIndex(
-        (i) => i.name === item.name && i.portionOption === item.portionOption
-      );
-
-      if (matchIndex > -1) {
-        const copy = [...prev];
-        copy[matchIndex] = {
-          ...copy[matchIndex],
-          quantity: copy[matchIndex].quantity + 1,
-        };
-        return copy;
-      }
-
-      const newItem: CartItem = {
-        id: `${item.menuId}-${Date.now()}`,
-        menuId: item.menuId,
-        name: item.name,
-        tag: item.tag,
-        price: item.price,
-        quantity: 1,
-        portionOption: item.portionOption,
-      };
-      return [...prev, newItem];
-    });
-  };
 
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
@@ -146,10 +136,7 @@ export const App: React.FC = () => {
         <Hero />
 
         {/* Auto-Scrolling Promo & Gallery Banner (Right after Hero) */}
-        <PromoGalleryBanner
-          onAddToCart={handleAddCustomToCart}
-          onOpenCart={() => setIsCartOpen(true)}
-        />
+        <PromoGalleryBanner />
 
         <AboutSection />
 
