@@ -10,12 +10,8 @@ import {
   PROMO_BANNER_ITEMS,
 } from './content';
 
-test('BUSINESS_INFO holds correct Medaeng Kulon Sidoarjo details', () => {
-  assert.equal(BUSINESS_INFO.phone, '6283830361617');
-  assert.equal(BUSINESS_INFO.phoneDisplay, '0838-3036-1617');
-  assert.equal(BUSINESS_INFO.rating, 4.6);
-  assert.equal(BUSINESS_INFO.reviewCount, 57);
-  assert.match(BUSINESS_INFO.address, /Medaeng Kulon/);
+test('BUSINESS_INFO provides a WhatsApp destination', () => {
+  assert.match(BUSINESS_INFO.whatsappBaseUrl, /^https:\/\/wa\.me\//);
 });
 
 test('getWhatsAppLink generates correct URL with query text', () => {
@@ -44,12 +40,12 @@ test('formatRupiah formats currency in Indonesian Rupiah', () => {
   assert.match(formatted, /15\.000/);
 });
 
-test('buildCartWhatsAppUrl produces complete itemized order with total', () => {
+test('buildCartWhatsAppUrl produces itemized request without quoting unverified prices', () => {
   const url = buildCartWhatsAppUrl({
     customerName: 'Siti Aminah',
     items: [
-      { name: 'Kebab Keju', quantity: 2, price: 15000, portionOption: 'Reguler' },
-      { name: 'Roti Maryam', quantity: 1, price: 10000, notes: 'Topping manis' },
+      { name: 'Kebab Keju', quantity: 2, portionOption: 'Reguler' },
+      { name: 'Roti Maryam', quantity: 1, notes: 'Topping manis' },
     ],
     deliveryOption: 'delivery',
     deliveryAddress: 'Jl. Medaeng Asri No. 5',
@@ -62,12 +58,14 @@ test('buildCartWhatsAppUrl produces complete itemized order with total', () => {
   assert.match(textParam, /Roti Maryam/);
   assert.match(textParam, /Total Pesanan/);
   assert.match(textParam, /3 item/);
+  assert.match(textParam, /Harga akhir dan ketersediaan akan dikonfirmasi oleh admin/);
+  assert.doesNotMatch(textParam, /Estimasi Total/);
   assert.match(textParam, /Siti Aminah/);
   assert.match(textParam, /Jl\. Medaeng Asri No\. 5/);
   assert.match(textParam, /Pengiriman \/ Antar ke Lokasi/);
 });
 
-test('MENU_VARIANTS includes primary kebabs, prices, and snacks', () => {
+test('MENU_VARIANTS includes core kebabs and secondary items', () => {
   const ids = MENU_VARIANTS.map((m) => m.id);
   assert.ok(ids.includes('original'));
   assert.ok(ids.includes('keju'));
@@ -76,14 +74,12 @@ test('MENU_VARIANTS includes primary kebabs, prices, and snacks', () => {
   assert.ok(ids.includes('maryam'));
   assert.ok(ids.includes('bahan-grosir'));
 
-  const keju = MENU_VARIANTS.find((m) => m.id === 'keju');
-  assert.equal(keju?.price, 15000);
+  const wholesale = MENU_VARIANTS.find((m) => m.id === 'bahan-grosir');
+  assert.equal(wholesale?.kind, 'wholesale');
 });
 
-test('PROMO_BANNER_ITEMS contains promo deals and gallery showcases', () => {
-  assert.ok(PROMO_BANNER_ITEMS.length >= 4);
-  const promo = PROMO_BANNER_ITEMS.find((p) => p.type === 'promo');
-  const gallery = PROMO_BANNER_ITEMS.find((p) => p.type === 'gallery');
-  assert.ok(promo);
-  assert.ok(gallery);
+test('PROMO_BANNER_ITEMS only publishes neutral gallery cards', () => {
+  assert.ok(PROMO_BANNER_ITEMS.length > 0);
+  assert.equal(PROMO_BANNER_ITEMS.every((item) => item.type === 'gallery'), true);
+  assert.equal(PROMO_BANNER_ITEMS.some((item) => item.highlightText), false);
 });
