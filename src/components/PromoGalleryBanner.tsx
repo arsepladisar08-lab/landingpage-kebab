@@ -19,25 +19,37 @@ export const PromoGalleryBanner: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Triple items list to provide seamless infinite scroll loop
-  const galleryItems = PROMO_BANNER_ITEMS.filter((item) => item.type === 'gallery');
-  const displayItems = [...galleryItems, ...galleryItems, ...galleryItems];
+  const displayItems = PROMO_BANNER_ITEMS.filter((item) => item.type === 'gallery');
 
-  // Auto-scroll loop using requestAnimationFrame for 60fps smooth control and pause ability
+  // Animate only when motion is allowed and the gallery is visible on screen.
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
+    if (!scrollContainer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
 
-    const scrollSpeed = 0.65; // pixels per frame (~40px per second)
+    let isVisible = true;
+    const scrollSpeed = 0.45;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    observer.observe(scrollContainer);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') isVisible = false;
+      else isVisible = true;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const step = () => {
-      if (!isPaused && !isPressing && scrollContainer) {
-        scrollContainer.scrollLeft += scrollSpeed;
-
-        // Reset seamlessly when reaching 1/3 of total scroll width
-        const singleSetWidth = scrollContainer.scrollWidth / 3;
-        if (scrollContainer.scrollLeft >= singleSetWidth * 2) {
-          scrollContainer.scrollLeft -= singleSetWidth;
+      if (!isPaused && !isPressing && isVisible && scrollContainer) {
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        if (maxScroll > 0) {
+          scrollContainer.scrollLeft =
+            scrollContainer.scrollLeft >= maxScroll - 1
+              ? 0
+              : scrollContainer.scrollLeft + scrollSpeed;
         }
       }
       animationFrameRef.current = requestAnimationFrame(step);
@@ -46,9 +58,11 @@ export const PromoGalleryBanner: React.FC = () => {
     animationFrameRef.current = requestAnimationFrame(step);
 
     return () => {
-      if (animationFrameRef.current) {
+      if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [isPaused, isPressing]);
 
@@ -100,7 +114,7 @@ export const PromoGalleryBanner: React.FC = () => {
             GALERI MENU & KUDAPAN
           </span>
           <span className="text-[11px] text-[#9e998c] hidden md:inline">
-            · Berjalan otomatis kesamping
+            · Geser untuk melihat pilihan menu
           </span>
         </div>
 
@@ -156,20 +170,17 @@ export const PromoGalleryBanner: React.FC = () => {
       {/* Auto-scrolling Track Container */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-4 overflow-x-hidden py-2 px-4 sm:px-6 cursor-grab active:cursor-grabbing no-scrollbar scroll-smooth"
+        className="flex gap-4 overflow-x-auto py-2 px-4 sm:px-6 cursor-grab active:cursor-grabbing no-scrollbar scroll-smooth"
         onMouseDown={() => setIsPressing(true)}
         onMouseUp={() => setIsPressing(false)}
         onMouseLeave={() => setIsPressing(false)}
         onTouchStart={() => setIsPressing(true)}
         onTouchEnd={() => setIsPressing(false)}
-        onClick={() => setIsPaused((prev) => !prev)}
-        title="Klik atau tahan pada banner untuk menjeda"
+        title="Geser untuk melihat pilihan menu; gunakan tombol jeda untuk menghentikan gerak otomatis"
       >
         {displayItems.map((item, index) => {
           const isPromo = item.type === 'promo';
-          const linkedVariant = MENU_VARIANTS.find((variant) => variant.name === item.linkedProductName);
-          const isInquiryOnly = linkedVariant?.kind === 'wholesale' || linkedVariant?.kind === 'event';
-          const actionLabel = isPromo ? (isInquiryOnly ? 'Tanya layanan' : 'Tanya promo') : 'Lihat menu';
+          const actionLabel = isPromo ? 'Tanya informasi' : 'Lihat menu';
           return (
             <article
               key={`${item.id}-${index}`}
