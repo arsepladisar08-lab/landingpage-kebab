@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { CartItem } from '../types';
-import { formatRupiah, buildCartWhatsAppUrl, BUSINESS_INFO } from '../data/content';
+import { buildCartWhatsAppUrl, BUSINESS_INFO } from '../data/content';
 import { DummyFoodVisual } from './DummyFoodVisual';
 
 interface CartModalProps {
@@ -43,7 +43,6 @@ export const CartModal: React.FC<CartModalProps> = ({
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -81,7 +80,6 @@ export const CartModal: React.FC<CartModalProps> = ({
       items: items.map((i) => ({
         name: i.name,
         quantity: i.quantity,
-        price: i.price,
         portionOption: i.portionOption,
         notes: i.notes,
       })),
@@ -212,10 +210,9 @@ export const CartModal: React.FC<CartModalProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className="text-xs font-bold text-[#ec6c3b] mt-0.5">
-                            {formatRupiah(item.price)}
-                            <span className="text-[11px] text-[#858074] font-normal"> / porsi</span>
-                          </div>
+                          <p className="text-[11px] text-[#858074] mt-0.5">
+                            Harga dikonfirmasi melalui WhatsApp
+                          </p>
                         </div>
                       </div>
 
@@ -242,13 +239,6 @@ export const CartModal: React.FC<CartModalProps> = ({
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
-                        </div>
-
-                        {/* Item Subtotal */}
-                        <div className="text-right min-w-[85px]">
-                          <span className="text-xs font-black text-[#1c1b18]">
-                            {formatRupiah(item.price * item.quantity)}
-                          </span>
                         </div>
 
                         {/* Delete button */}
@@ -311,7 +301,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                   <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200/90 space-y-2">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
                       <MapPin className="w-4 h-4 text-[#ec6c3b]" />
-                      <span>Alamat Lengkap Pengiriman (Area Sidoarjo & Sekitarnya)</span>
+                      <span>Alamat Lengkap Pengiriman (konfirmasi area layanan)</span>
                     </div>
                     <textarea
                       rows={2}
@@ -381,20 +371,14 @@ export const CartModal: React.FC<CartModalProps> = ({
             {/* Price Calculations */}
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs text-[#716d63]">
-                <span>Total Jumlah Pesanan:</span>
-                <span className="font-bold text-[#1c1b18]">{totalItemCount} porsi</span>
+                <span>Jumlah item:</span>
+                <span className="font-bold text-[#1c1b18]">{totalItemCount} item</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-extrabold text-[#1c1b18]">
-                  Estimasi Total Pembayaran:
-                </span>
-                <span className="text-xl font-black text-[#1c1b18]">
-                  {formatRupiah(totalPrice)}
-                </span>
-              </div>
+              <p className="text-sm font-extrabold text-[#1c1b18]">
+                Harga akhir dikonfirmasi melalui WhatsApp
+              </p>
               <p className="text-[10px] text-[#8c887d] italic">
-                *Ketersediaan stok & ongkir (jika antar) akan dikonfirmasi langsung di WhatsApp resmi{' '}
-                <strong>{BUSINESS_INFO.phoneDisplay}</strong>.
+                Ketersediaan menu, harga, area pengantaran, dan ongkir perlu dikonfirmasi oleh admin. Pesanan belum terkirim sampai kamu mengirim pesan melalui WhatsApp.
               </p>
             </div>
 
