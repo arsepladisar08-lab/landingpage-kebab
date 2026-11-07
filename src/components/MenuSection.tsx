@@ -16,6 +16,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('all');
   const [addedItemName, setAddedItemName] = useState<string | null>(null);
 
+  const isInquiryOnly = (item: MenuVariant) =>
+    item.kind === 'wholesale' || item.kind === 'event';
+
   const filteredItems = MENU_VARIANTS.filter((item) => {
     if (activeTab === 'all') return true;
     if (activeTab === 'kebab') return item.category === 'kebab';
@@ -142,7 +145,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
                     {item.name}
                   </h3>
-                  {item.price && (
+                  {!isInquiryOnly(item) && item.price && (
                     <span className="text-xs font-black text-[#1c1b18] shrink-0 bg-[#f3efe5] px-2 py-0.5 rounded-md border border-black/5">
                       {item.priceDisplay || formatRupiah(item.price)}
                     </span>
@@ -166,7 +169,19 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   <span>Detail</span>
                 </button>
 
-                {onAddToCart && (
+                {isInquiryOnly(item) ? (
+                  <a
+                    href={getWhatsAppLink(
+                      `Halo Kebab Al Firdaus, saya ingin bertanya tentang ${item.name}. Mohon info pilihan, minimum pemesanan, harga, dan ketersediaan terbaru.`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-black bg-[#1c1b18] text-[#d5f264] hover:bg-[#2c2b27] transition-all"
+                    aria-label={`Tanya tentang ${item.name} melalui WhatsApp`}
+                  >
+                    Tanya via WhatsApp
+                  </a>
+                ) : onAddToCart ? (
                   <button
                     type="button"
                     onClick={() => {
@@ -181,13 +196,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     }`}
                     aria-label={`Tambah ${item.name} ke keranjang`}
                   >
-                    {addedItemName === item.id ? (
-                      <span>Masuk!</span>
-                    ) : (
-                      <span>+ Keranjang</span>
-                    )}
+                    {addedItemName === item.id ? <span>Masuk!</span> : <span>+ Keranjang</span>}
                   </button>
-                )}
+                ) : null}
               </div>
             </div>
           </article>
