@@ -84,9 +84,11 @@ export const App: React.FC = () => {
   const handleAddToCart = (variant: MenuVariant, portionOption?: string) => {
     if (variant.kind === 'wholesale' || variant.kind === 'event') return;
 
+    const resolvedPortion = portionOption ?? (variant.category === 'snack' ? 'Siap Santap' : 'Reguler');
+
     setCartItems((prev) => {
       const matchIndex = prev.findIndex(
-        (item) => item.menuId === variant.id && item.portionOption === (portionOption || 'Reguler')
+        (item) => item.menuId === variant.id && item.portionOption === resolvedPortion
       );
 
       if (matchIndex > -1) {
@@ -103,10 +105,10 @@ export const App: React.FC = () => {
         menuId: variant.id,
         name: variant.name,
         tag: variant.tag,
-        price: variant.price || 15000,
+        price: variant.price ?? 0,
         quantity: 1,
         type: variant.type,
-        portionOption: portionOption || (variant.category === 'snack' ? 'Siap Santap' : 'Reguler'),
+        portionOption: resolvedPortion,
       };
       return [...prev, newItem];
     });
