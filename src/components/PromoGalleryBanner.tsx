@@ -5,8 +5,6 @@ import {
   Play,
   ChevronLeft,
   ChevronRight,
-  MessageCircle,
-  Flame,
   ArrowUpRight,
   Camera,
 } from 'lucide-react';
@@ -28,22 +26,22 @@ export const PromoGalleryBanner: React.FC = () => {
       return;
     }
 
-    let isVisible = true;
+    let isIntersecting = true;
+    let isDocumentVisible = document.visibilityState === 'visible';
     const scrollSpeed = 0.45;
 
     const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
+      isIntersecting = entry.isIntersecting;
     });
     observer.observe(scrollContainer);
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState !== 'visible') isVisible = false;
-      else isVisible = true;
+      isDocumentVisible = document.visibilityState === 'visible';
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const step = () => {
-      if (!isPaused && !isPressing && isVisible && scrollContainer) {
+      if (!isPaused && !isPressing && isIntersecting && isDocumentVisible && scrollContainer) {
         const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
         if (maxScroll > 0) {
           scrollContainer.scrollLeft =
@@ -178,32 +176,17 @@ export const PromoGalleryBanner: React.FC = () => {
         onTouchEnd={() => setIsPressing(false)}
         title="Geser untuk melihat pilihan menu; gunakan tombol jeda untuk menghentikan gerak otomatis"
       >
-        {displayItems.map((item, index) => {
-          const isPromo = item.type === 'promo';
-          const actionLabel = isPromo ? 'Tanya informasi' : 'Lihat menu';
-          return (
-            <article
-              key={`${item.id}-${index}`}
-              className={`flex-none w-[310px] sm:w-[360px] md:w-[390px] rounded-2xl p-5 border transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between ${
-                isPromo
-                  ? 'bg-gradient-to-br from-[#2c271b] via-[#221f19] to-[#1c1b18] border-[#d5f264]/30 hover:border-[#d5f264] shadow-md hover:shadow-xl'
-                  : 'bg-gradient-to-br from-[#26211e] via-[#1f1c19] to-[#171614] border-white/15 hover:border-white/35 shadow-sm'
-              }`}
+        {displayItems.map((item) => (
+          <article
+              key={item.id}
+              className="flex-none w-[310px] sm:w-[360px] md:w-[390px] rounded-2xl p-5 border border-white/15 bg-gradient-to-br from-[#26211e] via-[#1f1c19] to-[#171614] shadow-sm flex flex-col justify-between"
             >
               {/* Card Header: Tag & Badge */}
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                    isPromo
-                      ? 'bg-[#ec6c3b] text-white'
-                      : 'bg-[#d5f264] text-[#1c1b18]'
-                  }`}
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#d5f264] text-[#1c1b18]"
                 >
-                  {isPromo ? (
-                    <Flame className="w-3 h-3 fill-current" />
-                  ) : (
-                    <Camera className="w-3 h-3" />
-                  )}
+                  <Camera className="w-3 h-3" />
                   {item.tag}
                 </span>
 
@@ -233,30 +216,21 @@ export const PromoGalleryBanner: React.FC = () => {
                 <button
                   type="button"
                   onClick={(e) => handleCardAction(item, e)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all active:scale-95 shadow-xs ${
-                    isPromo
-                      ? 'bg-[#d5f264] text-[#1c1b18] hover:bg-[#c3e54c]'
-                      : 'bg-white/15 text-white hover:bg-white/25 border border-white/20'
-                  }`}
-                  aria-label={`${item.actionText} - ${item.title}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all active:scale-95 shadow-xs bg-white/15 text-white hover:bg-white/25 border border-white/20"
+                  aria-label={`Lihat menu terkait ${item.title}`}
                 >
-                  {isPromo ? (
-                    <MessageCircle className="w-3.5 h-3.5" />
-                  ) : (
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  )}
-                  <span>{actionLabel}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <span>Lihat menu</span>
                 </button>
               </div>
-            </article>
-          );
-        })}
+          </article>
+        ))}
       </div>
 
       {/* Bottom Hint */}
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-3 flex items-center justify-between text-[11px] text-[#8e8a7f]">
         <span>
-          💡 <em>Tip: Klik atau tekan banner untuk berhenti bergerak agar nyaman dibaca.</em>
+          💡 <em>Geser galeri untuk melihat pilihan lainnya. Gerakan otomatis dapat dijeda.</em>
         </span>
         <span className="hidden sm:inline">
           Status: <strong className="text-[#d5f264]">{isPaused ? 'Jeda (Diam)' : 'Berjalan'}</strong>
