@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { CartItem } from '../types';
-import { formatRupiah, buildCartWhatsAppUrl, BUSINESS_INFO } from '../data/content';
+import { buildCartWhatsAppUrl } from '../data/content';
 import { DummyFoodVisual } from './DummyFoodVisual';
 
 interface CartModalProps {
@@ -41,30 +41,59 @@ export const CartModal: React.FC<CartModalProps> = ({
   const [generalNotes, setGeneralNotes] = useState('');
   const [addressError, setAddressError] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  onCloseRef.current = onClose;
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    previousFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCloseRef.current();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable?.length) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-      setTimeout(() => closeBtnRef.current?.focus(), 50);
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = window.setTimeout(() => closeBtnRef.current?.focus(), 0);
 
     return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocusRef.current?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -81,7 +110,6 @@ export const CartModal: React.FC<CartModalProps> = ({
       items: items.map((i) => ({
         name: i.name,
         quantity: i.quantity,
-        price: i.price,
         portionOption: i.portionOption,
         notes: i.notes,
       })),
@@ -99,6 +127,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="cart-modal-title"
+      ref={dialogRef}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -212,10 +241,9 @@ export const CartModal: React.FC<CartModalProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className="text-xs font-bold text-[#ec6c3b] mt-0.5">
-                            {formatRupiah(item.price)}
-                            <span className="text-[11px] text-[#858074] font-normal"> / porsi</span>
-                          </div>
+                          <p className="text-[11px] text-[#858074] mt-0.5">
+                            Harga dikonfirmasi melalui WhatsApp
+                          </p>
                         </div>
                       </div>
 
@@ -242,13 +270,6 @@ export const CartModal: React.FC<CartModalProps> = ({
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
-                        </div>
-
-                        {/* Item Subtotal */}
-                        <div className="text-right min-w-[85px]">
-                          <span className="text-xs font-black text-[#1c1b18]">
-                            {formatRupiah(item.price * item.quantity)}
-                          </span>
                         </div>
 
                         {/* Delete button */}
@@ -311,7 +332,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                   <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200/90 space-y-2">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
                       <MapPin className="w-4 h-4 text-[#ec6c3b]" />
-                      <span>Alamat Lengkap Pengiriman (Area Sidoarjo & Sekitarnya)</span>
+                      <span>Alamat Lengkap Pengiriman (konfirmasi area layanan)</span>
                     </div>
                     <textarea
                       rows={2}
@@ -381,20 +402,14 @@ export const CartModal: React.FC<CartModalProps> = ({
             {/* Price Calculations */}
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs text-[#716d63]">
-                <span>Total Jumlah Pesanan:</span>
-                <span className="font-bold text-[#1c1b18]">{totalItemCount} porsi</span>
+                <span>Jumlah item:</span>
+                <span className="font-bold text-[#1c1b18]">{totalItemCount} item</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-extrabold text-[#1c1b18]">
-                  Estimasi Total Pembayaran:
-                </span>
-                <span className="text-xl font-black text-[#1c1b18]">
-                  {formatRupiah(totalPrice)}
-                </span>
-              </div>
+              <p className="text-sm font-extrabold text-[#1c1b18]">
+                Harga akhir dikonfirmasi melalui WhatsApp
+              </p>
               <p className="text-[10px] text-[#8c887d] italic">
-                *Ketersediaan stok & ongkir (jika antar) akan dikonfirmasi langsung di WhatsApp resmi{' '}
-                <strong>{BUSINESS_INFO.phoneDisplay}</strong>.
+                Ketersediaan menu, harga, area pengantaran, dan ongkir perlu dikonfirmasi oleh admin. Pesanan belum terkirim sampai kamu mengirim pesan melalui WhatsApp.
               </p>
             </div>
 

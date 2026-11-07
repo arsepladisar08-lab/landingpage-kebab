@@ -17,9 +17,39 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MenuDetailModal } from './components/MenuDetailModal';
 import { CartModal } from './components/CartModal';
 import { MenuVariant, CartItem } from './types';
-import { formatRupiah } from './data/content';
+import { MENU_VARIANTS } from './data/content';
 
 const CART_STORAGE_KEY = 'alfirdaus_kebab_cart_v1';
+
+const normalizeCartItem = (value: unknown): CartItem | null => {
+  if (!value || typeof value !== 'object') return null;
+
+  const item = value as Partial<CartItem>;
+  const variant = MENU_VARIANTS.find((entry) => entry.id === item.menuId);
+
+  if (
+    !variant ||
+    variant.kind === 'wholesale' ||
+    variant.kind === 'event' ||
+    typeof item.id !== 'string' ||
+    !Number.isInteger(item.quantity) ||
+    (item.quantity ?? 0) < 1
+  ) {
+    return null;
+  }
+
+  return {
+    id: item.id,
+    menuId: variant.id,
+    name: variant.name,
+    tag: variant.tag,
+    price: variant.price ?? 0,
+    quantity: item.quantity as number,
+    type: variant.type,
+    portionOption: typeof item.portionOption === 'string' ? item.portionOption : undefined,
+    notes: typeof item.notes === 'string' ? item.notes : undefined,
+  };
+};
 
 export const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -30,7 +60,10 @@ export const App: React.FC = () => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed: unknown = JSON.parse(saved);
+        return Array.isArray(parsed)
+          ? parsed.map(normalizeCartItem).filter((item): item is CartItem => item !== null)
+          : [];
       }
     } catch {
       // Fallback
@@ -47,12 +80,15 @@ export const App: React.FC = () => {
   }, [cartItems]);
 
   const totalCartCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
-  const totalCartPrice = cartItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 
   const handleAddToCart = (variant: MenuVariant, portionOption?: string) => {
+    if (variant.kind === 'wholesale' || variant.kind === 'event') return;
+
+    const resolvedPortion = portionOption ?? (variant.category === 'snack' ? 'Siap Santap' : 'Reguler');
+
     setCartItems((prev) => {
       const matchIndex = prev.findIndex(
-        (item) => item.menuId === variant.id && item.portionOption === (portionOption || 'Reguler')
+        (item) => item.menuId === variant.id && item.portionOption === resolvedPortion
       );
 
       if (matchIndex > -1) {
@@ -69,48 +105,15 @@ export const App: React.FC = () => {
         menuId: variant.id,
         name: variant.name,
         tag: variant.tag,
-        price: variant.price || 15000,
+        price: variant.price ?? 0,
         quantity: 1,
         type: variant.type,
-        portionOption: portionOption || (variant.category === 'snack' ? 'Siap Santap' : 'Reguler'),
+        portionOption: resolvedPortion,
       };
       return [...prev, newItem];
     });
   };
 
-  const handleAddCustomToCart = (item: {
-    menuId: string;
-    name: string;
-    tag: string;
-    price: number;
-    portionOption?: string;
-  }) => {
-    setCartItems((prev) => {
-      const matchIndex = prev.findIndex(
-        (i) => i.name === item.name && i.portionOption === item.portionOption
-      );
-
-      if (matchIndex > -1) {
-        const copy = [...prev];
-        copy[matchIndex] = {
-          ...copy[matchIndex],
-          quantity: copy[matchIndex].quantity + 1,
-        };
-        return copy;
-      }
-
-      const newItem: CartItem = {
-        id: `${item.menuId}-${Date.now()}`,
-        menuId: item.menuId,
-        name: item.name,
-        tag: item.tag,
-        price: item.price,
-        quantity: 1,
-        portionOption: item.portionOption,
-      };
-      return [...prev, newItem];
-    });
-  };
 
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
@@ -146,10 +149,7 @@ export const App: React.FC = () => {
         <Hero />
 
         {/* Auto-Scrolling Promo & Gallery Banner (Right after Hero) */}
-        <PromoGalleryBanner
-          onAddToCart={handleAddCustomToCart}
-          onOpenCart={() => setIsCartOpen(true)}
-        />
+        <PromoGalleryBanner />
 
         <AboutSection />
 
@@ -186,7 +186,7 @@ export const App: React.FC = () => {
             type="button"
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-3 py-3 px-4 rounded-2xl bg-[#1c1b18] text-[#d5f264] border-2 border-[#d5f264]/60 shadow-2xl hover:scale-105 active:scale-95 transition-all group"
-            aria-label={`Buka keranjang pesanan, ${totalCartCount} item seharga ${formatRupiah(totalCartPrice)}`}
+            aria-label={`Buka keranjang pesanan, ${totalCartCount} item`}
           >
             <div className="relative">
               <ShoppingBag className="w-5 h-5 text-[#d5f264]" />
@@ -196,10 +196,10 @@ export const App: React.FC = () => {
             </div>
             <div className="text-left">
               <div className="text-[11px] font-black text-white leading-tight">
-                {formatRupiah(totalCartPrice)}
+                {totalCartCount} item dipilih
               </div>
               <div className="text-[9px] text-[#b8b3a7] font-semibold">
-                Lihat Keranjang Pesanan
+                Harga dikonfirmasi melalui WhatsApp
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-[#d5f264] group-hover:translate-x-0.5 transition-transform" />
