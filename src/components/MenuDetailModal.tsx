@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, Flame, CheckCircle2, Sparkles, ChefHat, ShoppingBag, Check } from 'lucide-react';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
-import { formatRupiah, getWhatsAppLink } from '../data/content';
+import { getWhatsAppLink } from '../data/content';
 
 interface MenuDetailModalProps {
   item: MenuVariant | null;
@@ -119,11 +119,7 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
               <h2 id="menu-detail-title" className="text-2xl font-black text-[#1c1b18] tracking-tight">
                 {item.name}
               </h2>
-              {!isInquiryOnly && item.price && (
-                <span className="text-sm font-black text-[#1c1b18] bg-[#d5f264] px-3 py-1 rounded-full border border-black/10 self-start sm:self-auto">
-                  {item.priceDisplay || formatRupiah(item.price)}
-                </span>
-              )}
+
             </div>
             <p className="mt-1.5 text-sm text-[#5d5950] leading-relaxed">
               {item.description}
