@@ -10,7 +10,7 @@ import {
   ArrowUpRight,
   Camera,
 } from 'lucide-react';
-import { PROMO_BANNER_ITEMS, formatRupiah, MENU_VARIANTS, getWhatsAppLink } from '../data/content';
+import { PROMO_BANNER_ITEMS, MENU_VARIANTS, getWhatsAppLink } from '../data/content';
 import { PromoBannerItem } from '../types';
 
 export const PromoGalleryBanner: React.FC = () => {
@@ -20,7 +20,8 @@ export const PromoGalleryBanner: React.FC = () => {
   const animationFrameRef = useRef<number | null>(null);
 
   // Triple items list to provide seamless infinite scroll loop
-  const displayItems = [...PROMO_BANNER_ITEMS, ...PROMO_BANNER_ITEMS, ...PROMO_BANNER_ITEMS];
+  const galleryItems = PROMO_BANNER_ITEMS.filter((item) => item.type === 'gallery');
+  const displayItems = [...galleryItems, ...galleryItems, ...galleryItems];
 
   // Auto-scroll loop using requestAnimationFrame for 60fps smooth control and pause ability
   useEffect(() => {
@@ -84,7 +85,7 @@ export const PromoGalleryBanner: React.FC = () => {
   return (
     <section
       className="relative bg-[#1c1b18] text-[#f3efe5] py-8 border-y-2 border-[#d5f264]/40 overflow-hidden select-none"
-      aria-label="Banner Promosi dan Galeri Kebab Al Firdaus"
+      aria-label="Galeri menu Kebab Al Firdaus"
     >
       {/* Background Accent Subtle Glows */}
       <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#d5f264]/10 rounded-full blur-3xl pointer-events-none" />
@@ -96,7 +97,7 @@ export const PromoGalleryBanner: React.FC = () => {
           <div className="w-2.5 h-2.5 rounded-full bg-[#d5f264] animate-ping" />
           <span className="text-xs font-black uppercase tracking-widest text-[#d5f264] flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[#ec6c3b]" />
-            PROMOSI SPESIAL & GALERI SAJIAN
+            GALERI MENU & KUDAPAN
           </span>
           <span className="text-[11px] text-[#9e998c] hidden md:inline">
             · Berjalan otomatis kesamping
@@ -215,16 +216,7 @@ export const PromoGalleryBanner: React.FC = () => {
               {/* Highlight / Promo Price / Action Pill */}
               <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                 <div>
-                  {!isInquiryOnly && item.price && (
-                    <div className="text-xs font-black text-[#d5f264]">
-                      {formatRupiah(item.price)}
-                    </div>
-                  )}
-                  {!isInquiryOnly && item.highlightText && (
-                    <span className="text-[11px] font-bold text-[#ec6c3b] block">
-                      {item.highlightText}
-                    </span>
-                  )}
+
                 </div>
 
                 <button
