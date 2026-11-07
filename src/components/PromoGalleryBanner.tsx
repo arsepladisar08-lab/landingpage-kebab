@@ -5,29 +5,15 @@ import {
   Play,
   ChevronLeft,
   ChevronRight,
-  ShoppingBag,
+  MessageCircle,
   Flame,
   ArrowUpRight,
   Camera,
 } from 'lucide-react';
-import { PROMO_BANNER_ITEMS, formatRupiah, MENU_VARIANTS } from '../data/content';
+import { PROMO_BANNER_ITEMS, formatRupiah, MENU_VARIANTS, getWhatsAppLink } from '../data/content';
 import { PromoBannerItem } from '../types';
 
-interface PromoGalleryBannerProps {
-  onAddToCart?: (item: {
-    menuId: string;
-    name: string;
-    tag: string;
-    price: number;
-    portionOption?: string;
-  }) => void;
-  onOpenCart?: () => void;
-}
-
-export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
-  onAddToCart,
-  onOpenCart,
-}) => {
+export const PromoGalleryBanner: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isPressing, setIsPressing] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -81,21 +67,18 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
 
   const handleCardAction = (item: PromoBannerItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (item.linkedProductName && onAddToCart) {
-      const match = MENU_VARIANTS.find((v) => v.name === item.linkedProductName);
-      onAddToCart({
-        menuId: match?.id || item.id,
-        name: item.title,
-        tag: item.tag,
-        price: item.price || match?.price || 15000,
-        portionOption: item.badge,
-      });
-      if (onOpenCart) {
-        onOpenCart();
-      }
-    } else {
-      document.getElementById('menu-varian')?.scrollIntoView({ behavior: 'smooth' });
+
+    if (item.type === 'promo') {
+      const linkedVariant = MENU_VARIANTS.find((variant) => variant.name === item.linkedProductName);
+      const inquiryTarget = linkedVariant?.name || item.title;
+      const url = getWhatsAppLink(
+        `Halo Kebab Al Firdaus, saya ingin bertanya tentang ${inquiryTarget}. Mohon info harga, ketentuan, dan ketersediaan terbaru.`
+      );
+      window.open(url, '_blank', 'noopener,noreferrer');
+      return;
     }
+
+    document.getElementById('menu-varian')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -183,6 +166,9 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
       >
         {displayItems.map((item, index) => {
           const isPromo = item.type === 'promo';
+          const linkedVariant = MENU_VARIANTS.find((variant) => variant.name === item.linkedProductName);
+          const isInquiryOnly = linkedVariant?.kind === 'wholesale' || linkedVariant?.kind === 'event';
+          const actionLabel = isPromo ? (isInquiryOnly ? 'Tanya layanan' : 'Tanya promo') : 'Lihat menu';
           return (
             <article
               key={`${item.id}-${index}`}
@@ -229,12 +215,12 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
               {/* Highlight / Promo Price / Action Pill */}
               <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                 <div>
-                  {item.price && (
+                  {!isInquiryOnly && item.price && (
                     <div className="text-xs font-black text-[#d5f264]">
                       {formatRupiah(item.price)}
                     </div>
                   )}
-                  {item.highlightText && (
+                  {!isInquiryOnly && item.highlightText && (
                     <span className="text-[11px] font-bold text-[#ec6c3b] block">
                       {item.highlightText}
                     </span>
@@ -252,11 +238,11 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
                   aria-label={`${item.actionText} - ${item.title}`}
                 >
                   {isPromo ? (
-                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <MessageCircle className="w-3.5 h-3.5" />
                   ) : (
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   )}
-                  <span>{item.actionText || 'Pesan'}</span>
+                  <span>{actionLabel}</span>
                 </button>
               </div>
             </article>
