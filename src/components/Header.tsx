@@ -230,11 +230,11 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="bg-[#ede5d8] p-3 rounded-xl border border-black/10 space-y-2 text-xs text-[#555147] my-2">
               <div className="flex items-center gap-2 font-semibold">
                 <Clock className="w-3.5 h-3.5 text-[#ec6c3b]" />
-                <span>Buka: Sen–Sab 06.00–21.00 · Min 06.00–18.00</span>
+                <span>Konfirmasi jam operasional melalui WhatsApp sebelum berkunjung.</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#ec6c3b]" />
-                <span>Medaeng Kulon, Kedungturi, Taman, Sidoarjo</span>
+                <span>Area Medaeng, Sidoarjo · Hubungi admin untuk pin lokasi.</span>
               </div>
             </div>
 
