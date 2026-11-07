@@ -1,5 +1,5 @@
 import React from 'react';
-import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
+import { getWhatsAppLink } from '../data/content';
 
 export const Hero: React.FC = () => {
   return (
@@ -15,8 +15,8 @@ export const Hero: React.FC = () => {
           <em>Nikmati</em> rasanya.
         </h1>
         <p className="hero-intro">
-          Temukan kebab lezat dan aneka kudapan untuk teman santai. Butuh bahan kebab untuk jualan atau
-          pesanan acara di Sidoarjo? Al Firdaus siap jadi tempatmu mulai bertanya.
+          Temukan pilihan kebab dan kudapan untuk teman santai. Untuk kebutuhan bahan kebab atau
+          pesanan acara, hubungi admin terlebih dahulu untuk memastikan ketersediaannya.
         </p>
 
         <div className="hero-actions">
@@ -33,19 +33,7 @@ export const Hero: React.FC = () => {
           </a>
         </div>
 
-        <div className="hero-proof">
-          <div
-            className="proof-stars"
-            aria-label={`Rating direktori ${BUSINESS_INFO.rating.toString().replace('.', ',')} dari 5`}
-          >
-            ★★★★★
-          </div>
-          <div>
-            <strong>{BUSINESS_INFO.rating.toString().replace('.', ',')}/5 di Google</strong>
-            <small>{BUSINESS_INFO.reviewCount} ulasan publik · Medaeng Kulon, Sidoarjo</small>
-          </div>
-        </div>
-      </div>
+Hero public rating      </div>
 
       <div className="hero-art" aria-label="Ilustrasi komposisi kebab dengan sayuran segar" role="img">
         <div className="art-sticker sticker-one">DIBUAT DENGAN SEPENUH HATI</div>
