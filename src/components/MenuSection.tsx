@@ -13,7 +13,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onPreviewMenu,
   onAddToCart,
 }) => {
-  const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('kebab');
   const [addedItemName, setAddedItemName] = useState<string | null>(null);
 
   const isInquiryOnly = (item: MenuVariant) =>
