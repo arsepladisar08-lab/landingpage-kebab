@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, Sparkles } from 'lucide-react';
-import { MENU_VARIANTS, formatRupiah, getWhatsAppLink } from '../data/content';
+import { MENU_VARIANTS, getWhatsAppLink } from '../data/content';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
 
@@ -145,11 +145,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
                     {item.name}
                   </h3>
-                  {!isInquiryOnly(item) && item.price && (
-                    <span className="text-xs font-black text-[#1c1b18] shrink-0 bg-[#f3efe5] px-2 py-0.5 rounded-md border border-black/5">
-                      {item.priceDisplay || formatRupiah(item.price)}
-                    </span>
-                  )}
+
                 </div>
                 <p className="text-xs text-[#625e55] line-clamp-2 mt-1 leading-relaxed">
                   {item.description}
