@@ -31,15 +31,27 @@ export const LocationSection: React.FC = () => {
         </div>
         <p className="data-note">Alamat dan jam di atas berasal dari referensi listing publik dan perlu dikonfirmasi pemilik sebelum dipublikasikan sebagai informasi final.</p>
       </div>
-      <div className="map-panel">
-        <div className="map-grid" aria-hidden="true" />
-        <div className="map-route"><span className="route-dot" /><span className="route-line" /><span className="route-pin">AF</span></div>
-        <div className="map-label">
-          <small>YOU CAN FIND US HERE</small>
-          <strong>KEBAB {BUSINESS_INFO.name}</strong>
-          <span>Medaeng Kulon · Sidoarjo</span>
-        </div>
-        <a className="map-open" href={BUSINESS_INFO.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Buka lokasi Kebab Al Firdaus di Google Maps">↗</a>
+      <div className="map-panel" style={{ padding: 0, overflow: 'hidden', borderRadius: 16, border: '2px solid var(--ink)', minHeight: 480, position: 'relative', boxShadow: '4px 6px 0 var(--ink)' }}>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.2404!2d112.698709!3d-7.36497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e34363d77ca1%3A0x4138462fb3aba69c!2sKEBAB%20MURAH%20DI%20SIDOARJO%20ALFIRDAUS!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid"
+          title="Lokasi Kebab Al Firdaus di Google Maps"
+          width="100%"
+          height="100%"
+          style={{ border: 0, minHeight: 480, width: '100%', height: '100%', display: 'block' }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+        <a
+          className="map-open"
+          href={BUSINESS_INFO.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Buka lokasi Kebab Al Firdaus di Google Maps"
+          title="Buka rute langsung di aplikasi Google Maps"
+        >
+          ↗
+        </a>
       </div>
     </section>
   );

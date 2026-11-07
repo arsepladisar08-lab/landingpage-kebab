@@ -109,17 +109,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
 
           {/* Desktop Right Actions */}
           <div className="hidden sm:flex items-center gap-3">
-            <a
-              href={getWhatsAppLink('Halo Kebab Al Firdaus, saya ingin tanya informasi produk dan pemesanan.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1c1b18] hover:text-[#ec6c3b] transition-colors py-2 px-3 rounded-full hover:bg-black/5"
-              aria-label="Chat WhatsApp CS"
-            >
-              <MessageCircle className="w-3.5 h-3.5 text-emerald-700" />
-              <span>0838-3036-1617</span>
-            </a>
-
             <button
               type="button"
               className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#1c1b18] text-[#d5f264] hover:bg-[#2c2b27] active:scale-95 transition-all shadow-xs"

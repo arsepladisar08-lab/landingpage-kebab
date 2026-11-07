@@ -2500,8 +2500,7 @@ h1, h2, h3, p {
 
 /* Selector 1: Footer */
 .footer {
-  min-height: 90px;
-  padding: 64px max(7vw, 42px) 40px;
+  padding: 48px max(6vw, 24px) 36px;
   background: var(--ink);
   color: var(--paper);
   border-top: 1px solid rgba(255, 255, 255, 0.1);

@@ -5,9 +5,14 @@ import { getWhatsAppLink } from '../data/content';
 export const StepsSection: React.FC = () => (
   <section className="section steps" id="cara-pesan" aria-labelledby="steps-title">
     <div className="container">
-      <div className="section-head">
-        <div className="eyebrow">Cara pemesanan</div>
-        <h2 id="steps-title">Dari pilih produk sampai pesanan beres.</h2>
+      <div className="section-heading">
+        <div>
+          <div className="section-kicker">Cara Pemesanan</div>
+          <h2 id="steps-title">
+            Dari pilih produk sampai<br />
+            <em>Pesanan beres.</em>
+          </h2>
+        </div>
         <p>Harga, ketersediaan, ongkir, dan cara bayar dikonfirmasi admin sebelum pesanan disepakati.</p>
       </div>
       <div className="step-grid">
