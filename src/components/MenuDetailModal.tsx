@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, Flame, CheckCircle2, Sparkles, ChefHat, ShoppingBag, Check } from 'lucide-react';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
-import { formatRupiah } from '../data/content';
+import { formatRupiah, getWhatsAppLink } from '../data/content';
 
 interface MenuDetailModalProps {
   item: MenuVariant | null;
@@ -35,6 +35,11 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
   }, [item, onClose]);
 
   if (!item) return null;
+
+  const isInquiryOnly = item.kind === 'wholesale' || item.kind === 'event';
+  const inquiryUrl = getWhatsAppLink(
+    `Halo Kebab Al Firdaus, saya ingin bertanya tentang ${item.name}. Mohon info pilihan, minimum pemesanan, harga, dan ketersediaan terbaru.`
+  );
 
   const spiceMeter = () => {
     const level = item.spiceLevel ?? 1;
@@ -114,7 +119,7 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
               <h2 id="menu-detail-title" className="text-2xl font-black text-[#1c1b18] tracking-tight">
                 {item.name}
               </h2>
-              {item.price && (
+              {!isInquiryOnly && item.price && (
                 <span className="text-sm font-black text-[#1c1b18] bg-[#d5f264] px-3 py-1 rounded-full border border-black/10 self-start sm:self-auto">
                   {item.priceDisplay || formatRupiah(item.price)}
                 </span>
@@ -167,9 +172,18 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
             </div>
           )}
 
-          {/* Action CTAs - Only Cart Addition */}
+          {/* Inquiry services use WhatsApp; products use the cart. */}
           <div className="pt-2">
-            {onAddToCart && (
+            {isInquiryOnly ? (
+              <a
+                href={inquiryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-[#1c1b18] text-[#d5f264] font-extrabold text-sm tracking-wider uppercase shadow-sm hover:bg-[#2c2b27] transition-all"
+              >
+                <span>Konsultasi via WhatsApp</span>
+              </a>
+            ) : onAddToCart ? (
               <button
                 type="button"
                 onClick={() => {
@@ -195,7 +209,7 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
                   </>
                 )}
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
