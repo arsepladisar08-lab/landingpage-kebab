@@ -1,5 +1,3 @@
-import React from 'react';
-import { Star } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
 
 export const Footer: React.FC = () => {
@@ -48,24 +46,10 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Clean Meta Row: Copyright, Hours, & Google Rating */}
+        {/* Bottom Clean Meta Row: Copyright */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8c887e]">
           <div>
             © {new Date().getFullYear()} <strong>Kebab {BUSINESS_INFO.name}</strong> · Jl. Bali No.13 Blok O, Medaeng Kulon, Sidoarjo
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <span>Sen–Sab 06.00–21.00 · Min 06.00–18.00</span>
-            <span className="opacity-40 hidden sm:inline">•</span>
-            <a
-              href={BUSINESS_INFO.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[#b8b3a7] hover:text-[#d5f264] transition-colors"
-            >
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span>{BUSINESS_INFO.rating} / 5 Google ({BUSINESS_INFO.reviewCount} ulasan)</span>
-            </a>
           </div>
         </div>
       </div>

@@ -38,6 +38,65 @@ export function buildOrderWhatsAppUrl(data: {
   return `${BUSINESS_INFO.whatsappBaseUrl}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
+export function formatRupiah(value: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+export function buildCartWhatsAppUrl(data: {
+  customerName?: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    portionOption?: string;
+    notes?: string;
+  }>;
+  deliveryOption: 'pickup' | 'delivery';
+  deliveryAddress?: string;
+  generalNotes?: string;
+}): string {
+  const totalItemCount = data.items.reduce((acc, curr) => acc + curr.quantity, 0);
+  const totalPrice = data.items.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
+
+  const itemLines = data.items.map((item, index) => {
+    const optionText = item.portionOption ? ` (${item.portionOption})` : '';
+    const noteText = item.notes ? ` [Catatan: ${item.notes}]` : '';
+    const subtotal = formatRupiah(item.price * item.quantity);
+    return `${index + 1}. *${item.name}*${optionText} x${item.quantity} = ${subtotal}${noteText}`;
+  });
+
+  const methodText =
+    data.deliveryOption === 'delivery'
+      ? '🛵 Pengiriman / Antar ke Lokasi'
+      : '🏪 Ambil Sendiri di Outlet Medaeng Kulon';
+
+  const lines = [
+    'Halo Kebab Al Firdaus! Saya mau memesan melalui keranjang:',
+    '',
+    '📋 *DAFTAR PESANAN:*',
+    ...itemLines,
+    '',
+    `📦 *Total Pesanan:* ${totalItemCount} item`,
+    `💰 *Estimasi Total:* ${formatRupiah(totalPrice)}`,
+    '',
+    data.customerName ? `👤 *Nama Pemesan:* ${data.customerName}` : '',
+    `📍 *Metode Pengambilan:* ${methodText}`,
+    data.deliveryOption === 'delivery' && data.deliveryAddress
+      ? `🏠 *Alamat Antar:* ${data.deliveryAddress}`
+      : '',
+    data.generalNotes ? `📝 *Catatan Khusus:* ${data.generalNotes}` : '',
+    '',
+    'Mohon info ketersediaan stok & estimasi waktu pembuatannya ya. Terima kasih banyak!'
+  ].filter(Boolean);
+
+  return `${BUSINESS_INFO.whatsappBaseUrl}?text=${encodeURIComponent(lines.join('\n'))}`;
+}
+
 export const MENU_VARIANTS: MenuVariant[] = [
   {
     id: 'original',
@@ -52,6 +111,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 1,
     portionInfo: 'Tersedia ukuran Reguler & Jumbo (Porsi mengenyangkan)',
     imageDummyAlt: 'Dummy Foto Kebab Original Panggang dengan Sayuran Segar',
+    price: 12000,
+    priceDisplay: 'Rp 12.000',
     ingredients: [
       'Kulit Tortilla Panggang Renyah',
       'Irisan Daging Kebab Bumbu Rempah',
@@ -72,6 +133,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 1,
     portionInfo: 'Tersedia porsi Reguler & Ekstra Keju Double Melt',
     imageDummyAlt: 'Dummy Foto Kebab Keju Lumer Creamy',
+    price: 15000,
+    priceDisplay: 'Rp 15.000',
     ingredients: [
       'Kulit Tortilla Lembut Terpanggang',
       'Daging Kebab Pilihan Berbumbu',
@@ -92,6 +155,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 3,
     portionInfo: 'Level pedas bisa disesuaikan (Sedang / Ekstra Pedas)',
     imageDummyAlt: 'Dummy Foto Kebab Pedas dengan Saus Cabai Menggoda',
+    price: 14000,
+    priceDisplay: 'Rp 14.000',
     ingredients: [
       'Kulit Tortilla Dipanggang Matang',
       'Daging Kebab Gurih Empuk',
@@ -112,6 +177,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 2,
     portionInfo: 'Ukuran Jumbo Spesial, porsi paling mantap dan memuaskan',
     imageDummyAlt: 'Dummy Foto Kebab Komplit Porsi Jumbo Spesial',
+    price: 18000,
+    priceDisplay: 'Rp 18.000',
     ingredients: [
       'Kulit Tortilla Jumbo Lembut & Renyah',
       'Porsi Ekstra Daging Kebab Berlimpah',
@@ -133,6 +200,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 0,
     portionInfo: 'Isi per pack atau siap santap hangat dengan topping pilihan',
     imageDummyAlt: 'Dummy Foto Roti Maryam Hangat Berlapis',
+    price: 10000,
+    priceDisplay: 'Rp 10.000',
     ingredients: [
       'Adonan Tepung Gandum Berkualitas',
       'Margarin & Susu Pilihan',
@@ -153,6 +222,8 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 0,
     portionInfo: 'Paket grosir per pack kulit tortilla, daging roll/blok, & saus jerigen',
     imageDummyAlt: 'Dummy Foto Paket Bahan Baku Kebab Grosir',
+    price: 50000,
+    priceDisplay: 'Mulai Rp 50.000',
     ingredients: [
       'Kulit Tortilla (berbagai diameter)',
       'Daging Kebab Olahan Roll / Siap Panggang',
@@ -173,12 +244,89 @@ export const MENU_VARIANTS: MenuVariant[] = [
     spiceLevel: 1,
     portionInfo: 'Pemesanan mulai puluhan hingga ratusan porsi, harap info H-2/H-3',
     imageDummyAlt: 'Dummy Foto Sajian Kebab untuk Katering Acara dan Syukuran',
+    price: 15000,
+    priceDisplay: 'Mulai Rp 15.000/porsi',
     ingredients: [
       'Pilihan Varian Kebab Sesuai Permintaan',
       'Kemasan Box Praktis & Bersih',
       'Dibuat Hangat Menjelang Waktu Pengambilan/Antar',
       'Bisa Dikombinasikan dengan Roti Maryam',
     ],
+  },
+];
+
+export const PROMO_BANNER_ITEMS = [
+  {
+    id: 'promo-jumat',
+    type: 'promo' as const,
+    tag: '🔥 PROMO SPESIAL HARI INI',
+    title: 'Paket 3 Kebab Komplit Gratis 1 Roti Maryam',
+    subtitle: 'Cocok dinikmati bersama teman atau keluarga di sore hari.',
+    highlightText: 'Hemat Rp 10.000',
+    badge: 'BEST VALUE',
+    actionText: '+ Tambah ke Keranjang',
+    linkedProductName: 'Kebab Komplit',
+    price: 54000,
+  },
+  {
+    id: 'gallery-grill',
+    type: 'gallery' as const,
+    tag: '📸 GALERI KEBAB AL FIRDAUS',
+    title: 'Panggang Daging Rempah Smoky & Juicy',
+    subtitle: 'Dipanggang segar saat kamu memesan di outlet Medaeng Kulon.',
+    highlightText: 'Daging 100% Olahan Berkualitas',
+    badge: 'FRESH GRILL',
+    actionText: 'Lihat Menu',
+    linkedProductName: 'Kebab Original',
+    price: 12000,
+  },
+  {
+    id: 'promo-grosir',
+    type: 'promo' as const,
+    tag: '💼 PENAWARAN MITRA USAHA',
+    title: 'Paket Bahan Tortilla & Daging Kebab Grosir',
+    subtitle: 'Siap pasok untuk warung kuliner, cafe, dan reseller di Sidoarjo & Surabaya.',
+    highlightText: 'Harga Khusus Mitra',
+    badge: 'PELUANG BISNIS',
+    actionText: 'Konsultasi Pasokan',
+    linkedProductName: 'Bahan Baku Kebab Grosir',
+    price: 50000,
+  },
+  {
+    id: 'gallery-cheese',
+    type: 'gallery' as const,
+    tag: '📸 GALERI SAJIAN FAVORIT',
+    title: 'Sensasi Keju Lumer Creamy Double Melt',
+    subtitle: 'Lumuran keju gurih berpadu dengan selada renyah dan mayones gurih mantap.',
+    highlightText: 'Favorit Semua Kalangan',
+    badge: 'EXTRA CHEESY',
+    actionText: '+ Tambah ke Keranjang',
+    linkedProductName: 'Kebab Keju',
+    price: 15000,
+  },
+  {
+    id: 'promo-acara',
+    type: 'promo' as const,
+    tag: '🎉 PAKET HAJATAN & KATERING',
+    title: 'Pesan Kebab Porsi Besar untuk Acara & Arisan',
+    subtitle: 'Dikemas rapi dalam box praktis, higienis, dan disajikan hangat tepat waktu.',
+    highlightText: 'Free Ongkir Area Medaeng (Min. 30 Porsi)',
+    badge: 'KATERING CEPAT',
+    actionText: 'Pesan Acara',
+    linkedProductName: 'Paket Pesanan Acara / Hajatan',
+    price: 15000,
+  },
+  {
+    id: 'gallery-maryam',
+    type: 'gallery' as const,
+    tag: '📸 GALERI KUDAPAN HANGAT',
+    title: 'Roti Maryam Gurih & Manis Berlapis Renyah',
+    subtitle: 'Tekstur luar renyah dengan bagian dalam empuk lembut berserat harum margarin.',
+    highlightText: 'Enak Dinikmati Hangat',
+    badge: 'KUDAPAN SPESIAL',
+    actionText: '+ Tambah ke Keranjang',
+    linkedProductName: 'Roti Maryam Gurih / Manis',
+    price: 10000,
   },
 ];
 
@@ -227,7 +375,7 @@ export const ORDERING_STEPS: OrderingStep[] = [
   {
     number: '02',
     title: 'Hubungi kami',
-    description: 'Kirim pesan WhatsApp atau gunakan formulir cepat untuk merangkum pesanan.',
+    description: 'Masukkan pesanan ke keranjang belanja atau langsung chat kami via WhatsApp.',
   },
   {
     number: '03',

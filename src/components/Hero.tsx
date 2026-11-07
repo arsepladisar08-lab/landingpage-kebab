@@ -1,11 +1,7 @@
 import React from 'react';
-import { BUSINESS_INFO } from '../data/content';
+import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
 
-interface HeroProps {
-  onOpenOrderModal: () => void;
-}
-
-export const Hero: React.FC<HeroProps> = ({ onOpenOrderModal }) => {
+export const Hero: React.FC = () => {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-grain" aria-hidden="true" />
@@ -24,13 +20,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenOrderModal }) => {
         </p>
 
         <div className="hero-actions">
-          <button
-            type="button"
+          <a
             className="button button-lime"
-            onClick={onOpenOrderModal}
+            href={getWhatsAppLink('Halo Kebab Al Firdaus, saya mau pesan kebab.')}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Pesan via WhatsApp <span>↗</span>
-          </button>
+          </a>
           <a className="text-link light-link" href="#menu-varian">
             Pilih varian rasa <span>↓</span>
           </a>
@@ -84,7 +81,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenOrderModal }) => {
       </div>
 
       <div className="hero-bottom">
-        <span>01 — 05</span>
         <span>KEBAB · ROTI MARYAM · BAHAN GROSIR · PESANAN ACARA</span>
         <span>SCROLL TO EXPLORE ↓</span>
       </div>

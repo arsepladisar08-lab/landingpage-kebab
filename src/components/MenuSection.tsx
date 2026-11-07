@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { Eye, ArrowUpRight, Sparkles } from 'lucide-react';
-import { MENU_VARIANTS } from '../data/content';
+import { Eye, Sparkles } from 'lucide-react';
+import { MENU_VARIANTS, formatRupiah, getWhatsAppLink } from '../data/content';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
 
 interface MenuSectionProps {
-  onSelectProduct: (productName: string) => void;
   onPreviewMenu: (item: MenuVariant) => void;
+  onAddToCart?: (item: MenuVariant) => void;
 }
 
 export const MenuSection: React.FC<MenuSectionProps> = ({
-  onSelectProduct,
   onPreviewMenu,
+  onAddToCart,
 }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('all');
+  const [addedItemName, setAddedItemName] = useState<string | null>(null);
 
   const filteredItems = MENU_VARIANTS.filter((item) => {
     if (activeTab === 'all') return true;
@@ -137,9 +138,16 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     </span>
                   )}
                 </div>
-                <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
-                  {item.name}
-                </h3>
+                <div className="flex items-baseline justify-between gap-2 mt-1">
+                  <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
+                    {item.name}
+                  </h3>
+                  {item.price && (
+                    <span className="text-xs font-black text-[#1c1b18] shrink-0 bg-[#f3efe5] px-2 py-0.5 rounded-md border border-black/5">
+                      {item.priceDisplay || formatRupiah(item.price)}
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-[#625e55] line-clamp-2 mt-1 leading-relaxed">
                   {item.description}
                 </p>
@@ -150,22 +158,36 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => onPreviewMenu(item)}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-[#1c1b18] bg-neutral-100 hover:bg-neutral-200 active:scale-95 transition-all"
+                  className="px-3 py-2 rounded-xl text-xs font-bold text-[#1c1b18] bg-neutral-100 hover:bg-neutral-200 active:scale-95 transition-all inline-flex items-center justify-center gap-1.5"
                   aria-label={`Lihat detail ${item.name}`}
+                  title="Lihat detail komposisi"
                 >
                   <Eye className="w-3.5 h-3.5 text-[#5e5b53]" />
                   <span>Detail</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => onSelectProduct(item.name)}
-                  className="inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl text-xs font-black text-[#1c1b18] bg-[#d5f264] hover:bg-[#c6e64d] active:scale-95 transition-all shadow-xs"
-                  aria-label={`Pesan ${item.name}`}
-                >
-                  <span>Pesan</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
+                {onAddToCart && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onAddToCart(item);
+                      setAddedItemName(item.id);
+                      setTimeout(() => setAddedItemName(null), 1500);
+                    }}
+                    className={`flex-1 inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-black transition-all active:scale-95 shadow-xs ${
+                      addedItemName === item.id
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-[#d5f264] text-[#1c1b18] hover:bg-[#c4e44b]'
+                    }`}
+                    aria-label={`Tambah ${item.name} ke keranjang`}
+                  >
+                    {addedItemName === item.id ? (
+                      <span>Masuk!</span>
+                    ) : (
+                      <span>+ Keranjang</span>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </article>
@@ -187,17 +209,23 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           <button
             type="button"
             className="button button-lime"
-            onClick={() => onSelectProduct('Roti Maryam Gurih / Manis')}
+            onClick={() => {
+              const maryam = MENU_VARIANTS.find((m) => m.id === 'maryam');
+              if (maryam && onAddToCart) {
+                onAddToCart(maryam);
+              }
+            }}
           >
-            Pesan Roti Maryam <span>↗</span>
+            Pesan Roti Maryam
           </button>
-          <button
-            type="button"
+          <a
+            href={getWhatsAppLink('Halo Kebab Al Firdaus, saya ingin tanya pasokan bahan baku kebab grosir.')}
+            target="_blank"
+            rel="noopener noreferrer"
             className="button button-dark"
-            onClick={() => onSelectProduct('Bahan Baku Kebab Grosir')}
           >
             Tanya Bahan Grosir <span>↗</span>
-          </button>
+          </a>
         </div>
       </div>
     </section>

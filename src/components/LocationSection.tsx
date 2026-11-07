@@ -1,9 +1,7 @@
 import React from 'react';
-import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
+import { BUSINESS_INFO } from '../data/content';
 
 export const LocationSection: React.FC = () => {
-  const whatsappUrl = getWhatsAppLink('Halo Kebab Al Firdaus. Saya ingin bertanya sebelum berkunjung.');
-
   return (
     <section className="location section-pad" id="lokasi">
       <div className="location-copy">
@@ -27,7 +25,6 @@ export const LocationSection: React.FC = () => {
         </div>
         <div className="location-actions">
           <a className="button button-dark" href={BUSINESS_INFO.mapsUrl} target="_blank" rel="noopener noreferrer">Buka Google Maps <span>↗</span></a>
-          <a className="text-link dark-link" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat WhatsApp <span>↗</span></a>
         </div>
         <p className="data-note">Alamat dan jam di atas berasal dari referensi listing publik dan perlu dikonfirmasi pemilik sebelum dipublikasikan sebagai informasi final.</p>
       </div>

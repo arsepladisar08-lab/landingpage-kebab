@@ -1,6 +1,5 @@
 import React from 'react';
 import { ORDERING_STEPS } from '../data/content';
-import { getWhatsAppLink } from '../data/content';
 
 export const StepsSection: React.FC = () => (
   <section className="section steps" id="cara-pesan" aria-labelledby="steps-title">
@@ -23,11 +22,6 @@ export const StepsSection: React.FC = () => (
             <p>{step.description}</p>
           </article>
         ))}
-      </div>
-      <div className="steps-action">
-        <a className="btn btn-primary" href={getWhatsAppLink('Halo, saya ingin mulai pesan produk Kebab Al Firdaus.')} target="_blank" rel="noopener noreferrer">
-          Mulai Pesan via WhatsApp <span aria-hidden="true">↗</span>
-        </a>
       </div>
     </div>
   </section>

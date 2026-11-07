@@ -27,6 +27,34 @@ export interface MenuVariant {
   spiceLevel?: number; // 0 to 3
   portionInfo?: string;
   category?: 'kebab' | 'snack' | 'wholesale' | 'event';
+  price?: number;
+  priceDisplay?: string;
+}
+
+export interface CartItem {
+  id: string;
+  menuId: string;
+  name: string;
+  tag: string;
+  price: number;
+  quantity: number;
+  type?: 'original' | 'keju' | 'pedas' | 'komplit' | 'custom';
+  notes?: string;
+  portionOption?: string;
+}
+
+export interface PromoBannerItem {
+  id: string;
+  type: 'promo' | 'gallery';
+  tag: string;
+  title: string;
+  subtitle: string;
+  highlightText?: string;
+  badge?: string;
+  imageAlt?: string;
+  actionText?: string;
+  linkedProductName?: string;
+  price?: number;
 }
 
 export interface OrderFormData {

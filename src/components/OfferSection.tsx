@@ -1,13 +1,12 @@
 import React from 'react';
-import { OFFER_ITEMS } from '../data/content';
+import { OFFER_ITEMS, getWhatsAppLink } from '../data/content';
 import type { OfferItem } from '../types';
 
 interface OfferSectionProps {
-  onSelectProduct: (productName: string) => void;
   onViewMenu: () => void;
 }
 
-export const OfferSection: React.FC<OfferSectionProps> = ({ onSelectProduct, onViewMenu }) => {
+export const OfferSection: React.FC<OfferSectionProps> = ({ onViewMenu }) => {
   const renderVisual = (type: OfferItem['type']) => {
     if (type === 'food') return (
       <div className="offer-visual food-visual">
@@ -41,9 +40,20 @@ export const OfferSection: React.FC<OfferSectionProps> = ({ onSelectProduct, onV
               <div className="offer-tag">{item.tag}</div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              <button type="button" className="card-link" onClick={() => item.type === 'food' ? onViewMenu() : onSelectProduct(item.productName)}>
-                {item.actionText} <span>↗</span>
-              </button>
+              {item.type === 'food' ? (
+                <button type="button" className="card-link" onClick={onViewMenu}>
+                  {item.actionText} <span>↗</span>
+                </button>
+              ) : (
+                <a
+                  href={getWhatsAppLink(item.whatsappMessage || 'Halo Kebab Al Firdaus, saya ingin bertanya tentang layanan ini.')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card-link"
+                >
+                  {item.actionText} <span>↗</span>
+                </a>
+              )}
             </div>
           </article>
         ))}

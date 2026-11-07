@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, MessageCircle, MapPin, Clock } from 'lucide-react';
+import { Menu, X, MessageCircle, MapPin, Clock, ShoppingBag } from 'lucide-react';
 import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
 
 interface HeaderProps {
-  onOpenOrderModal: () => void;
+  onOpenCart?: () => void;
+  cartCount?: number;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onOpenCart,
+  cartCount = 0,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -107,30 +111,36 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
             </a>
           </nav>
 
-          {/* Desktop Right Actions */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Right Actions (Cart + Hamburger) */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Cart Button: Hidden by default; appears only when cartCount > 0 */}
+            {cartCount > 0 && (
+              <button
+                type="button"
+                onClick={onOpenCart}
+                className="relative inline-flex items-center gap-2 py-2 px-3 sm:px-3.5 rounded-full text-xs font-black bg-white hover:bg-neutral-100 text-[#1c1b18] border border-neutral-300 shadow-xs active:scale-95 transition-all animate-in fade-in zoom-in-95 duration-200"
+                aria-label={`Keranjang belanja, ${cartCount} item`}
+              >
+                <ShoppingBag className="w-4 h-4 text-[#ec6c3b]" />
+                <span className="hidden md:inline">Keranjang</span>
+                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black bg-[#1c1b18] text-[#d5f264] transition-all">
+                  {cartCount}
+                </span>
+              </button>
+            )}
+
+            {/* Mobile Menu Hamburger */}
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#1c1b18] text-[#d5f264] hover:bg-[#2c2b27] active:scale-95 transition-all shadow-xs"
-              onClick={onOpenOrderModal}
-              aria-label="Buka formulir pemesanan cepat"
+              className="lg:hidden w-10 h-10 rounded-xl bg-white/80 border border-black/10 flex items-center justify-center text-[#1c1b18] hover:bg-white active:scale-95 transition-all"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-sheet"
+              aria-label={isMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+              onClick={() => setIsMenuOpen((prev) => !prev)}
             >
-              <span>Pesan Sekarang</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-
-          {/* Mobile Menu Hamburger */}
-          <button
-            type="button"
-            className="lg:hidden w-10 h-10 rounded-xl bg-white/80 border border-black/10 flex items-center justify-center text-[#1c1b18] hover:bg-white active:scale-95 transition-all"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-sheet"
-            aria-label={isMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-          >
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
         </div>
       </header>
 
@@ -172,6 +182,28 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
               </button>
             </div>
 
+            {/* Quick Cart Banner in Mobile Sheet - only when cartCount > 0 */}
+            {cartCount > 0 && (
+              <div className="mt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    if (onOpenCart) onOpenCart();
+                  }}
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-white border border-neutral-300 flex items-center justify-between text-xs font-black text-[#1c1b18] hover:bg-neutral-50 shadow-xs"
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingBag className="w-4 h-4 text-[#ec6c3b]" />
+                    <span>Keranjang Pesanan</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-[#d5f264] text-[#1c1b18] text-[10px] font-black border border-black/10">
+                    {cartCount} Item
+                  </span>
+                </button>
+              </div>
+            )}
+
             {/* Links */}
             <div className="py-4 space-y-1">
               {[
@@ -208,24 +240,26 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrderModal }) => {
 
             {/* CTAs */}
             <div className="pt-3 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onOpenOrderModal();
-                }}
-                className="w-full py-3 rounded-xl bg-[#1c1b18] text-[#d5f264] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm"
-              >
-                <span>Buka Formulir Pesan</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
+              {cartCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    if (onOpenCart) onOpenCart();
+                  }}
+                  className="w-full py-3 rounded-xl bg-[#1c1b18] text-[#d5f264] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+                >
+                  <ShoppingBag className="w-4 h-4 text-[#d5f264]" />
+                  <span>Lihat Keranjang ({cartCount} Item)</span>
+                </button>
+              )}
 
               <a
                 href={getWhatsAppLink('Halo Kebab Al Firdaus, saya mau pesan kebab.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleLinkClick}
-                className="w-full py-2.5 rounded-xl bg-[#d5f264] text-[#1c1b18] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border border-black/10"
+                className="w-full py-2.5 rounded-xl bg-[#d5f264] text-[#1c1b18] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border border-black/10 shadow-xs active:scale-95 transition-all"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-800" />
                 <span>WhatsApp Langsung</span>

@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
-import { X, Flame, CheckCircle2, MessageCircle, FileText, Sparkles, ChefHat } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Flame, CheckCircle2, Sparkles, ChefHat, ShoppingBag, Check } from 'lucide-react';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
-import { getWhatsAppLink } from '../data/content';
+import { formatRupiah } from '../data/content';
 
 interface MenuDetailModalProps {
   item: MenuVariant | null;
   onClose: () => void;
-  onOpenOrderForm: (productName: string) => void;
+  onAddToCart?: (item: MenuVariant) => void;
 }
 
 export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
   item,
   onClose,
-  onOpenOrderForm,
+  onAddToCart,
 }) => {
+  const [justAdded, setJustAdded] = useState(false);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -63,8 +64,6 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
     );
   };
 
-  const directWaMessage = `Halo Kebab Al Firdaus, saya tertarik dengan menu *${item.name}*. Boleh info harga dan cara pemesanannya?`;
-
   return (
     <div
       className="modal-backdrop show"
@@ -111,9 +110,16 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
               <ChefHat className="w-4 h-4" />
               <span>Detail Menu Al Firdaus</span>
             </div>
-            <h2 id="menu-detail-title" className="text-2xl font-black text-[#1c1b18] tracking-tight">
-              {item.name}
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+              <h2 id="menu-detail-title" className="text-2xl font-black text-[#1c1b18] tracking-tight">
+                {item.name}
+              </h2>
+              {item.price && (
+                <span className="text-sm font-black text-[#1c1b18] bg-[#d5f264] px-3 py-1 rounded-full border border-black/10 self-start sm:self-auto">
+                  {item.priceDisplay || formatRupiah(item.price)}
+                </span>
+              )}
+            </div>
             <p className="mt-1.5 text-sm text-[#5d5950] leading-relaxed">
               {item.description}
             </p>
@@ -161,29 +167,35 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
             </div>
           )}
 
-          {/* Action CTAs */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
-            <a
-              href={getWhatsAppLink(directWaMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-extrabold text-xs tracking-wider uppercase bg-[#1c1b18] text-[#d5f264] hover:bg-[#2e2c27] active:scale-[0.98] transition-all shadow-sm"
-            >
-              <MessageCircle className="w-4 h-4 fill-current text-[#d5f264]" />
-              <span>Pesan via WhatsApp</span>
-            </a>
-
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onOpenOrderForm(item.name);
-              }}
-              className="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-extrabold text-xs tracking-wider uppercase bg-[#d5f264] text-[#1c1b18] border border-black/15 hover:bg-[#c9e855] active:scale-[0.98] transition-all shadow-sm"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Formulir Cepat</span>
-            </button>
+          {/* Action CTAs - Only Cart Addition */}
+          <div className="pt-2">
+            {onAddToCart && (
+              <button
+                type="button"
+                onClick={() => {
+                  onAddToCart(item);
+                  setJustAdded(true);
+                  setTimeout(() => setJustAdded(false), 1800);
+                }}
+                className={`w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-extrabold text-sm tracking-wider uppercase transition-all shadow-sm active:scale-[0.98] ${
+                  justAdded
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-[#d5f264] text-[#1c1b18] border border-black/15 hover:bg-[#c6e74b]'
+                }`}
+              >
+                {justAdded ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Dimasukkan ke Keranjang!</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>+ Masukkan ke Keranjang</span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
