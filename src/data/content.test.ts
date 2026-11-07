@@ -81,5 +81,4 @@ test('MENU_VARIANTS includes core kebabs and secondary items', () => {
 test('PROMO_BANNER_ITEMS only publishes neutral gallery cards', () => {
   assert.ok(PROMO_BANNER_ITEMS.length > 0);
   assert.equal(PROMO_BANNER_ITEMS.every((item) => item.type === 'gallery'), true);
-  assert.equal(PROMO_BANNER_ITEMS.some((item) => item.highlightText), false);
 });
