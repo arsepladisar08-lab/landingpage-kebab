@@ -41,29 +41,59 @@ export const CartModal: React.FC<CartModalProps> = ({
   const [generalNotes, setGeneralNotes] = useState('');
   const [addressError, setAddressError] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  onCloseRef.current = onClose;
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    previousFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCloseRef.current();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable?.length) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-      setTimeout(() => closeBtnRef.current?.focus(), 50);
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = window.setTimeout(() => closeBtnRef.current?.focus(), 0);
 
     return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocusRef.current?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -97,6 +127,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="cart-modal-title"
+      ref={dialogRef}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
