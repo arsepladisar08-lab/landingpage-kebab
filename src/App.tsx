@@ -17,28 +17,38 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MenuDetailModal } from './components/MenuDetailModal';
 import { CartModal } from './components/CartModal';
 import { MenuVariant, CartItem } from './types';
-import { formatRupiah, MENU_VARIANTS } from './data/content';
+import { MENU_VARIANTS } from './data/content';
 
 const CART_STORAGE_KEY = 'alfirdaus_kebab_cart_v1';
 
-const isValidCartItem = (value: unknown): value is CartItem => {
-  if (!value || typeof value !== 'object') return false;
+const normalizeCartItem = (value: unknown): CartItem | null => {
+  if (!value || typeof value !== 'object') return null;
 
   const item = value as Partial<CartItem>;
   const variant = MENU_VARIANTS.find((entry) => entry.id === item.menuId);
 
-  return Boolean(
-    variant &&
-      variant.kind !== 'wholesale' &&
-      variant.kind !== 'event' &&
-      item.name === variant.name &&
-      typeof item.id === 'string' &&
-      typeof item.tag === 'string' &&
-      typeof item.price === 'number' &&
-      Number.isFinite(item.price) &&
-      Number.isInteger(item.quantity) &&
-      (item.quantity ?? 0) > 0
-  );
+  if (
+    !variant ||
+    variant.kind === 'wholesale' ||
+    variant.kind === 'event' ||
+    typeof item.id !== 'string' ||
+    !Number.isInteger(item.quantity) ||
+    (item.quantity ?? 0) < 1
+  ) {
+    return null;
+  }
+
+  return {
+    id: item.id,
+    menuId: variant.id,
+    name: variant.name,
+    tag: variant.tag,
+    price: variant.price ?? 0,
+    quantity: item.quantity as number,
+    type: variant.type,
+    portionOption: typeof item.portionOption === 'string' ? item.portionOption : undefined,
+    notes: typeof item.notes === 'string' ? item.notes : undefined,
+  };
 };
 
 export const App: React.FC = () => {
@@ -51,7 +61,9 @@ export const App: React.FC = () => {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
       if (saved) {
         const parsed: unknown = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed.filter(isValidCartItem) : [];
+        return Array.isArray(parsed)
+          ? parsed.map(normalizeCartItem).filter((item): item is CartItem => item !== null)
+          : [];
       }
     } catch {
       // Fallback
@@ -68,7 +80,6 @@ export const App: React.FC = () => {
   }, [cartItems]);
 
   const totalCartCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
-  const totalCartPrice = cartItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 
   const handleAddToCart = (variant: MenuVariant, portionOption?: string) => {
     if (variant.kind === 'wholesale' || variant.kind === 'event') return;
@@ -173,7 +184,7 @@ export const App: React.FC = () => {
             type="button"
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-3 py-3 px-4 rounded-2xl bg-[#1c1b18] text-[#d5f264] border-2 border-[#d5f264]/60 shadow-2xl hover:scale-105 active:scale-95 transition-all group"
-            aria-label={`Buka keranjang pesanan, ${totalCartCount} item seharga ${formatRupiah(totalCartPrice)}`}
+            aria-label={`Buka keranjang pesanan, ${totalCartCount} item`}
           >
             <div className="relative">
               <ShoppingBag className="w-5 h-5 text-[#d5f264]" />
@@ -183,10 +194,10 @@ export const App: React.FC = () => {
             </div>
             <div className="text-left">
               <div className="text-[11px] font-black text-white leading-tight">
-                {formatRupiah(totalCartPrice)}
+                {totalCartCount} item dipilih
               </div>
               <div className="text-[9px] text-[#b8b3a7] font-semibold">
-                Lihat Keranjang Pesanan
+                Harga dikonfirmasi melalui WhatsApp
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-[#d5f264] group-hover:translate-x-0.5 transition-transform" />
