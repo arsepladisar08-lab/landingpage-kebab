@@ -5,14 +5,19 @@ export const FaqSection: React.FC = () => (
   <section className="section faq" id="faq" aria-labelledby="faq-title">
     <div className="container">
       <div className="section-head">
-        <div className="eyebrow">Pertanyaan umum</div>
+        <div className="section-kicker">07 / Pertanyaan Umum</div>
         <h2 id="faq-title">Sebelum pesan, cek dulu.</h2>
-        <p>Jawaban yang membutuhkan detail operasional atau informasi keamanan produk akan dikonfirmasi kepada admin.</p>
+        <p>
+          Pertanyaan soal stok harian, ongkir, atau pesanan jumlah besar bisa langsung kamu tanyakan ke admin kami di WhatsApp.
+        </p>
       </div>
       <div className="faq-list">
         {FAQ_ITEMS.map((item) => (
           <details key={item.question}>
-            <summary>{item.question}<span aria-hidden="true">+</span></summary>
+            <summary>
+              {item.question}
+              <span aria-hidden="true">+</span>
+            </summary>
             <p>{item.answer}</p>
           </details>
         ))}

@@ -6,13 +6,13 @@ export const StepsSection: React.FC = () => (
     <div className="container">
       <div className="section-heading">
         <div>
-          <div className="section-kicker">Cara Pemesanan</div>
+          <div className="section-kicker">05 / Cara Pemesanan</div>
           <h2 id="steps-title">
-            Dari pilih produk sampai<br />
-            <em>Pesanan beres.</em>
+            Dari pilih menu sampai<br />
+            <em>pesanan beres.</em>
           </h2>
         </div>
-        <p>Harga, ketersediaan, ongkir, dan cara bayar dikonfirmasi admin sebelum pesanan disepakati.</p>
+        <p>Admin kami mengonfirmasi harga terbaru, ketersediaan stok, ongkir, dan cara bayar sebelum pesanan diproses.</p>
       </div>
       <div className="step-grid">
         {ORDERING_STEPS.map((step) => (

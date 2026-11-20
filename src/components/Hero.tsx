@@ -8,15 +8,14 @@ export const Hero: React.FC = () => {
 
       <div className="hero-copy">
         <p className="eyebrow light">
-          <span /> DARI MEDAENG, UNTUK KAMU
+          <span aria-hidden="true" /> Medaeng Kulon, Sidoarjo · Maknyus Banget
         </p>
         <h1 id="hero-title">
           Gigit hangatnya.<br />
           <em>Nikmati</em> rasanya.
         </h1>
         <p className="hero-intro">
-          Temukan kebab lezat dan aneka kudapan untuk teman santai. Butuh bahan kebab untuk jualan atau
-          pesanan acara di Sidoarjo? Al Firdaus siap jadi tempatmu mulai bertanya.
+          Kebab panggang siap santap dan kemasan frozen praktis (isi 5, 6, 10) yang <strong>Maknyus Banget</strong>. Melayani pembelian harian, stok bahan kebab untuk usaha, dan pesanan acara di Sidoarjo.
         </p>
 
         <div className="hero-actions">
@@ -26,10 +25,10 @@ export const Hero: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Pesan via WhatsApp <span>↗</span>
+            Pesan via WhatsApp
           </a>
           <a className="text-link light-link" href="#menu-varian">
-            Pilih varian rasa <span>↓</span>
+            Lihat pilihan menu
           </a>
         </div>
 
@@ -47,42 +46,38 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      <div className="hero-art" aria-label="Ilustrasi komposisi kebab dengan sayuran segar" role="img">
-        <div className="art-sticker sticker-one">DIBUAT DENGAN SEPENUH HATI</div>
-        <div className="art-ring" />
+      <div className="hero-art">
+        <div className="art-ring" aria-hidden="true" />
 
-        <div className="kebab-wrap">
-          <div className="kebab-shadow" />
-          <div className="kebab">
-            <div className="tortilla" />
-            <div className="filling filling-a" />
-            <div className="filling filling-b" />
-            <div className="filling filling-c" />
-            <div className="sauce" />
-            <div className="grill g1" />
-            <div className="grill g2" />
-            <div className="grill g3" />
-          </div>
+        <div className="hero-packaging-frame">
+          <img
+            src="/assets/aistudio/visual_identitas_Kebab_Al_Firdaus_a36c5ca9.jpg"
+            alt="Kemasan resmi Kebab Al Firdaus Maknyus Banget, tersedia isi 5, 6, dan 10"
+            width={644}
+            height={643}
+            decoding="async"
+            className="hero-packaging-img"
+            {...({ fetchpriority: 'high' } as Record<string, string>)}
+          />
         </div>
 
-        <div className="art-leaf leaf-a">✳</div>
-        <div className="art-leaf leaf-b">✦</div>
-        <div className="art-label">
-          <span>AL FIRDAUS</span>
-          <b>
-            GOOD FOOD<br />
-            GOOD MOOD.
-          </b>
-        </div>
+        <div className="art-sticker sticker-one">PRAY BEFORE EAT · HALAL</div>
         <div className="art-sticker sticker-two">
-          MADE FOR<br />
-          YOUR CRAVINGS
+          FROZEN &amp; HANGAT<br />
+          ISI : 5 · 6 · 10
+        </div>
+        <div className="art-label">
+          <span>KEBAB AL FIRDAUS</span>
+          <b>
+            MAKNYUS<br />
+            BANGET!
+          </b>
         </div>
       </div>
 
       <div className="hero-bottom">
-        <span>KEBAB · ROTI MARYAM · BAHAN GROSIR · PESANAN ACARA</span>
-        <span>SCROLL TO EXPLORE ↓</span>
+        <span>KEBAB · ROTI MARYAM · FROZEN (ISI 5, 6, 10) · BAHAN GROSIR · PESANAN ACARA</span>
+        <span>BUKA SETIAP HARI · MEDAENG KULON</span>
       </div>
     </section>
   );

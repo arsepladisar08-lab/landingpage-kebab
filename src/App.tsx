@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PromoGalleryBanner } from './components/PromoGalleryBanner';
@@ -25,7 +25,6 @@ export const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [previewVariant, setPreviewVariant] = useState<MenuVariant | null>(null);
 
-  // Cart state with localStorage fallback
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
@@ -33,7 +32,7 @@ export const App: React.FC = () => {
         return JSON.parse(saved);
       }
     } catch {
-      // Fallback
+      return [];
     }
     return [];
   });
@@ -42,7 +41,7 @@ export const App: React.FC = () => {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
     } catch {
-      // Ignore
+      // Storage may be unavailable in private browsing modes.
     }
   }, [cartItems]);
 
@@ -51,8 +50,9 @@ export const App: React.FC = () => {
 
   const handleAddToCart = (variant: MenuVariant, portionOption?: string) => {
     setCartItems((prev) => {
+      const resolvedOption = portionOption || (variant.category === 'snack' ? 'Siap Santap' : 'Reguler');
       const matchIndex = prev.findIndex(
-        (item) => item.menuId === variant.id && item.portionOption === (portionOption || 'Reguler')
+        (item) => item.menuId === variant.id && item.portionOption === resolvedOption
       );
 
       if (matchIndex > -1) {
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         price: variant.price || 15000,
         quantity: 1,
         type: variant.type,
-        portionOption: portionOption || (variant.category === 'snack' ? 'Siap Santap' : 'Reguler'),
+        portionOption: resolvedOption,
       };
       return [...prev, newItem];
     });
@@ -136,16 +136,18 @@ export const App: React.FC = () => {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Langsung ke konten utama
+      </a>
+
       <Header
         onOpenCart={() => setIsCartOpen(true)}
         cartCount={totalCartCount}
       />
 
-      <main>
-        {/* Hero Section */}
+      <main id="main-content" tabIndex={-1}>
         <Hero />
 
-        {/* Auto-Scrolling Promo & Gallery Banner (Right after Hero) */}
         <PromoGalleryBanner
           onAddToCart={handleAddCustomToCart}
           onOpenCart={() => setIsCartOpen(true)}
@@ -165,7 +167,6 @@ export const App: React.FC = () => {
         />
 
         <WholesaleSection />
-
         <StepsSection />
         <QuoteBand />
         <LocationSection />
@@ -176,38 +177,35 @@ export const App: React.FC = () => {
       <Footer />
       <FloatingWhatsApp />
 
-      {/* Floating Cart Indicator Pill (visible when items are in cart) */}
       {totalCartCount > 0 && !isCartOpen && (
         <aside
           aria-label="Keranjang belanja aktif"
-          className="fixed bottom-6 left-5 z-30 animate-in fade-in slide-in-from-bottom duration-300"
+          className="fixed bottom-20 sm:bottom-6 left-4 sm:left-5 z-30"
         >
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
-            className="flex items-center gap-3 py-3 px-4 rounded-2xl bg-[#1c1b18] text-[#d5f264] border-2 border-[#d5f264]/60 shadow-2xl hover:scale-105 active:scale-95 transition-all group"
+            className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 rounded-xl bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[4px_4px_0_#2b1810] active:translate-y-0.5 transition-all"
             aria-label={`Buka keranjang pesanan, ${totalCartCount} item seharga ${formatRupiah(totalCartPrice)}`}
           >
             <div className="relative">
-              <ShoppingBag className="w-5 h-5 text-[#d5f264]" />
-              <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#ec6c3b] text-white text-[9px] font-black flex items-center justify-center">
+              <ShoppingBag className="w-5 h-5 text-[#f5d328]" aria-hidden="true" />
+              <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#f5d328] text-[#2b1810] border border-[#2b1810] text-[10px] font-black flex items-center justify-center">
                 {totalCartCount}
               </span>
             </div>
             <div className="text-left">
-              <div className="text-[11px] font-black text-white leading-tight">
+              <div className="text-xs font-black text-[#fffdf4] leading-tight">
                 {formatRupiah(totalCartPrice)}
               </div>
-              <div className="text-[9px] text-[#b8b3a7] font-semibold">
-                Lihat Keranjang Pesanan
+              <div className="text-[11px] text-[#f5d328] font-bold leading-tight">
+                Lihat keranjang
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-[#d5f264] group-hover:translate-x-0.5 transition-transform" />
           </button>
         </aside>
       )}
 
-      {/* Shopping Cart Modal */}
       <CartModal
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -220,7 +218,6 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Minimalist Menu Detail Preview Modal */}
       <MenuDetailModal
         item={previewVariant}
         onClose={() => setPreviewVariant(null)}

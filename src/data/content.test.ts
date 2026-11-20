@@ -8,6 +8,9 @@ import {
   formatRupiah,
   MENU_VARIANTS,
   PROMO_BANNER_ITEMS,
+  OFFER_ITEMS,
+  ORDERING_STEPS,
+  FAQ_ITEMS,
 } from './content';
 
 test('BUSINESS_INFO holds correct Medaeng Kulon Sidoarjo details', () => {
@@ -80,10 +83,26 @@ test('MENU_VARIANTS includes primary kebabs, prices, and snacks', () => {
   assert.equal(keju?.price, 15000);
 });
 
-test('PROMO_BANNER_ITEMS contains promo deals and gallery showcases', () => {
+test('PROMO_BANNER_ITEMS contains promo deals and gallery showcases without decorative emoji', () => {
   assert.ok(PROMO_BANNER_ITEMS.length >= 4);
   const promo = PROMO_BANNER_ITEMS.find((p) => p.type === 'promo');
   const gallery = PROMO_BANNER_ITEMS.find((p) => p.type === 'gallery');
   assert.ok(promo);
   assert.ok(gallery);
+
+  for (const item of PROMO_BANNER_ITEMS) {
+    assert.doesNotMatch(item.tag, /[\u{1F300}-\u{1FAFF}]/u);
+  }
+});
+
+test('UI copy contains no em dashes or en dashes (R-02)', () => {
+  const serialized = JSON.stringify({
+    BUSINESS_INFO,
+    MENU_VARIANTS,
+    PROMO_BANNER_ITEMS,
+    OFFER_ITEMS,
+    ORDERING_STEPS,
+    FAQ_ITEMS,
+  });
+  assert.doesNotMatch(serialized, /[—–]/);
 });

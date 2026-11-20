@@ -1,55 +1,52 @@
+import React from 'react';
 import { BUSINESS_INFO } from '../data/content';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="footer bg-[#1c1b18] text-[#f3efe5] py-12 border-t border-white/10">
+    <footer className="footer bg-[#24130d] text-[#fffdf4] py-12 border-t-4 border-[#f5d328]">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        {/* Main Clean Row: Brand Info & Primary Navigation */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
-          {/* Brand Identity */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#f5d328]/20">
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-[#d5f264] text-[#1c1b18] flex items-center justify-center font-black text-xs tracking-tight shrink-0 shadow-xs">
+            <div className="w-11 h-11 rounded-full bg-[#a91d22] text-[#f5d328] border-2 border-[#f5d328] flex items-center justify-center font-black text-xs tracking-tight shrink-0">
               AF
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm tracking-widest text-white">
-                  {BUSINESS_INFO.name}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-black text-sm tracking-wider text-[#f5d328]">
+                  KEBAB {BUSINESS_INFO.name}
                 </span>
-                <span className="text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-[#d5f264]">
-                  MEDAENG
+                <span className="text-[11px] font-black px-2.5 py-0.5 rounded-lg bg-[#a91d22] text-[#fffdf4] border border-[#f5d328]/50">
+                  Maknyus Banget
                 </span>
               </div>
-              <p className="text-xs text-[#9e9a8f] mt-0.5">
-                Kebab hangat & aneka kudapan di Medaeng Kulon, Sidoarjo
+              <p className="text-xs text-[#e3d2c4] mt-1 mb-0">
+                Kebab hangat siap santap, kemasan frozen (isi 5, 6, 10) dan kudapan di Medaeng Kulon, Sidoarjo
               </p>
             </div>
           </div>
 
-          {/* Quick Clean Navigation */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-semibold text-[#c8c3b7]">
-            <a href="#cerita" className="hover:text-white transition-colors">
+          <nav aria-label="Navigasi footer" className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-[#f7e7cb]">
+            <a href="#cerita" className="py-2 hover:text-[#f5d328] transition-colors">
               Tentang
             </a>
-            <a href="#menu-varian" className="hover:text-white transition-colors">
+            <a href="#menu-varian" className="py-2 hover:text-[#f5d328] transition-colors">
               Menu Kebab
             </a>
-            <a href="#grosir" className="hover:text-white transition-colors">
-              Grosir & Acara
+            <a href="#grosir" className="py-2 hover:text-[#f5d328] transition-colors">
+              Grosir &amp; Acara
             </a>
-            <a href="#lokasi" className="hover:text-white transition-colors">
+            <a href="#lokasi" className="py-2 hover:text-[#f5d328] transition-colors">
               Lokasi
             </a>
-            <a href="#faq" className="hover:text-white transition-colors">
+            <a href="#faq" className="py-2 hover:text-[#f5d328] transition-colors">
               FAQ
             </a>
-          </div>
+          </nav>
         </div>
 
-        {/* Bottom Clean Meta Row: Copyright */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8c887e]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#cbb8a8]">
           <div>
-            © {new Date().getFullYear()} <strong>Kebab {BUSINESS_INFO.name}</strong> · Jl. Bali No.13 Blok O, Medaeng Kulon, Sidoarjo
+            © {new Date().getFullYear()} <strong className="text-[#f5d328]">Kebab {BUSINESS_INFO.name}</strong> · Jl. Bali No.13 Blok O, Medaeng Kulon, Sidoarjo
           </div>
         </div>
       </div>

@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Sparkles,
+  Flame,
   Pause,
   Play,
   ChevronLeft,
   ChevronRight,
   ShoppingBag,
-  Flame,
-  ArrowUpRight,
   Camera,
 } from 'lucide-react';
 import { PROMO_BANNER_ITEMS, formatRupiah, MENU_VARIANTS } from '../data/content';
@@ -28,26 +26,28 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
   onAddToCart,
   onOpenCart,
 }) => {
-  const [isPaused, setIsPaused] = useState(false);
+  // Respect prefers-reduced-motion so motion-sensitive users start with the banner paused.
+  const [isPaused, setIsPaused] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
   const [isPressing, setIsPressing] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Triple items list to provide seamless infinite scroll loop
+  // Triple the item list to loop scrollLeft cleanly without visible jumps.
   const displayItems = [...PROMO_BANNER_ITEMS, ...PROMO_BANNER_ITEMS, ...PROMO_BANNER_ITEMS];
 
-  // Auto-scroll loop using requestAnimationFrame for 60fps smooth control and pause ability
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
 
-    const scrollSpeed = 0.65; // pixels per frame (~40px per second)
+    const scrollSpeed = 0.65;
 
     const step = () => {
       if (!isPaused && !isPressing && scrollContainer) {
         scrollContainer.scrollLeft += scrollSpeed;
 
-        // Reset seamlessly when reaching 1/3 of total scroll width
         const singleSetWidth = scrollContainer.scrollWidth / 3;
         if (scrollContainer.scrollLeft >= singleSetWidth * 2) {
           scrollContainer.scrollLeft -= singleSetWidth;
@@ -81,6 +81,11 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
 
   const handleCardAction = (item: PromoBannerItem, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (item.actionText === 'Lihat Menu') {
+      document.getElementById('menu-varian')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
     if (item.linkedProductName && onAddToCart) {
       const match = MENU_VARIANTS.find((v) => v.name === item.linkedProductName);
       onAddToCart({
@@ -100,142 +105,156 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
 
   return (
     <section
-      className="relative bg-[#1c1b18] text-[#f3efe5] py-8 border-y-2 border-[#d5f264]/40 overflow-hidden select-none"
+      className="relative bg-[#871418] text-[#fffdf4] py-8 border-b-4 border-[#f5d328] overflow-hidden select-none"
       aria-label="Banner Promosi dan Galeri Kebab Al Firdaus"
     >
-      {/* Background Accent Subtle Glows */}
-      <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#d5f264]/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-[#ec6c3b]/15 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Top Banner Control Bar */}
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#d5f264] animate-ping" />
-          <span className="text-xs font-black uppercase tracking-widest text-[#d5f264] flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#ec6c3b]" />
-            PROMOSI SPESIAL & GALERI SAJIAN
+          <span className="text-xs font-black tracking-wider uppercase text-[#f5d328] flex items-center gap-1.5">
+            <Flame className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
+            Promosi &amp; Galeri Sajian
           </span>
-          <span className="text-[11px] text-[#9e998c] hidden md:inline">
-            · Berjalan otomatis kesamping
+          <span className="text-xs text-[#fce8e8] hidden md:inline">
+            · Klik atau tekan banner untuk berhenti
           </span>
         </div>
 
-        {/* Interactive Play/Pause & Direction Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handleTogglePause}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+            aria-pressed={isPaused}
+            className={`inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-xl text-xs font-extrabold transition-colors border-2 ${
               isPaused
-                ? 'bg-[#d5f264] text-[#1c1b18] border-[#d5f264] shadow-sm'
-                : 'bg-white/10 text-white hover:bg-white/20 border-white/20'
+                ? 'bg-[#f5d328] text-[#2b1810] border-[#2b1810]'
+                : 'bg-[#2b1810] text-[#fffdf4] hover:bg-[#462619] border-[#f5d328]'
             }`}
-            aria-label={isPaused ? 'Lanjutkan banner berjalan' : 'Jeda banner berjalan'}
-            title="Klik untuk menjeda atau melanjutkan gerakan banner"
+            aria-label={isPaused ? 'Lanjutkan gerakan banner' : 'Jeda gerakan banner'}
           >
             {isPaused ? (
               <>
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Lanjutkan Gerak</span>
+                <Play className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
+                <span>Lanjutkan</span>
               </>
             ) : (
               <>
-                <Pause className="w-3.5 h-3.5 fill-current text-[#d5f264]" />
-                <span>Jeda Otomatis</span>
+                <Pause className="w-3.5 h-3.5 fill-current text-[#f5d328]" aria-hidden="true" />
+                <span>Jeda</span>
               </>
             )}
           </button>
 
-          <div className="inline-flex rounded-full bg-white/10 p-0.5 border border-white/15">
+          <div className="inline-flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => handleManualScroll('left')}
-              className="p-1 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
-              aria-label="Geser ke kiri"
-              title="Geser ke kiri"
+              className="w-11 h-11 rounded-xl bg-[#2b1810] hover:bg-[#f5d328] text-[#fffdf4] hover:text-[#2b1810] border-2 border-[#f5d328] flex items-center justify-center transition-colors"
+              aria-label="Geser banner ke kiri"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" aria-hidden="true" />
             </button>
             <button
               type="button"
               onClick={() => handleManualScroll('right')}
-              className="p-1 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
-              aria-label="Geser ke kanan"
-              title="Geser ke kanan"
+              className="w-11 h-11 rounded-xl bg-[#2b1810] hover:bg-[#f5d328] text-[#fffdf4] hover:text-[#2b1810] border-2 border-[#f5d328] flex items-center justify-center transition-colors"
+              aria-label="Geser banner ke kanan"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Auto-scrolling Track Container */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-4 overflow-x-hidden py-2 px-4 sm:px-6 cursor-grab active:cursor-grabbing no-scrollbar scroll-smooth"
-        onMouseDown={() => setIsPressing(true)}
-        onMouseUp={() => setIsPressing(false)}
-        onMouseLeave={() => setIsPressing(false)}
-        onTouchStart={() => setIsPressing(true)}
-        onTouchEnd={() => setIsPressing(false)}
-        onClick={() => setIsPaused((prev) => !prev)}
-        title="Klik atau tahan pada banner untuk menjeda"
+        className="flex gap-4 overflow-x-hidden py-2 px-4 sm:px-6 no-scrollbar scroll-smooth"
+        onPointerDown={() => setIsPressing(true)}
+        onPointerUp={() => setIsPressing(false)}
+        onPointerCancel={() => setIsPressing(false)}
+        onPointerLeave={() => setIsPressing(false)}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest('button, a')) return;
+          setIsPaused((prev) => !prev);
+        }}
       >
         {displayItems.map((item, index) => {
           const isPromo = item.type === 'promo';
           return (
             <article
               key={`${item.id}-${index}`}
-              className={`flex-none w-[310px] sm:w-[360px] md:w-[390px] rounded-2xl p-5 border transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between ${
+              className={`flex-none w-[290px] sm:w-[350px] md:w-[380px] rounded-2xl p-5 border-2 transition-transform duration-200 hover:-translate-y-1 flex flex-col justify-between ${
                 isPromo
-                  ? 'bg-gradient-to-br from-[#2c271b] via-[#221f19] to-[#1c1b18] border-[#d5f264]/30 hover:border-[#d5f264] shadow-md hover:shadow-xl'
-                  : 'bg-gradient-to-br from-[#26211e] via-[#1f1c19] to-[#171614] border-white/15 hover:border-white/35 shadow-sm'
+                  ? 'bg-[#fffdf4] text-[#2b1810] border-[#2b1810] shadow-[4px_4px_0_#2b1810]'
+                  : 'bg-[#2b1810] text-[#fffdf4] border-[#f5d328] shadow-[4px_4px_0_rgba(0,0,0,0.3)]'
               }`}
             >
-              {/* Card Header: Tag & Badge */}
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-black border ${
                     isPromo
-                      ? 'bg-[#ec6c3b] text-white'
-                      : 'bg-[#d5f264] text-[#1c1b18]'
+                      ? 'bg-[#a91d22] text-[#fffdf4] border-[#2b1810]'
+                      : 'bg-[#f5d328] text-[#2b1810] border-[#2b1810]'
                   }`}
                 >
                   {isPromo ? (
-                    <Flame className="w-3 h-3 fill-current" />
+                    <Flame className="w-3.5 h-3.5" aria-hidden="true" />
                   ) : (
-                    <Camera className="w-3 h-3" />
+                    <Camera className="w-3.5 h-3.5" aria-hidden="true" />
                   )}
                   {item.tag}
                 </span>
 
                 {item.badge && (
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#d5f264] border border-[#d5f264]/40 px-2 py-0.5 rounded-md bg-[#d5f264]/10">
+                  <span
+                    className={`text-[11px] font-extrabold px-2 py-0.5 rounded-md border ${
+                      isPromo
+                        ? 'text-[#8a1418] border-[#8a1418]/35 bg-[#fdf5d2]'
+                        : 'text-[#f5d328] border-[#f5d328]/50 bg-[#3c2217]'
+                    }`}
+                  >
                     {item.badge}
                   </span>
                 )}
               </div>
 
-              {/* Title & Description */}
               <div className="space-y-1.5 my-2">
-                <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
+                <h3
+                  className={`text-base sm:text-lg font-black tracking-tight leading-snug ${
+                    isPromo ? 'text-[#2b1810]' : 'text-[#fffdf4]'
+                  }`}
+                >
                   {item.title}
                 </h3>
-                <p className="text-xs text-[#b8b3a7] leading-relaxed line-clamp-2">
+                <p
+                  className={`text-xs leading-relaxed line-clamp-2 ${
+                    isPromo ? 'text-[#543729]' : 'text-[#e6d5c3]'
+                  }`}
+                >
                   {item.subtitle}
                 </p>
               </div>
 
-              {/* Highlight / Promo Price / Action Pill */}
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
-                <div>
+              <div
+                className={`mt-4 pt-3 border-t flex items-center justify-between gap-3 ${
+                  isPromo ? 'border-[#2b1810]/15' : 'border-white/20'
+                }`}
+              >
+                <div className="min-w-0">
                   {item.price && (
-                    <div className="text-xs font-black text-[#d5f264]">
+                    <div
+                      className={`text-sm font-black ${
+                        isPromo ? 'text-[#8a1418]' : 'text-[#f5d328]'
+                      }`}
+                    >
                       {formatRupiah(item.price)}
                     </div>
                   )}
                   {item.highlightText && (
-                    <span className="text-[11px] font-bold text-[#ec6c3b] block">
+                    <span
+                      className={`text-xs font-bold block ${
+                        isPromo ? 'text-[#196b3e]' : 'text-[#f5d328]'
+                      }`}
+                    >
                       {item.highlightText}
                     </span>
                   )}
@@ -244,18 +263,14 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
                 <button
                   type="button"
                   onClick={(e) => handleCardAction(item, e)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all active:scale-95 shadow-xs ${
+                  className={`inline-flex items-center gap-1.5 min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-extrabold transition-colors active:translate-y-0.5 border-2 shrink-0 ${
                     isPromo
-                      ? 'bg-[#d5f264] text-[#1c1b18] hover:bg-[#c3e54c]'
-                      : 'bg-white/15 text-white hover:bg-white/25 border border-white/20'
+                      ? 'bg-[#f5d328] text-[#2b1810] border-[#2b1810] hover:bg-[#a91d22] hover:text-[#fffdf4]'
+                      : 'bg-[#a91d22] text-[#fffdf4] border-[#f5d328] hover:bg-[#f5d328] hover:text-[#2b1810]'
                   }`}
                   aria-label={`${item.actionText} - ${item.title}`}
                 >
-                  {isPromo ? (
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                  ) : (
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  )}
+                  {isPromo && <ShoppingBag className="w-3.5 h-3.5" aria-hidden="true" />}
                   <span>{item.actionText || 'Pesan'}</span>
                 </button>
               </div>
@@ -264,13 +279,12 @@ export const PromoGalleryBanner: React.FC<PromoGalleryBannerProps> = ({
         })}
       </div>
 
-      {/* Bottom Hint */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-3 flex items-center justify-between text-[11px] text-[#8e8a7f]">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-[#fce8e8]">
         <span>
-          💡 <em>Tip: Klik atau tekan banner untuk berhenti bergerak agar nyaman dibaca.</em>
+          Klik atau tahan pada kartu untuk menghentikan gerakan banner saat membaca.
         </span>
-        <span className="hidden sm:inline">
-          Status: <strong className="text-[#d5f264]">{isPaused ? 'Jeda (Diam)' : 'Berjalan'}</strong>
+        <span aria-live="polite">
+          Status: <strong className="text-[#f5d328]">{isPaused ? 'Dijeda' : 'Berjalan otomatis'}</strong>
         </span>
       </div>
     </section>

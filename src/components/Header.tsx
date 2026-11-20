@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, MessageCircle, MapPin, Clock, ShoppingBag } from 'lucide-react';
 import { BUSINESS_INFO, getWhatsAppLink } from '../data/content';
+import { useModalFocusTrap } from '../utils/useModalFocusTrap';
 
 interface HeaderProps {
   onOpenCart?: () => void;
   cartCount?: number;
 }
+
+const NAV_LINKS = [
+  { href: '#cerita', label: 'Tentang', mobileLabel: 'Tentang Al Firdaus' },
+  { href: '#menu-varian', label: 'Menu Pilihan', mobileLabel: 'Pilihan Menu Kebab' },
+  { href: '#pilihan', label: 'Layanan', mobileLabel: 'Layanan Lengkap' },
+  { href: '#grosir', label: 'Grosir & Acara', mobileLabel: 'Bahan Grosir & Pesanan Acara' },
+  { href: '#lokasi', label: 'Lokasi', mobileLabel: 'Lokasi & Jam Buka' },
+  { href: '#faq', label: 'FAQ', mobileLabel: 'Pertanyaan Umum (FAQ)' },
+];
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenCart,
@@ -13,6 +23,8 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const drawerCloseRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,16 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isMenuOpen]);
+  useModalFocusTrap(isMenuOpen, () => setIsMenuOpen(false), drawerRef, drawerCloseRef);
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -41,148 +44,130 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-200 ${
+        className={`sticky top-0 z-40 w-full transition-colors duration-200 ${
           isScrolled
-            ? 'bg-[#f3efe5]/95 backdrop-blur-md border-b border-[#1c1b18]/15 shadow-xs'
-            : 'bg-[#f3efe5] border-b border-[#1c1b18]/10'
+            ? 'bg-[#f5d328]/95 backdrop-blur-md border-b-2 border-[#a91d22] shadow-sm'
+            : 'bg-[#f5d328] border-b-2 border-[#2b1810]/20'
         }`}
         id="top"
       >
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[74px] flex items-center justify-between">
-          {/* Brand Logo & Name */}
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[72px] sm:h-[76px] flex items-center justify-between gap-3">
           <a
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group min-h-[44px]"
             href="#top"
             aria-label="Kebab Al Firdaus, ke halaman utama"
           >
-            <div className="w-10 h-10 rounded-full border-2 border-[#1c1b18] bg-[#d5f264] flex items-center justify-center font-black text-sm tracking-tight transform -rotate-6 transition-transform group-hover:rotate-0">
+            <div className="w-11 h-11 rounded-full border-2 border-[#2b1810] bg-[#a91d22] text-[#f5d328] flex items-center justify-center font-black text-xs tracking-tight transform -rotate-6 transition-transform group-hover:rotate-0 shadow-[2px_2px_0_#2b1810]">
               AF
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-widest text-[#1c1b18] leading-none">
+              <span className="font-black text-[10px] tracking-[0.18em] text-[#2b1810] leading-none">
+                KEBAB
+              </span>
+              <span className="font-black text-base tracking-wide text-[#8a1418] leading-tight">
                 {BUSINESS_INFO.name}
               </span>
-              <span className="text-[9px] font-bold tracking-widest text-[#716d63] mt-0.5">
-                {BUSINESS_INFO.subName} · MEDAENG
+              <span className="text-[10px] font-bold italic text-[#2b1810] -mt-0.5">
+                Maknyus Banget · Medaeng
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation Links */}
-          <nav
-            className="hidden lg:flex items-center gap-1 bg-[#e8e1d2]/70 p-1 rounded-full border border-black/10"
-            aria-label="Navigasi utama"
-          >
-            <a
-              href="#cerita"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
+          <div className="flex items-center gap-3">
+            <nav
+              className="hidden lg:flex items-center gap-1 bg-[#fffdf4] p-1 rounded-xl border-2 border-[#2b1810]"
+              aria-label="Navigasi utama"
             >
-              Tentang
-            </a>
-            <a
-              href="#menu-varian"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
-            >
-              Menu Pilihan
-            </a>
-            <a
-              href="#pilihan"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
-            >
-              Layanan
-            </a>
-            <a
-              href="#grosir"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
-            >
-              Grosir & Acara
-            </a>
-            <a
-              href="#lokasi"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
-            >
-              Lokasi
-            </a>
-            <a
-              href="#faq"
-              className="px-3.5 py-1.5 text-xs font-bold text-[#45423b] hover:text-[#1c1b18] hover:bg-white/90 rounded-full transition-all"
-            >
-              FAQ
-            </a>
-          </nav>
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="px-3.5 py-2 text-xs font-extrabold text-[#2b1810] hover:text-[#fffdf4] hover:bg-[#a91d22] rounded-lg transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
 
-          {/* Right Actions (Cart + Hamburger) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Cart Button: Hidden by default; appears only when cartCount > 0 */}
+            {/* Cart button stays hidden until the user adds an item. */}
             {cartCount > 0 && (
               <button
                 type="button"
                 onClick={onOpenCart}
-                className="relative inline-flex items-center gap-2 py-2 px-3 sm:px-3.5 rounded-full text-xs font-black bg-white hover:bg-neutral-100 text-[#1c1b18] border border-neutral-300 shadow-xs active:scale-95 transition-all animate-in fade-in zoom-in-95 duration-200"
+                className="relative inline-flex items-center gap-2 min-h-[44px] py-2 px-3.5 rounded-xl text-xs font-black bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
                 aria-label={`Keranjang belanja, ${cartCount} item`}
               >
-                <ShoppingBag className="w-4 h-4 text-[#ec6c3b]" />
+                <ShoppingBag className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
                 <span className="hidden md:inline">Keranjang</span>
-                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black bg-[#1c1b18] text-[#d5f264] transition-all">
+                <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full text-[11px] font-black bg-[#f5d328] text-[#2b1810] border border-[#2b1810]">
                   {cartCount}
                 </span>
               </button>
             )}
 
-            {/* Mobile Menu Hamburger */}
             <button
               type="button"
-              className="lg:hidden w-10 h-10 rounded-xl bg-white/80 border border-black/10 flex items-center justify-center text-[#1c1b18] hover:bg-white active:scale-95 transition-all"
+              className="lg:hidden inline-flex items-center gap-2 min-h-[44px] px-3.5 rounded-xl bg-[#fffdf4] border-2 border-[#2b1810] text-xs font-black text-[#8a1418] hover:bg-[#a91d22] hover:text-[#fffdf4] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
               aria-expanded={isMenuOpen}
               aria-controls="mobile-sheet"
-              aria-label={isMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+              aria-label={isMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? (
+                <X className="w-5 h-5" aria-hidden="true" />
+              ) : (
+                <Menu className="w-5 h-5" aria-hidden="true" />
+              )}
+              <span>{isMenuOpen ? 'Tutup' : 'Menu'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer / Sheet */}
       {isMenuOpen && (
         <div
           id="mobile-sheet"
           className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="mobile-sheet-title"
         >
-          {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs animate-in fade-in"
+            className="fixed inset-0 bg-[#2b1810]/70"
             onClick={() => setIsMenuOpen(false)}
+            aria-hidden="true"
           />
 
-          {/* Sheet Body */}
-          <div className="relative z-10 w-full bg-[#faf7f0] rounded-t-3xl border-t border-neutral-300 p-6 shadow-2xl animate-in slide-in-from-bottom duration-250 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-200">
+          <div
+            ref={drawerRef}
+            className="relative z-10 w-full bg-[#fffdf4] rounded-t-3xl border-t-4 border-[#a91d22] p-5 pb-8 shadow-2xl max-h-[85vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between pb-4 border-b border-[#2b1810]/15">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full border border-black bg-[#d5f264] flex items-center justify-center font-bold text-xs">
+                <div className="w-9 h-9 rounded-full border-2 border-[#2b1810] bg-[#a91d22] text-[#f5d328] flex items-center justify-center font-black text-xs">
                   AF
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-sm text-[#1c1b18] leading-none">
-                    AL FIRDAUS
-                  </h4>
-                  <p className="text-[10px] text-[#716d63] mt-0.5">Kebab & More Medaeng</p>
+                  <h2 id="mobile-sheet-title" className="font-black text-sm text-[#8a1418] leading-none">
+                    KEBAB AL FIRDAUS
+                  </h2>
+                  <p className="text-xs font-bold italic text-[#2b1810] mt-0.5 mb-0">
+                    Maknyus Banget · Medaeng
+                  </p>
                 </div>
               </div>
 
               <button
+                ref={drawerCloseRef}
                 type="button"
-                className="w-8 h-8 rounded-full bg-neutral-200/80 flex items-center justify-center text-neutral-700"
+                className="w-11 h-11 rounded-xl bg-[#f5d328] hover:bg-[#a91d22] hover:text-[#fffdf4] border-2 border-[#2b1810] flex items-center justify-center text-[#2b1810] transition-colors"
                 onClick={() => setIsMenuOpen(false)}
+                aria-label="Tutup menu navigasi"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
 
-            {/* Quick Cart Banner in Mobile Sheet - only when cartCount > 0 */}
             {cartCount > 0 && (
               <div className="mt-3">
                 <button
@@ -191,55 +176,45 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMenuOpen(false);
                     if (onOpenCart) onOpenCart();
                   }}
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-white border border-neutral-300 flex items-center justify-between text-xs font-black text-[#1c1b18] hover:bg-neutral-50 shadow-xs"
+                  className="w-full min-h-[46px] py-2.5 px-3.5 rounded-xl bg-[#fdf5d2] border-2 border-[#2b1810] flex items-center justify-between text-xs font-black text-[#2b1810] hover:bg-[#f5d328] transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <ShoppingBag className="w-4 h-4 text-[#ec6c3b]" />
+                    <ShoppingBag className="w-4 h-4 text-[#8a1418]" aria-hidden="true" />
                     <span>Keranjang Pesanan</span>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-[#d5f264] text-[#1c1b18] text-[10px] font-black border border-black/10">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#a91d22] text-[#f5d328] text-[11px] font-black">
                     {cartCount} Item
                   </span>
                 </button>
               </div>
             )}
 
-            {/* Links */}
-            <div className="py-4 space-y-1">
-              {[
-                { href: '#cerita', label: 'Tentang Al Firdaus' },
-                { href: '#menu-varian', label: 'Pilihan Menu Kebab' },
-                { href: '#pilihan', label: 'Layanan Lengkap' },
-                { href: '#grosir', label: 'Bahan Grosir & Pesanan Acara' },
-                { href: '#lokasi', label: 'Lokasi & Jam Buka' },
-                { href: '#faq', label: 'Pertanyaan Umum (FAQ)' },
-              ].map((link) => (
+            <nav className="py-3 space-y-1" aria-label="Navigasi mobile">
+              {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={handleLinkClick}
-                  className="flex items-center justify-between py-2.5 px-3 rounded-xl text-sm font-bold text-[#2e2d29] hover:bg-[#e8e1d2] transition-colors"
+                  className="flex items-center justify-between min-h-[44px] py-2.5 px-3 rounded-xl text-sm font-extrabold text-[#2b1810] hover:bg-[#f5d328]/60 transition-colors"
                 >
-                  <span>{link.label}</span>
-                  <span className="text-neutral-400">›</span>
+                  <span>{link.mobileLabel}</span>
+                  <span className="text-[#8a1418] font-black" aria-hidden="true">›</span>
                 </a>
               ))}
-            </div>
+            </nav>
 
-            {/* Operating Hours & Address Callout */}
-            <div className="bg-[#ede5d8] p-3 rounded-xl border border-black/10 space-y-2 text-xs text-[#555147] my-2">
-              <div className="flex items-center gap-2 font-semibold">
-                <Clock className="w-3.5 h-3.5 text-[#ec6c3b]" />
-                <span>Buka: Sen–Sab 06.00–21.00 · Min 06.00–18.00</span>
+            <div className="bg-[#fdf5d2] p-3.5 rounded-xl border-2 border-[#2b1810]/20 space-y-2 text-xs text-[#2b1810] my-2">
+              <div className="flex items-center gap-2 font-bold">
+                <Clock className="w-4 h-4 text-[#8a1418] shrink-0" aria-hidden="true" />
+                <span>Buka: {BUSINESS_INFO.hoursWeekday} · {BUSINESS_INFO.hoursSunday}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-[#ec6c3b]" />
+              <div className="flex items-center gap-2 font-medium">
+                <MapPin className="w-4 h-4 text-[#8a1418] shrink-0" aria-hidden="true" />
                 <span>Medaeng Kulon, Kedungturi, Taman, Sidoarjo</span>
               </div>
             </div>
 
-            {/* CTAs */}
-            <div className="pt-3 flex flex-col gap-2">
+            <div className="pt-3 flex flex-col gap-2.5">
               {cartCount > 0 && (
                 <button
                   type="button"
@@ -247,9 +222,9 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMenuOpen(false);
                     if (onOpenCart) onOpenCart();
                   }}
-                  className="w-full py-3 rounded-xl bg-[#1c1b18] text-[#d5f264] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+                  className="w-full min-h-[48px] py-3 rounded-xl bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] text-xs font-black tracking-wide flex items-center justify-center gap-2 shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
                 >
-                  <ShoppingBag className="w-4 h-4 text-[#d5f264]" />
+                  <ShoppingBag className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
                   <span>Lihat Keranjang ({cartCount} Item)</span>
                 </button>
               )}
@@ -259,9 +234,9 @@ export const Header: React.FC<HeaderProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleLinkClick}
-                className="w-full py-2.5 rounded-xl bg-[#d5f264] text-[#1c1b18] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border border-black/10 shadow-xs active:scale-95 transition-all"
+                className="w-full min-h-[48px] py-3 rounded-xl bg-[#f5d328] hover:bg-[#fae15c] text-[#2b1810] text-xs font-black tracking-wide flex items-center justify-center gap-2 border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-800" />
+                <MessageCircle className="w-4 h-4 text-[#196b3e]" aria-hidden="true" />
                 <span>WhatsApp Langsung</span>
               </a>
             </div>

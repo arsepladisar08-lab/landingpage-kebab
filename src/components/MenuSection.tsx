@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, Sparkles } from 'lucide-react';
+import { Eye, Flame } from 'lucide-react';
 import { MENU_VARIANTS, formatRupiah, getWhatsAppLink } from '../data/content';
 import { MenuVariant } from '../types';
 import { DummyFoodVisual } from './DummyFoodVisual';
@@ -9,12 +9,19 @@ interface MenuSectionProps {
   onAddToCart?: (item: MenuVariant) => void;
 }
 
+const FILTER_TABS: Array<{ id: 'all' | 'kebab' | 'snack' | 'wholesale'; label: string }> = [
+  { id: 'all', label: `Semua (${MENU_VARIANTS.length})` },
+  { id: 'kebab', label: 'Kebab Hangat (4)' },
+  { id: 'snack', label: 'Roti Maryam (1)' },
+  { id: 'wholesale', label: 'Grosir & Acara (2)' },
+];
+
 export const MenuSection: React.FC<MenuSectionProps> = ({
   onPreviewMenu,
   onAddToCart,
 }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'kebab' | 'snack' | 'wholesale'>('all');
-  const [addedItemName, setAddedItemName] = useState<string | null>(null);
+  const [addedItemId, setAddedItemId] = useState<string | null>(null);
 
   const filteredItems = MENU_VARIANTS.filter((item) => {
     if (activeTab === 'all') return true;
@@ -25,184 +32,162 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   });
 
   return (
-    <section className="menu-variants-section section-pad" id="menu-varian">
+    <section className="menu-variants-section section-pad" id="menu-varian" aria-labelledby="menu-varian-title">
       <div className="section-heading">
         <div>
-          <div className="section-kicker flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#ec6c3b]" />
-            <span>PILIHAN MENU & KUDAPAN</span>
-          </div>
-          <h2>
-            Pilih mood<br />
+          <div className="section-kicker">02 / Pilihan Menu &amp; Kudapan</div>
+          <h2 id="menu-varian-title">
+            Pilih varian<br />
             <em>kebabmu hari ini.</em>
           </h2>
         </div>
         <p>
-          Tampilan minimalis dengan info ringkas. Klik <strong>Lihat Detail</strong> untuk komposisi lengkap & karakter rasa, atau langsung pesan via WhatsApp.
+          Tersedia kebab panggang siap santap, roti maryam hangat, hingga paket bahan usaha. Buka <strong>Detail</strong> untuk melihat komposisi dan tingkat pedas.
         </p>
       </div>
 
-      {/* shadcn-inspired Filter Tabs */}
-      <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-3 mb-8 gap-2 no-scrollbar">
-        <div className="inline-flex p-1 bg-[#eae3d5] rounded-xl border border-black/10 gap-1">
-          <button
-            type="button"
-            onClick={() => setActiveTab('all')}
-            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'all'
-                ? 'bg-white text-[#1c1b18] shadow-xs'
-                : 'text-[#656157] hover:text-[#1c1b18]'
-            }`}
-          >
-            Semua ({MENU_VARIANTS.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('kebab')}
-            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'kebab'
-                ? 'bg-white text-[#1c1b18] shadow-xs'
-                : 'text-[#656157] hover:text-[#1c1b18]'
-            }`}
-          >
-            Kebab Hangat (4)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('snack')}
-            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'snack'
-                ? 'bg-white text-[#1c1b18] shadow-xs'
-                : 'text-[#656157] hover:text-[#1c1b18]'
-            }`}
-          >
-            Roti Maryam (1)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('wholesale')}
-            className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'wholesale'
-                ? 'bg-white text-[#1c1b18] shadow-xs'
-                : 'text-[#656157] hover:text-[#1c1b18]'
-            }`}
-          >
-            Grosir & Acara (2)
-          </button>
+      <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-3 mb-8 no-scrollbar">
+        <div
+          className="inline-flex p-1.5 bg-[#f5d328]/50 rounded-xl border-2 border-[#2b1810] gap-1.5"
+          role="group"
+          aria-label="Filter kategori menu"
+        >
+          {FILTER_TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setActiveTab(tab.id)}
+                className={`min-h-[44px] px-4 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap transition-colors ${
+                  isActive
+                    ? 'bg-[#a91d22] text-[#fffdf4]'
+                    : 'text-[#2b1810] hover:bg-[#fffdf4]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Minimalist shadcn-style Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {filteredItems.map((item) => (
-          <article
-            key={item.id}
-            className="group flex flex-col bg-white rounded-2xl border border-neutral-200/90 hover:border-neutral-300 shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden"
+      {filteredItems.length === 0 ? (
+        <div className="bg-[#fffdf4] border-2 border-[#2b1810] rounded-2xl p-8 text-center space-y-3">
+          <p className="text-sm font-bold text-[#2b1810] m-0">
+            Belum ada menu pada kategori ini.
+          </p>
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            className="min-h-[44px] px-5 py-2 rounded-xl bg-[#a91d22] text-[#fffdf4] text-xs font-extrabold border-2 border-[#2b1810]"
           >
-            {/* Dummy Image Container with Quick Preview Hover */}
-            <div
-              className="relative aspect-[16/10] bg-[#f8f5ee] cursor-pointer overflow-hidden border-b border-neutral-100"
-              onClick={() => onPreviewMenu(item)}
+            Tampilkan semua menu
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {filteredItems.map((item) => (
+            <article
+              key={item.id}
+              className="group flex flex-col bg-[#fffdf4] rounded-2xl border-2 border-[#2b1810] shadow-[4px_4px_0_rgba(43,24,16,0.16)] hover:shadow-[6px_6px_0_#a91d22] transition-shadow duration-200 overflow-hidden"
             >
-              <DummyFoodVisual
-                type={item.type === 'custom' ? item.id : item.type}
-                alt={item.imageDummyAlt || item.name}
-                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                showBadge={true}
-              />
+              <button
+                type="button"
+                className="relative block w-full text-left aspect-[16/10] bg-[#fdf4c7] overflow-hidden border-b-2 border-[#2b1810] p-0"
+                onClick={() => onPreviewMenu(item)}
+                aria-label={`Buka detail ${item.name}`}
+              >
+                <DummyFoodVisual
+                  type={item.type === 'custom' ? item.id : item.type}
+                  alt={item.imageDummyAlt || item.name}
+                  className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  showBadge={true}
+                />
 
-              {/* Tag pill badge top left */}
-              <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#1c1b18] text-[#d5f264] shadow-xs">
-                {item.badge}
-              </span>
-
-              {/* Hover Quick Preview Pill Overlay */}
-              <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-[#1c1b18] text-xs font-bold shadow-md transform -translate-y-1 group-hover:translate-y-0 transition-transform duration-200">
-                  <Eye className="w-3.5 h-3.5" />
-                  Lihat Detail
+                <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-lg text-[11px] font-black bg-[#a91d22] text-[#f5d328] border border-[#2b1810]">
+                  {item.badge}
                 </span>
-              </div>
-            </div>
 
-            {/* Minimalist Card Body */}
-            <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ec6c3b]">
-                    {item.tag}
+                <div className="absolute inset-0 bg-[#2b1810]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#fffdf4] text-[#2b1810] border-2 border-[#2b1810] text-xs font-extrabold">
+                    <Eye className="w-3.5 h-3.5 text-[#a91d22]" aria-hidden="true" />
+                    Lihat Detail
                   </span>
-                  {item.spiceLevel !== undefined && item.spiceLevel > 0 && (
-                    <span className="text-[10px] font-medium text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded">
-                      {'🌶️'.repeat(item.spiceLevel)}
-                    </span>
-                  )}
                 </div>
-                <div className="flex items-baseline justify-between gap-2 mt-1">
-                  <h3 className="text-base font-black text-[#1c1b18] leading-snug group-hover:text-[#ec6c3b] transition-colors">
-                    {item.name}
-                  </h3>
-                  {item.price && (
-                    <span className="text-xs font-black text-[#1c1b18] shrink-0 bg-[#f3efe5] px-2 py-0.5 rounded-md border border-black/5">
-                      {item.priceDisplay || formatRupiah(item.price)}
+              </button>
+
+              <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-[11px] font-black text-[#8a1418]">
+                      {item.tag}
                     </span>
-                  )}
+                    {item.spiceLevel !== undefined && item.spiceLevel > 0 && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#8a1418] bg-[#f5d328]/45 px-2 py-0.5 rounded-md border border-[#2b1810]/20">
+                        <Flame className="w-3 h-3 fill-current" aria-hidden="true" />
+                        <span>Pedas Lv. {item.spiceLevel}</span>
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-baseline justify-between gap-2 mt-1">
+                    <h3 className="text-base font-black text-[#2b1810] leading-snug group-hover:text-[#a91d22] transition-colors m-0">
+                      {item.name}
+                    </h3>
+                    {item.price && (
+                      <span className="text-xs font-black text-[#2b1810] shrink-0 bg-[#f5d328] px-2 py-0.5 rounded-md border border-[#2b1810]">
+                        {item.priceDisplay || formatRupiah(item.price)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#543729] line-clamp-2 mt-1.5 leading-relaxed mb-0">
+                    {item.description}
+                  </p>
                 </div>
-                <p className="text-xs text-[#625e55] line-clamp-2 mt-1 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
 
-              {/* Minimalist Card Footer Actions */}
-              <div className="pt-2 border-t border-neutral-100 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => onPreviewMenu(item)}
-                  className="px-3 py-2 rounded-xl text-xs font-bold text-[#1c1b18] bg-neutral-100 hover:bg-neutral-200 active:scale-95 transition-all inline-flex items-center justify-center gap-1.5"
-                  aria-label={`Lihat detail ${item.name}`}
-                  title="Lihat detail komposisi"
-                >
-                  <Eye className="w-3.5 h-3.5 text-[#5e5b53]" />
-                  <span>Detail</span>
-                </button>
-
-                {onAddToCart && (
+                <div className="pt-2.5 border-t border-[#2b1810]/15 flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      onAddToCart(item);
-                      setAddedItemName(item.id);
-                      setTimeout(() => setAddedItemName(null), 1500);
-                    }}
-                    className={`flex-1 inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-black transition-all active:scale-95 shadow-xs ${
-                      addedItemName === item.id
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-[#d5f264] text-[#1c1b18] hover:bg-[#c4e44b]'
-                    }`}
-                    aria-label={`Tambah ${item.name} ke keranjang`}
+                    onClick={() => onPreviewMenu(item)}
+                    className="min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-extrabold text-[#2b1810] bg-[#fdf4c7] hover:bg-[#f5d328] border border-[#2b1810]/40 active:translate-y-0.5 transition-all inline-flex items-center justify-center gap-1.5"
+                    aria-label={`Lihat detail ${item.name}`}
                   >
-                    {addedItemName === item.id ? (
-                      <span>Masuk!</span>
-                    ) : (
-                      <span>+ Keranjang</span>
-                    )}
+                    <Eye className="w-3.5 h-3.5 text-[#8a1418]" aria-hidden="true" />
+                    <span>Detail</span>
                   </button>
-                )}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
 
-      {/* Roti Maryam & Wholesale Quick Callout */}
+                  {onAddToCart && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onAddToCart(item);
+                        setAddedItemId(item.id);
+                        setTimeout(() => setAddedItemId(null), 1500);
+                      }}
+                      className={`flex-1 min-h-[44px] inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-black transition-all active:translate-y-0.5 border-2 border-[#2b1810] ${
+                        addedItemId === item.id
+                          ? 'bg-[#196b3e] text-[#ffffff]'
+                          : 'bg-[#f5d328] text-[#2b1810] hover:bg-[#a91d22] hover:text-[#fffdf4]'
+                      }`}
+                      aria-label={`Tambah ${item.name} ke keranjang`}
+                    >
+                      {addedItemId === item.id ? 'Ditambahkan' : '+ Keranjang'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
       <div className="menu-snack-banner mt-12">
         <div className="snack-banner-left">
-          <span className="eyebrow" style={{ color: 'var(--orange)' }}>
-            LENGKAPI PESANANMU
-          </span>
-          <h3>Roti Maryam Hangat & Pasokan Grosir</h3>
+          <span className="eyebrow">Lengkapi Pesananmu</span>
+          <h3>Roti Maryam Hangat &amp; Pasokan Grosir</h3>
           <p>
-            Tersedia kudapan roti maryam gurih/manis, paket pasokan kulit tortilla & daging kebab untuk UMKM, serta paket katering acara di Sidoarjo.
+            Tersedia kudapan roti maryam gurih dan manis, pasokan kulit tortilla serta daging kebab untuk UMKM, dan paket acara di Sidoarjo.
           </p>
         </div>
         <div className="snack-banner-actions">
@@ -216,7 +201,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               }
             }}
           >
-            Pesan Roti Maryam
+            Tambah Roti Maryam
           </button>
           <a
             href={getWhatsAppLink('Halo Kebab Al Firdaus, saya ingin tanya pasokan bahan baku kebab grosir.')}
@@ -224,7 +209,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             rel="noopener noreferrer"
             className="button button-dark"
           >
-            Tanya Bahan Grosir <span>↗</span>
+            Tanya Bahan Grosir
           </a>
         </div>
       </div>
