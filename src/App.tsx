@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingBag } from 'lucide-react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { PromoGalleryBanner } from './components/PromoGalleryBanner';
+import { VisualShowcaseCarousel } from './components/VisualShowcaseCarousel';
 import { AboutSection } from './components/AboutSection';
 import { MenuSection } from './components/MenuSection';
 import { OfferSection } from './components/OfferSection';
@@ -78,40 +78,6 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleAddCustomToCart = (item: {
-    menuId: string;
-    name: string;
-    tag: string;
-    price: number;
-    portionOption?: string;
-  }) => {
-    setCartItems((prev) => {
-      const matchIndex = prev.findIndex(
-        (i) => i.name === item.name && i.portionOption === item.portionOption
-      );
-
-      if (matchIndex > -1) {
-        const copy = [...prev];
-        copy[matchIndex] = {
-          ...copy[matchIndex],
-          quantity: copy[matchIndex].quantity + 1,
-        };
-        return copy;
-      }
-
-      const newItem: CartItem = {
-        id: `${item.menuId}-${Date.now()}`,
-        menuId: item.menuId,
-        name: item.name,
-        tag: item.tag,
-        price: item.price,
-        quantity: 1,
-        portionOption: item.portionOption,
-      };
-      return [...prev, newItem];
-    });
-  };
-
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
       prev
@@ -148,10 +114,7 @@ export const App: React.FC = () => {
       <main id="main-content" tabIndex={-1}>
         <Hero />
 
-        <PromoGalleryBanner
-          onAddToCart={handleAddCustomToCart}
-          onOpenCart={() => setIsCartOpen(true)}
-        />
+        <VisualShowcaseCarousel />
 
         <AboutSection />
 
