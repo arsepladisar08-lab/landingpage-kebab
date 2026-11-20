@@ -1,28 +1,42 @@
-import React, { useState, useRef } from 'react';
-import { X, Flame, CheckCircle2, ChefHat, ShoppingBag, Check } from 'lucide-react';
-import { MenuVariant } from '../types';
-import { DummyFoodVisual } from './DummyFoodVisual';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Flame, CheckCircle2, ChefHat, ShoppingBag, Check, MessageCircle } from 'lucide-react';
+import { MenuVariant, ServiceInquiryMode } from '../types';
+import { ProductImage } from './ProductImage';
+import { resolveProductAsset } from '../data/productAssets';
 import { formatRupiah } from '../data/content';
+import { useCart } from '../context/CartContext';
+import { getDefaultOption, getVerifiedPrice, isCartEligibleVariant } from '../utils/cart';
 import { useModalFocusTrap } from '../utils/useModalFocusTrap';
 
 interface MenuDetailModalProps {
   item: MenuVariant | null;
   onClose: () => void;
-  onAddToCart?: (item: MenuVariant) => void;
+  onOpenServiceInquiry: (mode: ServiceInquiryMode, productName?: string) => void;
 }
 
 export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
   item,
   onClose,
-  onAddToCart,
+  onOpenServiceInquiry,
 }) => {
+  const { addItem } = useCart();
+  const [selectedOption, setSelectedOption] = useState<string>('');
   const [justAdded, setJustAdded] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
+  useEffect(() => {
+    if (!item) return;
+    setSelectedOption(getDefaultOption(item));
+    setJustAdded(false);
+  }, [item]);
+
   useModalFocusTrap(Boolean(item), onClose, dialogRef, closeBtnRef);
 
   if (!item) return null;
+
+  const cartEligible = isCartEligibleVariant(item);
+  const verifiedPrice = getVerifiedPrice(item);
 
   const spiceMeter = () => {
     const level = item.spiceLevel ?? 1;
@@ -66,12 +80,16 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
         ref={dialogRef}
         className="menu-detail-dialog max-w-xl w-[94%] bg-[#fffdf4] rounded-2xl border-2 border-[#2b1810] shadow-[8px_10px_0_#a91d22] overflow-hidden p-0 my-auto"
       >
-        <div className="relative aspect-[16/9] w-full bg-[#fdf4c7] border-b-2 border-[#2b1810] overflow-hidden">
-          <DummyFoodVisual
-            type={item.type === 'custom' ? item.id : item.type}
-            alt={item.imageDummyAlt || item.name}
+        <div className="relative aspect-[4/3] w-full bg-[#fdf4c7] border-b-2 border-[#2b1810] overflow-hidden">
+          <ProductImage
+            asset={
+              item.image ||
+              resolveProductAsset(item.id, item.imageDummyAlt || item.name, item.type)
+            }
+            priority={true}
             className="w-full h-full"
-            showBadge={true}
+            showPlaceholderTag={true}
+            sizes="(max-width: 640px) 94vw, 576px"
           />
 
           <button
@@ -94,19 +112,23 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
           </div>
         </div>
 
-        <div className="p-5 md:p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4">
           <div>
             <div className="flex items-center gap-2 text-xs font-extrabold text-[#8a1418] tracking-wide mb-1">
               <ChefHat className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>Detail Menu Al Firdaus · Maknyus Banget</span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-              <h2 id="menu-detail-title" className="text-2xl font-black text-[#2b1810] tracking-tight m-0">
+              <h2 id="menu-detail-title" className="text-xl sm:text-2xl font-black text-[#2b1810] tracking-tight m-0">
                 {item.name}
               </h2>
-              {item.price && (
-                <span className="text-sm font-black text-[#2b1810] bg-[#f5d328] px-3 py-1 rounded-lg border-2 border-[#2b1810] self-start sm:self-auto">
-                  {item.priceDisplay || formatRupiah(item.price)}
+              {verifiedPrice !== undefined ? (
+                <span className="text-sm font-black text-[#2b1810] bg-[#f5d328] px-3 py-1 rounded-lg border-2 border-[#2b1810] self-start sm:self-auto tabular-nums">
+                  {item.priceDisplay || formatRupiah(verifiedPrice)}
+                </span>
+              ) : (
+                <span className="text-xs font-bold text-[#543729] bg-[#fdf4c7] px-2.5 py-1 rounded-lg border border-[#2b1810]/30 self-start sm:self-auto">
+                  Harga dikonfirmasi admin via WhatsApp
                 </span>
               )}
             </div>
@@ -127,6 +149,34 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
               {item.flavorProfile || 'Racikan gurih khas Al Firdaus dengan bahan higienis dan porsi memuaskan.'}
             </p>
           </div>
+
+          {cartEligible && item.validOptions && item.validOptions.length > 0 && (
+            <fieldset className="border-0 p-0 m-0 space-y-2">
+              <legend className="text-xs font-black uppercase tracking-wider text-[#2b1810]">
+                Pilihan Varian
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                {item.validOptions.map((option) => {
+                  const isSelected = selectedOption === option;
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() => setSelectedOption(option)}
+                      className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-extrabold border-2 transition-colors ${
+                        isSelected
+                          ? 'bg-[#a91d22] text-[#fffdf4] border-[#2b1810]'
+                          : 'bg-white text-[#2b1810] border-[#2b1810]/35 hover:bg-[#fdf4c7]'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+          )}
 
           {item.ingredients && item.ingredients.length > 0 && (
             <div>
@@ -155,13 +205,14 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
           )}
 
           <div className="pt-2">
-            {onAddToCart && (
+            {cartEligible ? (
               <button
                 type="button"
                 onClick={() => {
-                  onAddToCart(item);
+                  const added = addItem(item, selectedOption);
+                  if (!added) return;
                   setJustAdded(true);
-                  setTimeout(() => setJustAdded(false), 1800);
+                  window.setTimeout(() => setJustAdded(false), 1800);
                 }}
                 className={`w-full min-h-[48px] inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-black text-sm tracking-wide transition-colors border-2 border-[#2b1810] shadow-[3px_3px_0_#2b1810] active:translate-y-0.5 ${
                   justAdded
@@ -180,6 +231,21 @@ export const MenuDetailModal: React.FC<MenuDetailModalProps> = ({
                     <span>+ Masukkan ke Keranjang</span>
                   </>
                 )}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  const mode: ServiceInquiryMode = item.category === 'event' ? 'event' : 'wholesale';
+                  onClose();
+                  onOpenServiceInquiry(mode, item.name);
+                }}
+                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-black text-sm tracking-wide transition-colors border-2 border-[#2b1810] bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] shadow-[3px_3px_0_#2b1810]"
+              >
+                <MessageCircle className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
+                <span>
+                  {item.category === 'event' ? 'Konsultasi Pesanan Acara' : 'Konsultasi Bahan Grosir'}
+                </span>
               </button>
             )}
           </div>

@@ -1,0 +1,51 @@
+import { ShowcaseMediaItem } from '../types';
+
+export const SHOWCASE_MEDIA: ShowcaseMediaItem[] = [
+  {
+    id: 'official-packaging',
+    type: 'image',
+    src: '/assets/aistudio/visual_identitas_Kebab_Al_Firdaus_a36c5ca9.jpg',
+    alt: 'Kemasan resmi Kebab Al Firdaus Maknyus Banget',
+    width: 644,
+    height: 643,
+    fit: 'contain',
+  },
+  {
+    id: 'fnb-video-kitchen-fire',
+    type: 'video',
+    src: 'https://videos.pexels.com/video-files/2620043/2620043-hd_1280_720_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1280&h=720&q=80',
+    alt: 'Video dokumentasi dapur F&B proses memasak hangat di atas api (placeholder)',
+    width: 1280,
+    height: 720,
+    fit: 'cover',
+  },
+  {
+    id: 'fnb-photo-rotisserie',
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1530469912745-a215c6b256ea?auto=format&fit=crop&w=1280&h=720&q=80',
+    alt: 'Dokumentasi panggangan daging kebab putar hangat (foto placeholder)',
+    width: 1280,
+    height: 720,
+    fit: 'cover',
+  },
+  {
+    id: 'fnb-video-fresh-prep',
+    type: 'video',
+    src: 'https://videos.pexels.com/video-files/3195650/3195650-hd_1280_720_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1280&h=720&q=80',
+    alt: 'Video dokumentasi F&B penyiapan bahan dan sayuran segar di dapur (placeholder)',
+    width: 1280,
+    height: 720,
+    fit: 'cover',
+  },
+  {
+    id: 'fnb-photo-grill-flame',
+    type: 'image',
+    src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1280&h=720&q=80',
+    alt: 'Dokumentasi F&B proses pemanggangan daging berbumbu (foto placeholder)',
+    width: 1280,
+    height: 720,
+    fit: 'cover',
+  },
+];

@@ -28,9 +28,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 28);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -44,82 +45,117 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-colors duration-200 ${
-          isScrolled
-            ? 'bg-[#f5d328]/95 backdrop-blur-md border-b-2 border-[#a91d22] shadow-sm'
-            : 'bg-[#f5d328] border-b-2 border-[#2b1810]/20'
-        }`}
         id="top"
+        data-scrolled={isScrolled ? 'true' : 'false'}
+        className="sticky top-0 z-40 w-full pointer-events-none"
       >
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[72px] sm:h-[76px] flex items-center justify-between gap-3">
-          <a
-            className="flex items-center gap-3 group min-h-[44px]"
-            href="#top"
-            aria-label="Kebab Al Firdaus, ke halaman utama"
+        <div
+          className={`w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+            isScrolled ? 'px-3 sm:px-5 pt-2.5 sm:pt-3.5' : 'px-0 pt-0'
+          }`}
+        >
+          <div
+            className={`pointer-events-auto mx-auto w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+              isScrolled
+                ? 'max-w-[1080px] rounded-full bg-[#f5d328]/55 backdrop-blur-xl border-2 border-[#2b1810]/25 shadow-[0_14px_34px_rgba(43,24,16,0.22),inset_0_1px_0_rgba(255,253,244,0.5)]'
+                : 'max-w-full rounded-none bg-[#f5d328] border-b-2 border-[#2b1810]/20 shadow-none'
+            }`}
           >
-            <div className="w-11 h-11 rounded-full border-2 border-[#2b1810] bg-[#a91d22] text-[#f5d328] flex items-center justify-center font-black text-xs tracking-tight transform -rotate-6 transition-transform group-hover:rotate-0 shadow-[2px_2px_0_#2b1810]">
-              AF
-            </div>
-            <div className="flex flex-col">
-              <span className="font-black text-[10px] tracking-[0.18em] text-[#2b1810] leading-none">
-                KEBAB
-              </span>
-              <span className="font-black text-base tracking-wide text-[#8a1418] leading-tight">
-                {BUSINESS_INFO.name}
-              </span>
-              <span className="text-[10px] font-bold italic text-[#2b1810] -mt-0.5">
-                Maknyus Banget · Medaeng
-              </span>
-            </div>
-          </a>
-
-          <div className="flex items-center gap-3">
-            <nav
-              className="hidden lg:flex items-center gap-1 bg-[#fffdf4] p-1 rounded-xl border-2 border-[#2b1810]"
-              aria-label="Navigasi utama"
+            <div
+              className={`mx-auto flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                isScrolled
+                  ? 'max-w-[1080px] h-[58px] sm:h-[64px] px-3 sm:px-5'
+                  : 'max-w-[1240px] h-[72px] sm:h-[76px] px-4 sm:px-6 lg:px-8'
+              }`}
             >
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="px-3.5 py-2 text-xs font-extrabold text-[#2b1810] hover:text-[#fffdf4] hover:bg-[#a91d22] rounded-lg transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-
-            {/* Cart button stays hidden until the user adds an item. */}
-            {cartCount > 0 && (
-              <button
-                type="button"
-                onClick={onOpenCart}
-                className="relative inline-flex items-center gap-2 min-h-[44px] py-2 px-3.5 rounded-xl text-xs font-black bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
-                aria-label={`Keranjang belanja, ${cartCount} item`}
+              <a
+                className={`flex items-center gap-2.5 sm:gap-3 group min-h-[44px] min-w-0 transition-all duration-300 motion-reduce:transition-none ${
+                  isScrolled ? 'pl-0.5 pr-2.5 py-1 rounded-full bg-[#fffdf4]/80' : ''
+                }`}
+                href="#top"
+                aria-label="Kebab Al Firdaus, ke halaman utama"
               >
-                <ShoppingBag className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
-                <span className="hidden md:inline">Keranjang</span>
-                <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full text-[11px] font-black bg-[#f5d328] text-[#2b1810] border border-[#2b1810]">
-                  {cartCount}
-                </span>
-              </button>
-            )}
+                <div
+                  className={`rounded-full border-2 border-[#2b1810] bg-[#a91d22] text-[#f5d328] flex items-center justify-center font-black text-xs tracking-tight transform -rotate-6 transition-all duration-300 group-hover:rotate-0 shadow-[2px_2px_0_#2b1810] shrink-0 ${
+                    isScrolled ? 'w-9 h-9' : 'w-10 h-10 sm:w-11 sm:h-11'
+                  }`}
+                >
+                  AF
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-black text-[9.5px] sm:text-[10px] tracking-[0.16em] text-[#2b1810] leading-none">
+                    KEBAB
+                  </span>
+                  <span className="font-black text-sm sm:text-base tracking-wide text-[#8a1418] leading-tight whitespace-nowrap truncate">
+                    {BUSINESS_INFO.name}
+                  </span>
+                  {!isScrolled && (
+                    <span className="hidden sm:block text-[10px] font-bold italic text-[#2b1810] -mt-0.5 truncate">
+                      Maknyus Banget · Medaeng
+                    </span>
+                  )}
+                </div>
+              </a>
 
-            <button
-              type="button"
-              className="lg:hidden inline-flex items-center gap-2 min-h-[44px] px-3.5 rounded-xl bg-[#fffdf4] border-2 border-[#2b1810] text-xs font-black text-[#8a1418] hover:bg-[#a91d22] hover:text-[#fffdf4] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all"
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-sheet"
-              aria-label={isMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
-              onClick={() => setIsMenuOpen((prev) => !prev)}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <Menu className="w-5 h-5" aria-hidden="true" />
-              )}
-              <span>{isMenuOpen ? 'Tutup' : 'Menu'}</span>
-            </button>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <nav
+                  className={`hidden lg:flex items-center gap-1 p-1 border-2 border-[#2b1810] transition-all duration-300 motion-reduce:transition-none ${
+                    isScrolled
+                      ? 'bg-[#fffdf4]/90 rounded-full'
+                      : 'bg-[#fffdf4] rounded-xl'
+                  }`}
+                  aria-label="Navigasi utama"
+                >
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className={`px-3.5 py-1.5 text-xs font-extrabold text-[#2b1810] hover:text-[#fffdf4] hover:bg-[#a91d22] whitespace-nowrap shrink-0 transition-colors ${
+                        isScrolled ? 'rounded-full' : 'rounded-lg'
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+
+                {/* Cart button stays hidden until the user adds an item. */}
+                {cartCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={onOpenCart}
+                    className={`relative inline-flex items-center gap-2 min-h-[42px] py-2 px-3.5 text-xs font-black bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all whitespace-nowrap shrink-0 ${
+                      isScrolled ? 'rounded-full' : 'rounded-xl'
+                    }`}
+                    aria-label={`Keranjang belanja, ${cartCount} item`}
+                  >
+                    <ShoppingBag className="w-4 h-4 text-[#f5d328]" aria-hidden="true" />
+                    <span className="hidden md:inline">Keranjang</span>
+                    <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full text-[11px] font-black bg-[#f5d328] text-[#2b1810] border border-[#2b1810]">
+                      {cartCount}
+                    </span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  className={`lg:hidden inline-flex items-center gap-2 min-h-[42px] px-3.5 bg-[#fffdf4] border-2 border-[#2b1810] text-xs font-black text-[#8a1418] hover:bg-[#a91d22] hover:text-[#fffdf4] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all whitespace-nowrap shrink-0 ${
+                    isScrolled ? 'rounded-full' : 'rounded-xl'
+                  }`}
+                  aria-expanded={isMenuOpen}
+                  aria-controls="mobile-sheet"
+                  aria-label={isMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                >
+                  {isMenuOpen ? (
+                    <X className="w-5 h-5" aria-hidden="true" />
+                  ) : (
+                    <Menu className="w-5 h-5" aria-hidden="true" />
+                  )}
+                  <span>{isMenuOpen ? 'Tutup' : 'Menu'}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -140,7 +176,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div
             ref={drawerRef}
-            className="relative z-10 w-full bg-[#fffdf4] rounded-t-3xl border-t-4 border-[#a91d22] p-5 pb-8 shadow-2xl max-h-[85vh] overflow-y-auto"
+            className="relative z-10 w-full bg-[#fffdf4] rounded-t-3xl border-t-4 border-[#a91d22] p-5 pb-8 shadow-2xl max-h-[85dvh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-4 border-b border-[#2b1810]/15">
               <div className="flex items-center gap-2.5">

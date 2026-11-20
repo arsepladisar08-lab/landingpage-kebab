@@ -8,7 +8,7 @@ interface DummyFoodVisualProps {
   showBadge?: boolean;
 }
 
-export const DummyFoodVisual: React.FC<DummyFoodVisualProps> = ({
+export const DummyFoodVisual: React.FC<DummyFoodVisualProps> = React.memo(({
   type,
   className = '',
   alt = 'Ilustrasi Menu Kebab Al Firdaus',
@@ -309,4 +309,6 @@ export const DummyFoodVisual: React.FC<DummyFoodVisualProps> = ({
       )}
     </div>
   );
-};
+});
+
+DummyFoodVisual.displayName = 'DummyFoodVisual';

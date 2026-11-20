@@ -1,12 +1,16 @@
 import React from 'react';
-import { OFFER_ITEMS, getWhatsAppLink } from '../data/content';
-import type { OfferItem } from '../types';
+import { OFFER_ITEMS } from '../data/content';
+import type { OfferItem, ServiceInquiryMode } from '../types';
 
 interface OfferSectionProps {
   onViewMenu: () => void;
+  onOpenServiceInquiry: (mode: ServiceInquiryMode, productName?: string) => void;
 }
 
-export const OfferSection: React.FC<OfferSectionProps> = ({ onViewMenu }) => {
+export const OfferSection: React.FC<OfferSectionProps> = ({
+  onViewMenu,
+  onOpenServiceInquiry,
+}) => {
   const renderVisual = (type: OfferItem['type']) => {
     if (type === 'food') {
       return (
@@ -71,14 +75,18 @@ export const OfferSection: React.FC<OfferSectionProps> = ({ onViewMenu }) => {
                   {item.actionText}
                 </button>
               ) : (
-                <a
-                  href={getWhatsAppLink(item.whatsappMessage || 'Halo Kebab Al Firdaus, saya ingin bertanya tentang layanan ini.')}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
                   className="card-link"
+                  onClick={() =>
+                    onOpenServiceInquiry(
+                      item.type === 'event' ? 'event' : 'wholesale',
+                      item.productName
+                    )
+                  }
                 >
                   {item.actionText}
-                </a>
+                </button>
               )}
             </div>
           </article>

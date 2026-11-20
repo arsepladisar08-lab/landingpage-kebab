@@ -42,16 +42,15 @@ The exact wholesale catalogue, unit sizes, minimum order, event availability, ev
 
 ## Data retained from project references — owner verification required
 
-- WhatsApp number: +62 838-3036-1617.
+- WhatsApp number (updated by owner): +62 889-8911-3552.
 - Address: Jl. Bali No.13 Blok O, Medaeng Kulon, Kedungturi, Taman, Sidoarjo 61257.
 - Hours in supplied ZIP: Senin–Sabtu 06.00–21.00; Minggu 06.00–18.00.
 - Public-directory rating in supplied ZIP: 4.6 / 5 from 57 reviews.
 
-These values are retained from the supplied ZIP / prior project data, not newly confirmed by the owner in this conversation. Validate them before using them as definitive current business information.
+The address, hours, and rating values above are retained from the supplied ZIP / prior project data, not newly confirmed by the owner in this conversation. Validate them before using them as definitive current business information.
 
 ## Unknowns / owner confirmation required
 
-- Current official WhatsApp number.
 - Exact street address and Google Maps pin.
 - Official operating hours.
 - Approved retail price list and active kebab variants.

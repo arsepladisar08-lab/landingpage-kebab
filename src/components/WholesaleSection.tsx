@@ -1,7 +1,13 @@
 import React from 'react';
-import { getWhatsAppLink } from '../data/content';
+import { ServiceInquiryMode } from '../types';
 
-export const WholesaleSection: React.FC = () => (
+interface WholesaleSectionProps {
+  onOpenServiceInquiry: (mode: ServiceInquiryMode, productName?: string) => void;
+}
+
+export const WholesaleSection: React.FC<WholesaleSectionProps> = ({
+  onOpenServiceInquiry,
+}) => (
   <section className="wholesale" id="grosir" aria-labelledby="grosir-title">
     <div className="wholesale-pattern" aria-hidden="true">AF AF AF AF AF AF AF AF</div>
     <div className="wholesale-inner">
@@ -10,16 +16,15 @@ export const WholesaleSection: React.FC = () => (
         Punya rencana<br />jualan kebab?
       </h2>
       <p>
-        Untuk warung, gerobak kebab, reseller frozen, atau pelaku usaha kuliner di Sidoarjo dan Surabaya, konsultasikan jenis bahan, jumlah perkiraan, dan jadwal pasokan bersama kami.
+        Untuk warung, gerobak kebab, reseller frozen, atau pelaku usaha kuliner di Sidoarjo dan Surabaya, konsultasikan jenis bahan, jumlah perkiraan, satuan, dan jadwal pasokan bersama kami.
       </p>
-      <a
-        href={getWhatsAppLink('Halo Kebab Al Firdaus, saya ingin konsultasi kebutuhan bahan baku kebab grosir.')}
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        type="button"
+        onClick={() => onOpenServiceInquiry('wholesale', 'Bahan Baku Kebab Grosir')}
         className="button button-dark"
       >
         Konsultasi bahan grosir
-      </a>
+      </button>
     </div>
 
     <div className="wholesale-side">
