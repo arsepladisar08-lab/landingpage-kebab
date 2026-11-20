@@ -39,6 +39,7 @@ npm run preview
 - `src/App.tsx` — page composition and order-modal state.
 - `src/components/` — modular page sections, four-variant kebab menu, mode-aware order modal, navigation, and CTAs.
 - `src/data/content.ts` — business details, product variants, WhatsApp message builder, ordering steps, and FAQ copy.
+- `src/data/showcase.ts` — image/video media entries for the full-width visual showcase carousel.
 - `src/index.css` — reference-inspired visual system and responsive layouts.
 - `index.html` — title, description, social metadata, and restaurant structured data.
 
