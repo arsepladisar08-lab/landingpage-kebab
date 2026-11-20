@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { SHOWCASE_MEDIA } from './showcase';
 import {
   BUSINESS_INFO,
   getWhatsAppLink,
@@ -80,6 +81,20 @@ test('MENU_VARIANTS includes primary kebabs, prices, and snacks', () => {
 
   const keju = MENU_VARIANTS.find((m) => m.id === 'keju');
   assert.equal(keju?.price, 15000);
+});
+
+
+test('SHOWCASE_MEDIA contains unique local image or video assets only', () => {
+  const ids = SHOWCASE_MEDIA.map((media) => media.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(SHOWCASE_MEDIA.length > 0);
+
+  for (const media of SHOWCASE_MEDIA) {
+    assert.ok(media.id.trim().length > 0);
+    assert.ok(media.src.startsWith('/'));
+    assert.ok(media.alt.trim().length > 0);
+    assert.ok(media.type === 'image' || media.type === 'video');
+  }
 });
 
 test('UI copy contains no em dashes or en dashes (R-02)', () => {
