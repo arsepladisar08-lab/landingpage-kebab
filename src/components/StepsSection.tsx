@@ -1,5 +1,8 @@
 import React from 'react';
 import { ORDERING_STEPS } from '../data/content';
+import { AnimatedWords, AnimatedAccentWord } from './AnimatedText';
+import { Reveal } from './Reveal';
+import { getStaggerDelayMs } from '../utils/motion';
 
 export const StepsSection: React.FC = () => (
   <section className="section steps" id="cara-pesan" aria-labelledby="steps-title">
@@ -8,19 +11,25 @@ export const StepsSection: React.FC = () => (
         <div>
           <div className="section-kicker">05 / Cara Pemesanan</div>
           <h2 id="steps-title">
-            Dari pilih menu sampai<br />
-            <em>pesanan beres.</em>
+            <AnimatedWords text="Dari pilih menu sampai" baseDelayMs={0} stepMs={55} />
+            <br />
+            <AnimatedAccentWord delayMs={200}>pesanan beres.</AnimatedAccentWord>
           </h2>
         </div>
-        <p>Admin kami mengonfirmasi harga terbaru, ketersediaan stok, ongkir, dan cara bayar sebelum pesanan diproses.</p>
       </div>
       <div className="step-grid">
-        {ORDERING_STEPS.map((step) => (
-          <article className="step-card" key={step.number}>
+        {ORDERING_STEPS.map((step, idx) => (
+          <Reveal
+            key={step.number}
+            as="article"
+            variant="fade-up"
+            delayMs={getStaggerDelayMs(idx, 30, 80, 270)}
+            className="step-card"
+          >
             <div className="step-num">{step.number}</div>
             <h3>{step.title}</h3>
             <p>{step.description}</p>
-          </article>
+          </Reveal>
         ))}
       </div>
     </div>

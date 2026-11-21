@@ -7,9 +7,6 @@ export const FaqSection: React.FC = () => (
       <div className="section-head">
         <div className="section-kicker">07 / Pertanyaan Umum</div>
         <h2 id="faq-title">Sebelum pesan, cek dulu.</h2>
-        <p>
-          Pertanyaan soal stok harian, ongkir, atau pesanan jumlah besar bisa langsung kamu tanyakan ke admin kami di WhatsApp.
-        </p>
       </div>
       <div className="faq-list">
         {FAQ_ITEMS.map((item) => (

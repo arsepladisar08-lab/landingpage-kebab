@@ -57,15 +57,15 @@ export const Header: React.FC<HeaderProps> = ({
           <div
             className={`pointer-events-auto mx-auto w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
               isScrolled
-                ? 'max-w-[1080px] rounded-full bg-[#f5d328]/55 backdrop-blur-xl border-2 border-[#2b1810]/25 shadow-[0_14px_34px_rgba(43,24,16,0.22),inset_0_1px_0_rgba(255,253,244,0.5)]'
+                ? 'max-w-[1440px] rounded-full bg-[#f5d328]/55 backdrop-blur-xl border-2 border-[#2b1810]/25 shadow-[0_14px_34px_rgba(43,24,16,0.22),inset_0_1px_0_rgba(255,253,244,0.5)]'
                 : 'max-w-full rounded-none bg-[#f5d328] border-b-2 border-[#2b1810]/20 shadow-none'
             }`}
           >
             <div
               className={`mx-auto flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
                 isScrolled
-                  ? 'max-w-[1080px] h-[58px] sm:h-[64px] px-3 sm:px-5'
-                  : 'max-w-[1240px] h-[72px] sm:h-[76px] px-4 sm:px-6 lg:px-8'
+                  ? 'max-w-[1440px] h-[58px] sm:h-[64px] px-3 sm:px-5 lg:px-6'
+                  : 'max-w-[1600px] h-[72px] sm:h-[76px] px-4 sm:px-6 lg:px-11'
               }`}
             >
               <a
@@ -122,9 +122,10 @@ export const Header: React.FC<HeaderProps> = ({
                 {/* Cart button stays hidden until the user adds an item. */}
                 {cartCount > 0 && (
                   <button
+                    key={cartCount}
                     type="button"
                     onClick={onOpenCart}
-                    className={`relative inline-flex items-center gap-2 min-h-[42px] py-2 px-3.5 text-xs font-black bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all whitespace-nowrap shrink-0 ${
+                    className={`cart-badge-pop relative inline-flex items-center gap-2 min-h-[42px] py-2 px-3.5 text-xs font-black bg-[#a91d22] hover:bg-[#7d1216] text-[#fffdf4] border-2 border-[#2b1810] shadow-[2px_2px_0_#2b1810] active:translate-y-0.5 transition-all whitespace-nowrap shrink-0 ${
                       isScrolled ? 'rounded-full' : 'rounded-xl'
                     }`}
                     aria-label={`Keranjang belanja, ${cartCount} item`}

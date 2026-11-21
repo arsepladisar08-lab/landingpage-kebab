@@ -4,111 +4,134 @@ interface IconProps {
   className?: string;
 }
 
-/** Full menu / platter grid icon for "Semua" tab */
-export const AllMenuIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <rect x="3" y="3" width="7.5" height="7.5" rx="2" />
-    <rect x="13.5" y="3" width="7.5" height="7.5" rx="2" />
-    <rect x="3" y="13.5" width="7.5" height="7.5" rx="2" />
-    <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" />
-  </svg>
-);
+/**
+ * Dominant culinary vector icons tailored for large 80%-scale category tiles.
+ * Uses dual-tone currentColor fills + crisp strokes so each silhouette reads
+ * cleanly on both active crimson and inactive warm-cream surfaces.
+ */
 
 /** Rolled kebab / shawarma wrap icon for "Kebab" tab */
-export const KebabIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
+export const KebabIcon: React.FC<IconProps> = ({ className = 'w-14 h-14' }) => (
   <svg
-    viewBox="0 0 24 24"
+    viewBox="0 0 48 48"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.9"
+    strokeWidth="2.3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
     aria-hidden="true"
   >
-    {/* Diagonal rolled wrap body */}
-    <path d="M5.2 14.3 13.8 5.7c1.6-1.6 4.2-1.6 5.8 0 1.6 1.6 1.6 4.2 0 5.8L11 20.1c-1.1 1.1-2.9 1.1-4 0l-1.8-1.8c-1.1-1.1-1.1-2.9 0-4Z" />
-    {/* Tortilla wrap fold seam */}
-    <path d="M12.3 7.2c1.6 1.2 3.1 2.7 4.3 4.3" />
-    {/* Grill marks on toasted tortilla */}
-    <path d="M9.6 12.2l2.2 2.2" />
-    <path d="M7.6 14.2l2.2 2.2" />
-    {/* Lettuce & filling peeking from top opening */}
-    <path d="M15.6 4.5c.6-1 1.8-1.4 2.8-.9" />
-    <path d="M19.5 8.4c1-.6 1.4-1.8.9-2.8" />
+    {/* Soft dual-tone wrap body fill */}
+    <path
+      d="M11 29.5 28.5 12c3.2-3.2 8.4-3.2 11.6 0 3.2 3.2 3.2 8.4 0 11.6L22.6 41.1c-2.2 2.2-5.8 2.2-8 0l-3.6-3.6c-2.2-2.2-2.2-5.8 0-8Z"
+      fill="currentColor"
+      fillOpacity="0.14"
+    />
+    {/* Crisp wrap tortilla collar fold */}
+    <path d="M24.2 16.2c3.3 2.3 6.2 5.2 8.5 8.5" />
+    {/* Lower parchment paper cuff */}
+    <path
+      d="M14.6 25.9 22.8 34.1 19 37.9c-1.8 1.8-4.7 1.8-6.5 0l-1.7-1.7c-1.8-1.8-1.8-4.7 0-6.5l3.8-3.8Z"
+      fill="currentColor"
+      fillOpacity="0.22"
+      stroke="none"
+    />
+    <path d="M15.8 24.7 24 32.9" />
+    {/* Toasted grill marks */}
+    <path d="M21 20.8l4.4 4.4" />
+    <path d="M25.5 16.3l3.6 3.6" />
+    {/* Leafy greens & filling peeking from top opening */}
+    <path d="M29.5 10.6c1-2.4 3.5-3.9 6.1-3.2 1.1.3 2 1 2.6 1.9" />
+    <path d="M38.2 18.8c2.2-1 3.5-3.4 2.8-5.9-.3-1-1-1.9-1.9-2.5" />
+    {/* Aroma steam wisp */}
+    <path d="M13 13c0-1.8 1.4-2.4 1.4-4.2" strokeWidth="2" />
+    <path d="M18.5 10.5c0-1.6 1.3-2.2 1.3-3.8" strokeWidth="2" />
   </svg>
 );
 
 /** Circular flaky layered flatbread icon for "Roti Maryam" tab */
-export const RotiMaryamIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
+export const RotiMaryamIcon: React.FC<IconProps> = ({ className = 'w-14 h-14' }) => (
   <svg
-    viewBox="0 0 24 24"
+    viewBox="0 0 48 48"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.9"
+    strokeWidth="2.3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
     aria-hidden="true"
   >
-    {/* Outer flatbread disc */}
-    <circle cx="12" cy="12" r="9" />
-    {/* Spiral layered dough fold */}
-    <path d="M12 6.5c3 0 5.5 2.5 5.5 5.5 0 2.6-2.1 4.7-4.7 4.7-2.2 0-4-1.8-4-4 0-1.8 1.5-3.3 3.3-3.3 1.4 0 2.5 1.1 2.5 2.5 0 1-.8 1.8-1.8 1.8-.7 0-1.3-.6-1.3-1.3" />
+    {/* Warm layered disc */}
+    <circle cx="24" cy="25" r="16.5" fill="currentColor" fillOpacity="0.14" />
+    {/* Inner toasted ring */}
+    <circle cx="24" cy="25" r="12.2" strokeDasharray="5 3.5" strokeWidth="1.9" />
+    {/* Signature Roti Maryam spiral flaky dough layers */}
+    <path d="M24 15.2c5.4 0 9.8 4.4 9.8 9.8 0 4.6-3.7 8.4-8.4 8.4-3.9 0-7.1-3.2-7.1-7.1 0-3.2 2.6-5.8 5.8-5.8 2.4 0 4.4 2 4.4 4.4 0 1.8-1.4 3.2-3.2 3.2-1.3 0-2.3-1-2.3-2.3" />
+    {/* Warm steam wisps above bread */}
+    <path d="M18 6.5c0-1.4 1.2-2 1.2-3.3" strokeWidth="2" />
+    <path d="M24 5.5c0-1.4 1.2-2 1.2-3.3" strokeWidth="2" />
+    <path d="M30 6.5c0-1.4 1.2-2 1.2-3.3" strokeWidth="2" />
   </svg>
 );
 
-/** Cut of beef / meat slice icon for "Daging & Bahan" (wholesale) tab */
-export const MeatIngredientIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
+/** Marbled beef / meat cut icon for "Daging & Bahan" (wholesale) tab */
+export const MeatIngredientIcon: React.FC<IconProps> = ({ className = 'w-14 h-14' }) => (
   <svg
-    viewBox="0 0 24 24"
+    viewBox="0 0 48 48"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.9"
+    strokeWidth="2.3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
     aria-hidden="true"
   >
-    {/* Marbled meat cut silhouette */}
-    <path d="M19.4 9.2c1.1 2.5.4 5.7-2 7.7-2.6 2.2-6.8 3.2-10.3 2.1-2.5-.8-4.1-2.9-3.6-5.2.4-1.9 2.1-2.8 3.7-3.6 1.7-.8 2.6-2.4 4.1-3.7 2.5-2.1 6.7-1.4 8.1 2.7Z" />
-    {/* Inner marbling / bone ring */}
-    <circle cx="14.5" cy="11.2" r="2.1" />
-    {/* Texture streak */}
-    <path d="M7.5 15.2c1.6.4 3.4.2 5-.6" />
+    {/* Thick steak/meat cut outer silhouette */}
+    <path
+      d="M39.5 18.2c2.4 5.2.9 11.8-4.1 16-5.4 4.5-14 6.5-21.3 4.2-5.1-1.6-8.4-5.9-7.4-10.7.9-4 4.4-5.8 7.7-7.4 3.5-1.7 5.3-5 8.5-7.7 5.2-4.3 13.8-2.9 16.6 5.6Z"
+      fill="currentColor"
+      fillOpacity="0.16"
+    />
+    {/* Outer fat rim accent */}
+    <path d="M10.4 31.8c4.2 3.4 11.4 4.4 17.5 2.5 5.4-1.6 9.5-5.6 10.6-10.3" strokeWidth="1.9" />
+    {/* Signature marbling bone eyelet */}
+    <circle cx="29.5" cy="21.5" r="4.3" fill="currentColor" fillOpacity="0.22" />
+    <circle cx="29.5" cy="21.5" r="1.6" fill="currentColor" stroke="none" />
+    {/* Marbling veins */}
+    <path d="M14.5 28.5c3.2.8 6.8.3 9.8-1.4" strokeWidth="2" />
+    <path d="M18.2 23.2c1.8.2 3.5-.3 5-1.3" strokeWidth="1.9" />
   </svg>
 );
 
 /** Serving cloche / catering platter icon for "Acara" (event) tab */
-export const EventCateringIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
+export const EventCateringIcon: React.FC<IconProps> = ({ className = 'w-14 h-14' }) => (
   <svg
-    viewBox="0 0 24 24"
+    viewBox="0 0 48 48"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.9"
+    strokeWidth="2.3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
     aria-hidden="true"
   >
-    {/* Cloche top knob */}
-    <path d="M12 6V4.5" />
-    <circle cx="12" cy="4" r="0.8" fill="currentColor" />
-    {/* Dome lid */}
-    <path d="M4 17a8 8 0 0 1 16 0" />
-    {/* Serving tray */}
-    <path d="M2.5 17h19" />
-    <path d="M5.5 20h13" />
-    {/* Subtle dome sheen */}
-    <path d="M8.5 11.5a4.5 4.5 0 0 1 2.5-1.8" />
+    {/* Top handle knob */}
+    <path d="M24 14v-3" />
+    <circle cx="24" cy="9.5" r="2.2" fill="currentColor" fillOpacity="0.22" />
+    {/* Cloche serving dome */}
+    <path
+      d="M8.5 33a15.5 15.5 0 0 1 31 0Z"
+      fill="currentColor"
+      fillOpacity="0.15"
+    />
+    {/* Specular dome sheen */}
+    <path d="M15.2 25.5a10 10 0 0 1 6.8-6.4" strokeWidth="2.1" />
+    {/* Platter base */}
+    <path d="M5.5 33h37" strokeWidth="2.6" />
+    <path d="M10.5 38h27" strokeWidth="2.4" />
+    {/* Festive accent sparkles */}
+    <path d="M12 13l1.2-2.2L14.4 13l-1.2 2.2Z" fill="currentColor" stroke="none" />
+    <path d="M35 12l1-1.8 1 1.8-1 1.8Z" fill="currentColor" stroke="none" />
   </svg>
 );

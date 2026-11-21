@@ -4,7 +4,7 @@ import { BUSINESS_INFO } from '../data/content';
 export const Footer: React.FC = () => {
   return (
     <footer className="footer bg-[#24130d] text-[#fffdf4] py-12 border-t-4 border-[#f5d328]">
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="max-w-[1600px] mx-auto px-5 sm:px-6 lg:px-11 space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#f5d328]/20">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-full bg-[#a91d22] text-[#f5d328] border-2 border-[#f5d328] flex items-center justify-center font-black text-xs tracking-tight shrink-0">
